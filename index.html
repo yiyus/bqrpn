@@ -8,7 +8,7 @@
     </head>
     <body>
     <div class="topbar">
-		<a href="javascript:immediate();" title="immediate" id="imm"></a>
+		<a href="javascript:immediate();" title="immediate"><span id="imm"></span></a>
 		<a href="javascript:reset();update();" title="reset"></a>
 		<a href="javascript:help();" title="help"></a>
 	</div>
@@ -16,7 +16,7 @@
 	<p id="stack"></p>
 	<p id="log"/></p>
 	<p id="help">
-		dyadic:+-*/ monadic(shift+):-/<br>
+		dyadic:+-*/ monadic:1+ 0- 2* 1/<br>
 		shift+enger:dup shift+backsp:drop<br>
 		esc:clean tab:swap shift+tab:over<br>
 		enter:

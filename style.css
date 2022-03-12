@@ -8,10 +8,10 @@ body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; }
 	margin: 0 0 1ex 0; padding: 3px; background-color: #ccc;
 	font-family: "Octicons"; font-size: 16px; text-align: right;
 }
-.topbar span { font-family: "BQN386"; }
 .topbar a {	padding: 0 1ex; text-decoration: none; color: #777; }
 .topbar a:hover, .topbar a:active { color: #000; }
-.topbar a.imm { color: #c44; }
+.topbar #imm { color: #777; }
+.topbar #imm.imm { color: #000; }
 
 div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }
@@ -19,7 +19,7 @@ p { margin: 0; padding: 0.25ex 0 0.25ex 1em; max-width: 100%; }
 p:empty { display: none; }
 
 table { border-collapse: collapse; margin-top: 2em; }
-td { padding: 0.25ex 0 0.25ex 1em; }
+td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
 td.exp { color: #6b6; }
 tr.ans { color: #06e; }
 
