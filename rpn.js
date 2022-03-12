@@ -16,7 +16,6 @@ const Log = document.getElementById('log');      let ans = "";    //last answer
 // stack
 function input(c) { cur += c; mod = Input; sel = 1; }
 function push(t, v) {
-	if (t != Exp && v < 0) t = Exp; // neg values are not editable!
 	stk.push({type: t, value: v}); mod = (t == Exp ? Eval : t == Ans ? Input : Empty);
 	sel = Math.min(stk.length, 2);
 }
@@ -33,24 +32,24 @@ function reset() { clear(); ans = Done.innerHTML = Stack.innerHTML = Log.innerHT
 function id(x) { return x; }
 function swap() { if ((n = push_curr()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); }
 function over() { if ((n = push_curr()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); }
-function select() {
+function selection() {
 	if (cur != "") { push_curr(); return; }
 	sel = (sel <= 1 ? Math.min(stk.length, 2) : sel - 1);
 }
 
 // functions
 function monadic(f) { if (push_curr() < 1) return; x = pop_exp(); push(Exp, f + x); if(imm) evaluate(); }
-function dyadic(f) { if (push_curr() < 2) return; w = pop_exp(); x = pop_exp(); push(Exp, x + f + w); if(imm) evaluate(); }
+function dyadic(f) { if (push_curr() < 2) return; w = pop_exp(); x = pop().value; push(Exp, w + f + x); if(imm) evaluate(); }
 function ambval(m, d) { if (sel == 1) monadic(m); else if (sel == 2) dyadic(d); }
-function evaluate() { if (push_curr() < 1) return; x = pop().value; add_done(ans = String(eval(x)), x); push(Ans, ans); }
+function evaluate() { if (push_curr() < 1) return; x = pop().value; add_done(ans = fmt(bqn(x)), x); push(Ans, ans); }
 function immediate() { imm = !imm; Imm.className = (imm ? "imm" : "");  }
 
 // input
 function keydown(e) {
 	//Log.textContent += ` ${e.code}`;
 	if (e.shiftKey) switch (e.code) {
-		case "Equal": ambval('1+', '+'); break;
-		case "Digit8": ambval('2*', '*'); break;
+		case "Equal": ambval('+', '+'); break;
+		case "Digit8": ambval('×', '×'); break;
 		case "Space": immediate(); break;
 		case "Tab": e.preventDefault(); over(); break;
 		case "Backspace": e.preventDefault(); drop(); break;
@@ -62,8 +61,8 @@ function keydown(e) {
 		case "Digit6": case "Digit7": case "Digit8": case "Digit9": input(e.code[e.code.length-1]); break;
 		case "Period": input('.'); break;
 		case "Minus": ambval('-', '-'); break;
-		case "Slash": ambval('1/', '/'); break;
-		case "Space": select(); break;
+		case "Slash": ambval('÷', '÷'); break;
+		case "Space": selection(); break;
 		case "Tab": e.preventDefault(); swap(); break;
 		case "Escape": e.preventDefault(); clear(); break;
 		case "Enter": e.preventDefault();
@@ -101,7 +100,7 @@ function update() {
 	Stack.innerHTML = ''; n = stk.length;
 	if (c = Done.lastChild) c.className = (cur == "" && ans != "" && n == 0 ? "ans" : "none");
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Input); return; }
-	for (const e of stk) { element(n > sel ? U : n == 2 ? W : X, e.value); n--;	}
+	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, e.value); n--; }
 	if (cur != "") element(X, cur);
 	cursor(mod); window.scrollTo(0, document.body.scrollHeight);
 }
