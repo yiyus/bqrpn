@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex, nofollow">
+        <link rel="stylesheet" href="style.css">       
+        <title>rpn</title>
+    </head>
+    <body>
+    <div class="topbar">
+		<a href="javascript:immediate();" title="immediate" id="imm"></a>
+		<a href="javascript:reset();update();" title="reset"></a>
+		<a href="javascript:help();" title="help"></a>
+	</div>
+	<table id="done"></table>
+	<p id="stack"></p>
+	<p id="log"/></p>
+	<p id="help">
+		dyadic:+-*/ monadic(shift+):-/<br>
+		shift+enger:dup shift+backsp:drop<br>
+		esc:clean tab:swap shift+tab:over<br>
+		enter:
+			x<span class="input cursor">█</span> push x,
+			x<span class="eval">█</span> eval x,
+			x<span class="empty">█</span> ans=x<br>
+		when empty:
+			<span class="empty cursor">█</span> push ans,
+			ans<span class="input">█</span> drop
+	</p>
+	<script type="text/javascript" src="rpn.js"></script>
+	</body>
+</html>
