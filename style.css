@@ -28,13 +28,16 @@ td.x { color: #06e; }
 
 #stack { padding-left: 0; }
 #stack span.unsel { color: #888; }
-#stack span.x     { color: #06e; }
-#stack span.w     { color: #91c; }
+#stack span.x     { color: #09f; }
+#stack span.w     { color: #b0f; }
+#stack span.y     { color: #e06; }
 
 cursor { padding: 0 0 0 1em; }
 cursor.tight { padding-left: 0; }
 cursor.val { color: #ccc; }
 cursor.res { color: #def; }
+cursor.fun { color: #fde; }
+cursor.tra { color: #fde; }
 cursor.exp { color: #cec; }
 
 #help {

@@ -1,52 +1,58 @@
 // bqrpn
 // © JGL (yy). 2022
 
-// args                     // types
-const X = Symbol("x");      const Val = Symbol("val");
-const W = Symbol("w");      const Res = Symbol("res");
-const U = Symbol("unsel");  const Exp = Symbol("exp");
-
-// doc elements                                      // globals
-const Results = document.getElementById('results');  let stk = [];    //stack
-const Stack = document.getElementById('stack');      let mod = Val;   //mode
-const Imm = document.getElementById('imm');          let imm = false; //immediate
-const Help = document.getElementById('help');        let cur = "";    //current
-const Helping = document.getElementById('helping');  let sel = 0;     //selection
-const Log = document.getElementById('log');          let res = -1;    //selected result
+// types
+const Val = Symbol("val"), Res = Symbol("res"), Fun = Symbol("fun"), Tra = Symbol("tra"), Exp = Symbol("exp");
+// args
+const X = Symbol("x"), W = Symbol("w"), Y = Symbol("y"); U = Symbol("unsel");
+// doc elements
+const Results = document.getElementById('results');
+const Stack = document.getElementById('stack');
+const Imm = document.getElementById('imm');
+const Help = document.getElementById('help');
+const Helping = document.getElementById('helping');
+const Log = document.getElementById('log');
+// globals: stack, mode, immediate, current, selection, result
+let stk = [], mod = Val, imm = false, cur = "", sel = 0, res = -1;
 
 // stack
-function input(c) { cur += c; setres(); sel = 1 + (stk.length > 0); }
-function push(t, v) { stk.push({type: t, value: v}); setmod(t); sel = Math.min(stk.length, 2); }
-function pushc() { if (cur != "") push(Val, cur); cur = ""; return stk.length; }
-function pop() { if ((n = stk.length) > 1) setmod(stk[n-2].type); return stk.pop(); }
-function popx() { e = pop(); return (e.type == Exp ? `(${e.value})` : e.value); }
-function dup() { if ((n = pushc()) < 1) return; stk.push(stk[n-1]); }
-function drop() { if ((n = pushc()) < 1) return; r = stk[n-1].type; pop(); setres(isres(r) ? r : n > 1 ? -1 : nres() - 1); }
-function clear() { stk = []; cur = ""; setres(nres() - 1); sel = 0; }
+function ss() { return stk.length; } // stack size
+function st(i) { return stk[stk.length-i].type } // stack (element) type
+function input(c) { cur += c; setres(); sel = 1 + (ss() > 0); }
+function push(t, v) { stk.push({type: t, value: v}); setmod(t); if (!isfun(t) || (ss() > 1 && isfun(st(2)))) sel = Math.min(ss(), 2); }
+function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
+function pop() { if (ss() > 1) setmod(st(2)); return stk.pop(); }
+function popx() { e = pop(); return (e.type == Exp || e.type == Tra ? `(${e.value})` : e.value); }
+function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
+function drop() { if (n = pushc() < 1) return; pop(); setres(n > 1 && isres(t = st(1)) ? t : -1); }
+function clear() { stk = []; cur = ""; setres(rs() - 1); sel = 0; }
 function reset() { clear(); setres(); Results.innerHTML = Stack.innerHTML = Log.innerHTML = ""; }
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
-function selection() { setres(); if (cur != "") pushc(); sel = (sel <= 1 ? Math.min(stk.length, 2) : sel - 1); }
+function selection() { setres(); if (cur != "") pushc(); sel = (sel == 0 ? Math.min(ss(), 2) : sel - 1); }
 
 // functions
-function monadic(f) { if (pushc() < 1) return; x = popx(); push(Exp, f + x); if(imm) evaluate(); }
-function dyadic(f) { if (pushc() < 2) return; w = popx(); x = pop().value; push(Exp, w + f + x); if(imm) evaluate(); }
-function ambval(m, d, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
-function ambimm(m, d, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(stk.length, ps); }
+function isfun(t) { return (t == Fun || t == Tra); }
 function evaluate() { if (pushc() < 1) return; x = pop().value; ans = fmt(bqn(x)); push(imm != Imm ? pushr(ans, x) : Exp, ans); }
+function evimm() { if (imm && mod == Exp) evaluate(); }
+function pushf(f, g = null) { if (sel != 0) return false; push(Fun, f ? f : g); return true; }
+function monadic(f) { if (pushc() < 1 || pushf(f)) return; push(isfun(st(1)) ? Tra : Exp, f + popx()); evimm() }
+function dyadic(f) { if (pushc() < 2 || pushf(f)) return; push(isfun(st(2)) ? Tra : Exp, popx() + f + pop().value); evimm() }
+function ambval(m, d, s = false) { if (pushf(d, m)) return; if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
+function ambimm(m, d, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = (imm ? "on" : "off");  }
 
 // results (ro stack)
-function nres() { return Results.childElementCount; }
+function rs() { return Results.childElementCount; } // results size
 function pushr(r, x = "") {
 	tr = document.createElement("tr"); tr.appendChild(html("td", "", r));
 	if (x != "") tr.appendChild(html("td", Exp.description, "= " + x));
-	Results.appendChild(tr); return nres() - 1;
+	Results.appendChild(tr); return rs() - 1;
 }
 function setres(i = -1) { if (typeof(i) != "number") i = -1;
 	res = -1; for (const c of Results.childNodes) if (c.firstChild) c.firstChild.className = "";
-	if (i >= 0 && i < nres()) { Results.childNodes.item(res = i).firstChild.classList.add(Res.description, X.description); }
+	if (i >= 0 && i < rs()) { Results.childNodes.item(res = i).firstChild.classList.add(Res.description, X.description); }
 	setmod();
 }
 function isres(t) { return typeof(t) == "number"; }
@@ -55,18 +61,18 @@ function setmod(t = stk) {
 	if (t == stk) { if ((n = t.length) < 1) return mod = Val; t = t[n-1].type; }
 	return mod = t;
 }
-function prevres() { pushc(); if(res < 0 && isres(mod)) res = mod + 1; if (res < 0) res = nres(); setres(res - 1); }
-function nextres() { pushc(); if(res < 0 && isres(mod)) res = mod - 1; if (++res >= nres()) res = -1; setres(res); }
-function res2tos() { if (res < 0 || res >= nres()) return; push(res, Results.childNodes.item(res).firstChild.innerHTML); }
+function prevres() { pushc(); if(res < 0 && isres(mod)) res = mod + 1; if (res < 0) res = rs(); setres(res - 1); }
+function nextres() { pushc(); if(res < 0 && isres(mod)) res = mod - 1; if (++res >= rs()) res = -1; setres(res); }
+function res2tos() { if (res < 0 || res >= rs()) return; push(res, Results.childNodes.item(res).firstChild.innerHTML); }
 
 // input
 function keydown(e) {
 	//Log.textContent += ` ${e.code}`;
 	if (e.shiftKey) switch (e.code) {
+		case "Equal": ambval('+', '+'); break;
+		case "Minus": ambimm('-', 0); break;
 		case "Digit9": input(cur == "" ? '0.0' : '00'); break;
 		case "Digit0": input(cur == "" ? '0.00' : '000'); break;
-		case "Minus": ambimm('-', 0); break;
-		case "Equal": ambval('+', '+'); break;
 		case "Digit5": ambval('0.01×', '(0.01××)'); break;
 		case "Digit6": ambval('⋆', '⋆', true); break;
 		case "KeyY": ambval('⋆⁼', '⋆⁼'); break;
@@ -111,12 +117,13 @@ function keydown(e) {
 		case "Enter": e.preventDefault();
 			if (cur != "") { pushc(); break; }
 			if (mod == Exp) { evaluate(); break; }
+			if (isfun(mod)) { f = popx(); sel = Math.min(2 - sel, ss()); ambval(f, f); break; }
 			if (res >= 0) { res2tos(); setres(); break; }
-			if (stk.length > 0) pushr(pop().value); setres(); break;
-		case "Backspace": e.preventDefault(); n = stk.length;
+			if (ss() > 0) pushr(pop().value); setres(); break;
+		case "Backspace": e.preventDefault();
 			if (cur != "") { cur = cur.slice(0, cur.length - 1); setmod(); break; }
-			if (n < 1) break; if (mod == Val && ((t = stk[n-1].type) == Exp || t == Res)) { mod = t; break; }
-			if (stk[n-1].type == Val) { input(pop().value); break; }
+			if (ss() < 1) break; if (mod == Val && ((t = st(1)) == Exp || t == Res)) { mod = t; break; }
+			if (st(1) == Val) { input(pop().value); break; }
 			m = mod; drop(); break;
 		default: return;
 	}
@@ -134,9 +141,12 @@ function cursor(mod) {
 	Stack.appendChild(html("cursor", c, res < 0 ? "█" : "⎕"));
 }
 function update() {
-	Stack.innerHTML = ''; n = stk.length;
+	Stack.innerHTML = ''; n = ss(); if (ss()) f1 = isfun(st(1));
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
-	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, e.value); n--; }
+	for (const e of stk) {
+		element(n > sel ? ((f1 && sel == 0 && n == 3) || (f1 && sel == 1 && n == 2) ? Y :
+			f1 && sel == 0 && n == 2 ? (ss() > 2 ? W : Y) : U) : (n == 1 && sel == 2) ? W : X, e.value); n--;
+	}
 	if (cur != "") element(sel > 1 ? W : X, cur); cursor(mod);
 	if (isres(mod)) Results.childNodes.item(mod).firstChild.classList.add(Res.description);
 	window.scrollTo(0, document.body.scrollHeight);
