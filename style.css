@@ -22,8 +22,9 @@ p:empty { display: none; }
 
 table { border-collapse: collapse; margin-top: 2em; }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
-td.exp { color: #6b6; }
-td.res { text-decoration: underline; text-decoration-color: #cde; text-decoration-thickness: 3px; color: #06e; }
+td.exp { color: #8a8; }
+td.res { text-decoration: underline; text-decoration-color: #cde; text-decoration-thickness: 3px; }
+td.x { color: #06e; }
 
 #stack { padding-left: 0; }
 #stack span.unsel { color: #888; }
