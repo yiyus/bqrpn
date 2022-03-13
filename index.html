@@ -12,26 +12,19 @@
 		<a href="javascript:immediate();" title="immediate"><span id="imm" class="off"></span></a>
 		<a href="javascript:help();" title="help"><span id="helping" class="off"></span></a>
 	</div>
-	<table id="done"></table>
+	<table id="results"></table>
 	<p id="stack"></p>
 	<p id="log"/></p>
-	<p id="help">
-		?: show/hide help<br>
-		+ -˜ ×(*) ÷˜(/) √(%) ⋆˜(^) ⋆⁼(&)<br>
-		&lt; &gt; = ≤(K) ≥(L) ≠(;) ⌊(k) ⌈(l) |˜<br>
-		(c)os (s)in (t)an a(C)os a(S)in a(T)an<br>
-		space:monadic/dyadic, shift+space:<octi></octi><br>
-		tab:swap shift+tab:over esc:clean<br>
-		shift+enter:dup shift+backsp:drop<br>
-		enter:
-			x<span class="input cursor">█</span> push x,
-			x<span class="eval">█</span> eval x,
-			x<span class="empty">█</span> ans=x<br>
-		when empty:
-			<span class="empty cursor">█</span> push ans,
-			ans<span class="input">█</span> drop<br>
-		<a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a>
-	</p>
+	<pre id="help">?: show/hide help
+		value<cursor class="val tight">█</cursor> result<cursor class="res tight">█</cursor> expression<cursor class="exp tight">█</cursor>
+		+ -˜ ×(*) ÷˜(/) √(%) ⋆˜(^) ⋆⁼(&)
+		&lt; &gt; = ≤(K) ≥(L) ≠(;) ⌊(k) ⌈(l) |˜
+		(c)os (s)in (t)an a(C)os a(S)in a(T)an
+		space:monadic/dyadic, shift+space:<octi></octi>
+		tab:swap shift+tab:over esc:clean
+		enter:eval shift+enter:dup shift+backsp:drop
+		up/down: select prev/next result (enter to push)
+		<a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a></pre>
 	<script type="text/javascript" src="bqn.js"></script>
 	<script type="text/javascript" src="rpn.js"></script>
 	</body>

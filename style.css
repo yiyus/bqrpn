@@ -23,19 +23,21 @@ p:empty { display: none; }
 table { border-collapse: collapse; margin-top: 2em; }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
 td.exp { color: #6b6; }
-tr.ans { color: #06e; }
+td.res { text-decoration: underline; text-decoration-color: #cde; text-decoration-thickness: 3px; color: #06e; }
 
 #stack { padding-left: 0; }
 #stack span.unsel { color: #888; }
 #stack span.x     { color: #06e; }
 #stack span.w     { color: #91c; }
-span.cursor { padding-left: 0; }
-span.empty { color: #def; }
-span.input { color: #ccc; }
-span.eval  { color: #cec; }
+
+cursor { padding: 0 0 0 1em; }
+cursor.tight { padding-left: 0; }
+cursor.val { color: #ccc; }
+cursor.res { color: #def; }
+cursor.exp { color: #cec; }
 
 #help {
-	position: fixed; bottom: 1ex; right: 1em;
+	position: fixed; bottom: 1ex; right: 1em; margin:0;
 	text-align: right; color: #777; display: none;
 }
 #help a { color: #777; text-decoration: none;}
