@@ -5,13 +5,13 @@ const Empty = Symbol("empty");  const X = Symbol("x");      const Val = Symbol("
 const Input = Symbol("input");  const W = Symbol("w");      const Ans = Symbol("answer");
 const Eval = Symbol("eval");    const U = Symbol("unsel");  const Exp = Symbol("expression");
 
-// doc elements                                  // globals
-const Done = document.getElementById('done');    let stk = [];    //stack
-const Stack = document.getElementById('stack');  let mod = Empty; //mode
-const Imm = document.getElementById('imm');      let imm = false; //immediate
-const Help = document.getElementById('help');    let cur = "";    //current
-const Log = document.getElementById('log');      let ans = "";    //last answer
-                                                 let sel = 0;     //selection
+// doc elements                                      // globals
+const Done = document.getElementById('done');        let stk = [];    //stack
+const Stack = document.getElementById('stack');      let mod = Empty; //mode
+const Imm = document.getElementById('imm');          let imm = false; //immediate
+const Help = document.getElementById('help');        let cur = "";    //current
+const Helping = document.getElementById('helping');  let ans = "";    //last answer
+const Log = document.getElementById('log');          let sel = 0;     //selection
 
 // stack
 function input(c) { cur += c; mod = Input; sel = 1 + (stk.length > 0); }
@@ -39,7 +39,7 @@ function monadic(f) { if (push_curr() < 1) return; x = pop_exp(); push(Exp, f + 
 function dyadic(f) { if (push_curr() < 2) return; w = pop_exp(); x = pop().value; push(Exp, w + f + x); if(imm) evaluate(); }
 function ambval(m, d, s = false) { if (sel == 1) monadic(m); if (sel < 2) return; if (s) swap(); dyadic(d); }
 function evaluate() { if (push_curr() < 1) return; x = pop().value; add_done(ans = fmt(bqn(x)), x); push(Ans, ans); }
-function immediate() { imm = !imm; Imm.className = (imm ? "imm" : "");  }
+function immediate() { imm = !imm; Imm.className = (imm ? "on" : "off");  }
 
 // input
 function keydown(e) {
@@ -48,7 +48,17 @@ function keydown(e) {
 		case "Equal": ambval('+', '+'); break;
 		case "Digit5": ambval('√', '√'); break;
 		case "Digit6": ambval('⋆', '⋆', true); break;
+		case "Digit7": ambval('⋆⁼', '⋆⁼'); break;
 		case "Digit8": ambval('×', '×'); break;
+		case "Comma": ambval('0⊸<', '<'); break;
+		case "Period": ambval('0⊸>', '>'); break;
+		case "KeyC": ambval('•math.Cos⁼', '÷⟜•math.Sin˜'); break;
+		case "KeyS": ambval('•math.Sin⁼', '÷⟜•math.Cos˜'); break;
+		case "KeyT": ambval('•math.Tan⁼', '•math.ATan2'); break;
+		case "KeyK": ambval('0⊸≤', '≤'); break;
+		case "KeyL": ambval('0⊸≥', '≥'); break;
+		case "Backslash": ambval('|', '|', true); break;
+		case "Minus": ambval('0⊸≠', '≠'); break;
 		case "Space": immediate(); break;
 		case "Tab": e.preventDefault(); over(); break;
 		case "Backspace": e.preventDefault(); drop(); break;
@@ -59,6 +69,12 @@ function keydown(e) {
 		case "Digit0": case "Digit1": case "Digit2": case "Digit3": case "Digit4": case "Digit5":
 		case "Digit6": case "Digit7": case "Digit8": case "Digit9": input(e.code[e.code.length-1]); break;
 		case "Period": input('.'); break;
+		case "KeyC": ambval('•math.Cos', '×⟜•math.Cos˜'); break;
+		case "KeyS": ambval('•math.Sin', '×⟜•math.Sin˜'); break;
+		case "KeyT": ambval('•math.Tan', '×⟜•math.Tan˜'); break;
+		case "KeyK": ambval('⌊', '⌊'); break;
+		case "KeyL": ambval('⌈', '⌈'); break;
+		case "Equal": ambval('0⊸=', '='); break;
 		case "Minus": ambval('-', '-', true); break;
 		case "Slash": ambval('÷', '÷', true); break;
 		case "Space": selection(); break;
@@ -103,7 +119,10 @@ function update() {
 	if (cur != "") element(sel > 1 ? W : X, cur);
 	cursor(mod); window.scrollTo(0, document.body.scrollHeight);
 }
-function help() { Help.style.display = (Help.style.display != "block" ? "block" : "none"); }
+function help() {
+	h = (Help.style.display == "block");
+	Help.style.display = (h ? "none" : "block"); Helping.className = (h ? "off" : "on");
+}
 
 // go!
-reset(); update(); document.addEventListener('keydown', keydown);
+reset(); update(); help(); immediate(); document.addEventListener('keydown', keydown);

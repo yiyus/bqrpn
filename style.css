@@ -1,17 +1,19 @@
 @font-face { font-family: "BQN386"; src: url("https://dzaima.github.io/BQN386/BQN386.ttf"); }
 @font-face { font-family: "Octicons"; src: url("https://yelp.github.io/fonts/octicons.ttf"); }
+octi { font-family: "Octicons"; }
 
 body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; }
 
 .topbar {
-	position: fixed; top:0;  width: 100%;
+	position: fixed; top:0;  width: 100%; color: #777;
 	margin: 0 0 1ex 0; padding: 3px; background-color: #ccc;
 	font-family: "Octicons"; font-size: 16px; text-align: right;
 }
-.topbar a {	padding: 0 1ex; text-decoration: none; color: #777; }
+.topbar span { padding: 0; }
+.topbar a {	padding: 0 1em 1ex 0; text-decoration: none; color: #777; }
 .topbar a:hover, .topbar a:active { color: #000; }
-.topbar #imm { color: #777; }
-.topbar #imm.imm { color: #000; }
+.topbar a .off, .topbar a:hover .off, .topbar a:active .off { color: #777; }
+.topbar a .on, .topbar a:hover .on, .topbar a:active .on { color: #000; }
 
 div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }
@@ -34,5 +36,6 @@ span.eval  { color: #cec; }
 
 #help {
 	position: fixed; bottom: 1ex; right: 1em;
-	text-align: right; color: #aaa; display: none;
+	text-align: right; color: #777; display: none;
 }
+#help a { color: #777; text-decoration: none;}

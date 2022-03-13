@@ -8,24 +8,28 @@
     </head>
     <body>
     <div class="topbar">
-		<a href="javascript:immediate();" title="immediate"><span id="imm"></span></a>
 		<a href="javascript:reset();update();" title="reset"></a>
-		<a href="javascript:help();" title="help"></a>
+		<a href="javascript:immediate();" title="immediate"><span id="imm" class="off"></span></a>
+		<a href="javascript:help();" title="help"><span id="helping" class="off"></span></a>
 	</div>
 	<table id="done"></table>
 	<p id="stack"></p>
 	<p id="log"/></p>
 	<p id="help">
-		+-*/^%: +-×÷⋆√<br>
-		shift+enger:dup shift+backsp:drop<br>
-		esc:clean tab:swap shift+tab:over<br>
+		+ -˜ ×(*) ÷˜(/) √(%) ⋆˜(^) ⋆⁼(&)<br>
+		&lt; &gt; = ≠(_) ≤(K) ≥(L) ⌊(k) ⌈(l) |˜<br>
+		(c)os (s)in (t)an a(C)os a(S)in a(T)an<br>
+		space:monadic/dyadic, shift+space:<octi></octi><br>
+		tab:swap shift+tab:over esc:clean<br>
+		shift+enter:dup shift+backsp:drop<br>
 		enter:
 			x<span class="input cursor">█</span> push x,
 			x<span class="eval">█</span> eval x,
 			x<span class="empty">█</span> ans=x<br>
 		when empty:
 			<span class="empty cursor">█</span> push ans,
-			ans<span class="input">█</span> drop
+			ans<span class="input">█</span> drop<br>
+		<a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a>
 	</p>
 	<script type="text/javascript" src="bqn.js"></script>
 	<script type="text/javascript" src="rpn.js"></script>
