@@ -19,7 +19,7 @@ let stk = [], mod = Val, imm = false, cur = "", sel = 0, res = -1;
 function ss() { return stk.length; } // stack size
 function st(i) { return stk[stk.length-i].type } // stack (element) type
 function input(c) { cur += c; setres(); sel = 1 + (ss() > 0); }
-function push(t, v) { stk.push({type: t, value: v}); setmod(t); if (!isfun(t) || (ss() > 1 && isfun(st(2)))) sel = Math.min(ss(), 2); }
+function push(t, v) { stk.push({type: t, value: v}); setmod(t); sel = (!isfun(t) || (ss() > 1 && isf(2)) ? Math.min(ss(), 2) : 0); }
 function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
 function pop() { if (ss() > 1) setmod(st(2)); return stk.pop(); }
 function popx() { e = pop(); return (e.type == Exp || e.type == Tra ? `(${e.value})` : e.value); }
@@ -30,17 +30,25 @@ function reset() { clear(); setres(); Results.innerHTML = Stack.innerHTML = Log.
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
-function selection() { setres(); if (cur != "") pushc(); sel = (sel == 0 ? Math.min(ss(), 2) : sel - 1); }
+function selection() {
+	setres(); if (cur != "") pushc();
+	if (ss() && isf(1)) { sel = (sel == Math.min(ss(), 2) ? 0 : sel + 1); return; }
+	sel = (sel == 0 ? Math.min(ss(), 2) : sel - 1);
+}
 
 // functions
 function isfun(t) { return (t == Fun || t == Tra); }
+function isf(i) { return isfun(st(i)); }
 function evaluate() { if (pushc() < 1) return; x = pop().value; ans = fmt(bqn(x)); push(imm != Imm ? pushr(ans, x) : Exp, ans); }
 function evimm() { if (imm && mod == Exp) evaluate(); }
 function pushf(f, g = null) { if (sel != 0) return false; push(Fun, f ? f : g); return true; }
-function monadic(f) { if (pushc() < 1 || pushf(f)) return; push(isfun(st(1)) ? Tra : Exp, f + popx()); evimm() }
-function dyadic(f) { if (pushc() < 2 || pushf(f)) return; push(isfun(st(2)) ? Tra : Exp, popx() + f + pop().value); evimm() }
+function monadic(f) { if (pushc() < 1 || pushf(f)) return; push(isf(1) ? Tra : Exp, f + popx()); evimm() }
+function dyadic(f) { if (pushc() < 2 || pushf(f)) return; push(isf(2) ? Tra : Exp, popx() + f + pop().value); evimm() }
 function ambval(m, d, s = false) { if (pushf(d, m)) return; if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
+function mod1(m) { if (pushc() < 1) return; push(Tra, popx() + m); }
+function mod2(m) { if (pushc() < 2) return; x = popx(); Log.textContent+=`<<${x}>>`; push(Tra, popx() + m + x); }
+function ambmod(m, d) { if (sel == 1) mod1(m); else if (sel == 2) mod2(d); }
 function immediate() { imm = !imm; Imm.className = (imm ? "on" : "off");  }
 
 // results (ro stack)
@@ -67,7 +75,6 @@ function res2tos() { if (res < 0 || res >= rs()) return; push(res, Results.child
 
 // input
 function keydown(e) {
-	//Log.textContent += ` ${e.code}`;
 	if (e.shiftKey) switch (e.code) {
 		case "Equal": ambval('+', '+'); break;
 		case "Minus": ambimm('-', 0); break;
@@ -86,6 +93,9 @@ function keydown(e) {
 		case "KeyL": ambval('0≥', '≥'); break;
 		case "Backslash": ambval('|', '|', true); break;
 		case "Space": immediate(); break;
+		case "Backquote": ambmod('˜', '○'); break;
+		case "BracketLeft": ambmod('⁼', '⌾'); break;
+		case "BracketRight": ambmod('⁼', '⍟'); break;
 		case "Tab": e.preventDefault(); over(); break;
 		case "Backspace": e.preventDefault(); m = mod; drop(); break;
 		case "Escape": e.preventDefault(); reset(); break;
@@ -112,6 +122,9 @@ function keydown(e) {
 		case "Space": selection(); break;
 		case "ArrowUp": prevres(); break;
 		case "ArrowDown": nextres(); break;
+		case "Backquote": ambmod('˙', '∘'); break;
+		case "BracketLeft": ambmod('˜', '⊸'); break;
+		case "BracketRight": ambmod('˜', '⟜'); break;
 		case "Tab": e.preventDefault(); swap(); break;
 		case "Escape": e.preventDefault(); clear(); break;
 		case "Enter": e.preventDefault();
@@ -141,7 +154,7 @@ function cursor(mod) {
 	Stack.appendChild(html("cursor", c, res < 0 ? "█" : "⎕"));
 }
 function update() {
-	Stack.innerHTML = ''; n = ss(); if (ss()) f1 = isfun(st(1));
+	Stack.innerHTML = ''; n = ss(); if (ss()) f1 = isf(1);
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
 	for (const e of stk) {
 		element(n > sel ? ((f1 && sel == 0 && n == 3) || (f1 && sel == 1 && n == 2) ? Y :
