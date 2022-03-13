@@ -58,12 +58,12 @@ function keydown(e) {
 		case "KeyK": ambval('0⊸≤', '≤'); break;
 		case "KeyL": ambval('0⊸≥', '≥'); break;
 		case "Backslash": ambval('|', '|', true); break;
-		case "Minus": ambval('0⊸≠', '≠'); break;
 		case "Space": immediate(); break;
 		case "Tab": e.preventDefault(); over(); break;
 		case "Backspace": e.preventDefault(); drop(); break;
 		case "Escape": e.preventDefault(); reset(); break;
 		case "Enter": e.preventDefault(); dup(); break;
+		case "Slash": help(); break;
 		default: return;
 	} else switch (e.code) {
 		case "Digit0": case "Digit1": case "Digit2": case "Digit3": case "Digit4": case "Digit5":
@@ -74,6 +74,7 @@ function keydown(e) {
 		case "KeyT": ambval('•math.Tan', '×⟜•math.Tan˜'); break;
 		case "KeyK": ambval('⌊', '⌊'); break;
 		case "KeyL": ambval('⌈', '⌈'); break;
+		case "Semicolon": ambval('0⊸≠', '≠'); break;
 		case "Equal": ambval('0⊸=', '='); break;
 		case "Minus": ambval('-', '-', true); break;
 		case "Slash": ambval('÷', '÷', true); break;
