@@ -14,6 +14,7 @@ body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; }
 .topbar a:hover, .topbar a:active { color: #000; }
 .topbar a .off, .topbar a:hover .off, .topbar a:active .off { color: #777; }
 .topbar a .on, .topbar a:hover .on, .topbar a:active .on { color: #000; }
+.topbar #mod1 { font-family: 'BQN386'; padding: 1em; color: #000; }
 
 div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }

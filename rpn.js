@@ -9,12 +9,13 @@ const X = Symbol("x"), W = Symbol("w"), Y = Symbol("y"); U = Symbol("unsel");
 const Results = document.getElementById('results');
 const Stack = document.getElementById('stack');
 const Imm = document.getElementById('imm');
+const Mod1 = document.getElementById('mod1');
 const Banner = document.getElementById('banner');
 const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
 const Err = document.getElementById('err');
-// globals: stack, mode, immediate, current, selection, result
-let stk = [], mod = Val, imm = false, cur = "", sel = 0, res = -1;
+// globals: stack, mode, immediate, current, selection, result, mod-1
+let stk = [], mod = Val, imm = false, cur = "", sel = 0, res = -1, md1 = "";
 
 // stack
 function ss() { return stk.length; } // stack size
@@ -35,11 +36,12 @@ function selection() { setres(); if (cur != "") pushc(); sel = (sel == 1 ? Math.
 
 // functions
 function evaluate() { if (pushc() < 1) return; x = pop().value; ans = bqrpn(x); push(imm != Imm ? pushr(ans, x) : Exp, ans); }
-function monadic(f) { if (pushc() < 1) return; push(Exp, f + popx()); if (imm && mod == Exp) evaluate(); }
-function dyadic(f) { if (pushc() < 2) return; push(Exp, popx() + f + pop().value); if (imm && mod == Exp) evaluate(); }
+function monadic(f) { if (pushc() < 1) return; push(Exp, f + mod1() + popx()); if (imm && mod == Exp) evaluate(); }
+function dyadic(f) { if (pushc() < 2) return; push(Exp, popx() + f + mod1() + pop().value); if (imm && mod == Exp) evaluate(); }
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = (imm ? "on" : "off");  }
+function mod1(m = "") { r = md1; md1 = (m == r ? "" : m); return r; }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -107,6 +109,8 @@ function keydown(e) {
 		case "C": ambval('⍃', '⍃'); break;
 		case "S": ambval('⍌', '⍌'); break;
 		case "T": ambval('⍂', '⍂'); break;
+		// modifiers
+		case "\\": mod1('⁼'); break;
 		// interface
 		case "?": help(); break;
 		case " ": if (e.shiftKey) immediate(); else selection(); break;
@@ -144,8 +148,8 @@ function cursor(mod) {
 	Stack.appendChild(html("cursor", c, res < 0 ? "█" : "⎕"));
 }
 function update() {
-	Banner.style.visibility = (ss() || rs() || cur ? "hidden" : "visible");
-	Stack.innerHTML = Err.textContent = ''; n = ss();
+	Banner.style.visibility = (ss() || rs() || cur || md1 ? "hidden" : "visible");
+	Stack.innerHTML = Err.textContent = ''; Mod1.textContent = md1; n = ss();
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
 	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, e.value); n--; }
 	if (cur != "") element(sel > 1 ? W : X, cur); cursor(mod); setres(res, sel);
@@ -162,6 +166,7 @@ prim = [ // 1st:key 2nd:symbol rest:function
 	"<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
 	"⍄•math.Cos⊘(×⟜•math.Cos˜)", "⍓•math.Sin⊘(×⟜•math.Sin˜)", "⍁•math.Tan⊘(×⟜•math.Tan˜)",
 	"⍃•math.Cos⁼⊘(÷⟜•math.Cos˜)", "⍌•math.Sin⁼⊘(÷⟜•math.Sin˜)", "⍂•math.Tan⁼⊘•math.ATan2",
+	"⁼⁼"
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
