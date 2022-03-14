@@ -23,9 +23,10 @@ pre { font-family: 'BQN386'; }
 
 table { border-collapse: collapse; margin-top: 2em; }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
-td.exp { color: #8a8; }
-td.res { text-decoration: underline; text-decoration-color: #cde; text-decoration-thickness: 3px; }
-td.x { color: #06e; }
+td.x { text-decoration: underline; text-decoration-color: #cde; text-decoration-thickness: 3px; }
+td.w { text-decoration: underline; text-decoration-color: #dbe; text-decoration-thickness: 3px; }
+tr.res td { background-color: #89b; color: white; }
+td.exp { width: 100%; color: #8a8; }
 
 #stack { padding-left: 0; }
 #stack span.unsel { color: #888; }

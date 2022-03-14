@@ -25,8 +25,8 @@ function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
 function pop() { if (ss() > 1) setmod(st(2)); return stk.pop(); }
 function popx() { e = pop(); return (e.type == Exp ? `(${e.value})` : e.value); }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
-function drop() { if (n = pushc() < 1) return; pop(); setres(n > 1 && isres(t = st(1)) ? t : -1); }
-function clear() { stk = []; cur = ""; setres(rs() - 1); sel = 0; }
+function drop() { if (n = pushc() < 1) return; t = st(1); pop(); setres(isres(t) ? t : -1); sel = Math.min(ss(), sel); }
+function clear() { stk = []; cur = ""; setres(-1); sel = 0; }
 function reset() { clear(); setres(); Results.innerHTML = Stack.innerHTML = Err.innerHTML = ""; }
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
@@ -48,9 +48,12 @@ function pushr(r, x = "") {
 	if (x != "") tr.appendChild(html("td", Exp.description, "= " + x));
 	Results.appendChild(tr); return rs() - 1;
 }
-function setres(i = -1) { if (typeof(i) != "number") i = -1;
-	res = -1; for (const c of Results.childNodes) if (c.firstChild) c.firstChild.className = "";
-	if (i >= 0 && i < rs()) { Results.childNodes.item(res = i).firstChild.classList.add(Res.description, X.description); }
+function setres(i = -1, sel = -1) {
+	if (typeof(i) != "number") i = -1; res = -1;
+	for (const c of Results.childNodes) { c.className = ""; if (c.firstChild) c.firstChild.className = ""; }
+	if (i >= 0 && i < rs()) { Results.childNodes.item(res = i).classList.add(Res.description); }
+	if (ss() > 1 && sel > 1 && isres(t = st(2))) Results.childNodes.item(t).firstChild.classList.add(X.description);
+	if (ss() && sel > 0 && isres(t = st(1))) Results.childNodes.item(t).firstChild.classList.add(sel > 1 ? W.description : X.description);
 	setmod();
 }
 function isres(t) { return typeof(t) == "number"; }
@@ -108,13 +111,14 @@ function keydown(e) {
 		case "?": help(); break;
 		case " ": if (e.shiftKey) immediate(); else selection(); break;
 		case "Tab": e.preventDefault(); if (e.shiftKey) over(); else swap(); break;
-		case "Escape": e.preventDefault(); if (e.shiftKey) reset(); clear(); break;
+		case "Escape": e.preventDefault(); if (e.shiftKey) reset(); else clear(); break;
 		case "ArrowUp": prevres(); break;
 		case "ArrowDown": nextres(); break;
 		case "Enter": e.preventDefault();
 			if (e.shiftKey) { dup(); break; }
 			if (cur != "") { pushc(); break; }
 			if (mod == Exp) { evaluate(); break; }
+			if (isres(mod)) { drop(); break; }
 			if (res >= 0) { res2tos(); setres(); break; }
 			if (ss() > 0) pushr(pop().value); setres(); break;
 		case "Backspace": e.preventDefault();
@@ -144,8 +148,7 @@ function update() {
 	Stack.innerHTML = Err.textContent = ''; n = ss();
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
 	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, e.value); n--; }
-	if (cur != "") element(sel > 1 ? W : X, cur); cursor(mod);
-	if (isres(mod)) Results.childNodes.item(mod).firstChild.classList.add(Res.description);
+	if (cur != "") element(sel > 1 ? W : X, cur); cursor(mod); setres(res, sel);
 	window.scrollTo(0, document.body.scrollHeight);
 }
 function help() {
