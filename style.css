@@ -19,6 +19,7 @@ div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }
 p { margin: 0; padding: 0.25ex 0 0.25ex 1em; max-width: 100%; }
 p:empty { display: none; }
+pre { font-family: 'BQN386'; }
 
 table { border-collapse: collapse; margin-top: 2em; }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
@@ -39,14 +40,19 @@ cursor.fun { color: #fde; }
 cursor.exp { color: #cec; }
 cursor.xxx { color: #ecf; }
 
+#err { background-color: #fff4f4; color: #c00; }
+
 #banner { position: absolute; top: 15%; width: 100%; font-size: 500%; text-align: center; user-select: none; }
 #banner h1 { font-size: 80px; word-spacing: -1ex; color: #222; }
 #banner h2 { font-size: 12px; font-weight: normal; color: #777; }
 
 #help {
-	position: fixed; bottom: 0; right: 1em; margin:0; font-family: 'BQN386';
+	position: fixed; bottom: 0; right: 1em; margin:0;
 	text-align: right; color: #777; display: none; user-select: none;
 }
 #help a { color: #777; text-decoration: none;}
-#help k { color: #e77; }
+#help v { color: #8a8; }
+#help d { color: #09f; }
+#help r { color: #b0f; }
+#help c { color: #e77; }
 #help #bqn { color: #1f7229;}

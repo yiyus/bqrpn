@@ -12,7 +12,7 @@ const Imm = document.getElementById('imm');
 const Banner = document.getElementById('banner');
 const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
-const Log = document.getElementById('log');
+const Err = document.getElementById('err');
 // globals: stack, mode, immediate, current, selection, result
 let stk = [], mod = Val, imm = false, cur = "", sel = 0, res = -1;
 
@@ -27,7 +27,7 @@ function popx() { e = pop(); return (e.type == Exp ? `(${e.value})` : e.value); 
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
 function drop() { if (n = pushc() < 1) return; pop(); setres(n > 1 && isres(t = st(1)) ? t : -1); }
 function clear() { stk = []; cur = ""; setres(rs() - 1); sel = 0; }
-function reset() { clear(); setres(); Results.innerHTML = Stack.innerHTML = Log.innerHTML = ""; }
+function reset() { clear(); setres(); Results.innerHTML = Stack.innerHTML = Err.innerHTML = ""; }
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
@@ -37,8 +37,8 @@ function selection() { setres(); if (cur != "") pushc(); sel = (sel == 1 ? Math.
 function evaluate() { if (pushc() < 1) return; x = pop().value; ans = bqrpn(x); push(imm != Imm ? pushr(ans, x) : Exp, ans); }
 function monadic(f) { if (pushc() < 1) return; push(Exp, f + popx()); if (imm && mod == Exp) evaluate(); }
 function dyadic(f) { if (pushc() < 2) return; push(Exp, popx() + f + pop().value); if (imm && mod == Exp) evaluate(); }
-function ambval(m, d, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
-function ambimm(m, d, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
+function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
+function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = (imm ? "on" : "off");  }
 
 // results (ro stack)
@@ -76,15 +76,16 @@ function keydown(e) {
 		case 'p': push(Exp, 'π'); break;
 		// immediate
 		case "_": ambimm('-', 0); break;
-		case 'e': ambimm('⁰', '⁰'); break;
+		case 'e': ambimm('10⋆', '×10⋆', true); break;
 		case 'd': ambimm('(π÷180)×', 0); break;
 		case 'r': ambimm('(180÷π)×', 0); break;
+		case 'P': ambimm('π×', 0); break;
 		// functions
 		case "+": ambval('+', '+'); break;
 		case "-": ambval('-', '-', true); break;
 		case "*": ambval('×', '×'); break;
 		case "/": ambval('÷', '÷', true); break;
-		case "%": ambval('%', '%'); break;
+		case "%": ambval('(×2)', '%'); break;
 		case "^": ambval('⋆', '⋆', true); break;
 		case "y": ambval('√', '√'); break;
 		case "Y": ambval('⍟', '⍟'); break;
@@ -140,7 +141,7 @@ function cursor(mod) {
 }
 function update() {
 	Banner.style.visibility = (ss() || rs() || cur ? "hidden" : "visible");
-	Stack.innerHTML = ''; n = ss();
+	Stack.innerHTML = Err.textContent = ''; n = ss();
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
 	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, e.value); n--; }
 	if (cur != "") element(sel > 1 ? W : X, cur); cursor(mod);
@@ -155,15 +156,15 @@ function help() {
 // reBQN
 prim = [ // 1st:key 2nd:symbol rest:function
 	"++", "--", "××", "÷÷", "%×⟜0.01⊘(0.01××)", "⋆⋆", "⍟⋆⁼", "√√", "⌊⌊", "⌈⌈", "||",
-	"<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠", "⁰10⊸⋆⊘(10⊸⋆⊸×)",
+	"<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
 	"⍄•math.Cos⊘(×⟜•math.Cos˜)", "⍓•math.Sin⊘(×⟜•math.Sin˜)", "⍁•math.Tan⊘(×⟜•math.Tan˜)",
 	"⍃•math.Cos⁼⊘(÷⟜•math.Cos˜)", "⍌•math.Sin⁼⊘(÷⟜•math.Sin˜)", "⍂•math.Tan⁼⊘•math.ATan2",
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
-	s = '•ReBQN {primitives⇐⟨' + s + '⟩}';
-	b = bqn(s);
-	return (x) => fmt(b(str(x)));
+	b = bqn('•ReBQN {primitives⇐⟨' + s + '⟩}');
+	return (x) => { try { return fmt(b(str(x))); } catch (error) { Err.textContent = fmt(error.message); throw(error); } }
+	//return (x) => { return fmt(b(str(x))); }
 }
 const bqrpn = rbqn(prim);
 
