@@ -48,7 +48,7 @@ function dyadic(f) { if (pushc() < 2 || pushf(f)) return; push(isf(2) ? Tra : Ex
 function ambval(m, d, s = false) { if (pushf(d, m)) return; if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function mod1(m) { if (pushc() < 1) return; push(Tra, popx() + m); }
-function mod2(m) { if (pushc() < 2) return; x = popx(); Log.textContent+=`<<${x}>>`; push(Tra, popx() + m + x); }
+function mod2(m) { if (pushc() < 2) return; x = popx(); push(Tra, popx() + m + x); }
 function ambmod(m, d) { if (sel == 1) mod1(m); else if (sel == 2) mod2(d); }
 function immediate() { imm = !imm; Imm.className = (imm ? "on" : "off");  }
 
@@ -87,8 +87,8 @@ function keydown(e) {
 		case "Digit8": ambval('×', '×'); break;
 		case "Comma": ambval('0<', '<'); break;
 		case "Period": ambval('0>', '>'); break;
-		case "KeyC": ambval('•math.Cos⁼', '÷⟜•math.Sin˜'); break;
-		case "KeyS": ambval('•math.Sin⁼', '÷⟜•math.Cos˜'); break;
+		case "KeyC": ambval('•math.Cos⁼', '÷⟜•math.Cos˜'); break;
+		case "KeyS": ambval('•math.Sin⁼', '÷⟜•math.Sin˜'); break;
 		case "KeyT": ambval('•math.Tan⁼', '•math.ATan2 '); break;
 		case "KeyK": ambval('0≤', '≤'); break;
 		case "KeyL": ambval('0≥', '≥'); break;
