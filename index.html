@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="robots" content="noindex, nofollow">
+		<link rel="icon" type="image/x-icon" href="favicon.ico">
         <link rel="stylesheet" href="style.css">       
         <title>rpn</title>
     </head>
@@ -12,21 +13,25 @@
 		<a href="javascript:immediate();" title="immediate"><span id="imm" class="off"></span></a>
 		<a href="javascript:help();" title="help"><span id="helping" class="off"></span></a>
 	</div>
+	<div id="banner"><h1>
+		<cursor class="val tight">█</cursor> <cursor class="exp tight">█</cursor> <cursor class="res tight">█</cursor>
+		<cursor class="xxx tight">█</cursor> <cursor class="fun tight">█</cursor><br>b q r p n</h1>
+		<h2>big questions reverse polish notation</h2>
+	</div>
 	<table id="results"></table>
 	<p id="stack"></p>
 	<p id="log"/></p>
 	<pre id="help">
-		+ -˜ ×[*] ÷˜[/] ⋆˜[^] ⋆⁼[Y] √[y]
-		&lt; &gt; = ≤[K] ≥[L] ≠[;] ⌊[k] ⌈[l] |˜
-		% π[p] ∞[o] ¯[_] 𝕩E𝕨[e] 00[(] 000[)]
-		[c]os [s]in [t]an a[C]os a[S]in a[T]an
-		˙/∘[`] ˜/○[~] ˜/⊸[[] ˜/⟜[]] ⁼/⌾[{] ⁼/⍟[}]
-		space:select 2/1/0, shift+space:<octi></octi>
-		tab:swap shift+tab:over esc:clean
-		enter:eval shift+enter:dup shift+backsp:drop
-		up/down: select prev/next result (enter to push)
+		<k>+</k> <k>-</k>˜ ×<k>*</k> ÷˜<k>/</k> ⋆˜<k>^</k> ⋆⁼<k>Y</k> √<k>y</k>
+		<k>&lt;</k> <k>&gt;</k> <k>=</k> ≤<k>K</k> ≥<k>L</k> ≠<k>;</k> ⌊<k>k</k> ⌈<k>l</k> </k>|</k>˜
+		</k>%</k> π<k>p</k> ∞<k>o</k> ¯<k>_</k> 𝕩<k>e</k>𝕨 00<k>(</k> 000<k>)</k>
+		<k>c</k>os <k>s</k>in <k>t</k>an a<k>C</k>os a<k>S</k>in a<k>T</k>an
+		˙/∘<k>`</k> ˜/○<k>~</k> ˜/⊸<k>[</k> ˜/⟜<k>]</k> ⁼/⌾<k>{</k> ⁼/⍟<k>}</k>
+		<k>↹</k>:swap <k>⇧</k>+<k>↹</k>:over <k>␛</k>:clear <k>⇧</k>+<k>␛</k>:reset
+		<k>⎵</k>:select 2/1/0, <k>⇧</k>+<k>⎵</k>:<octi></octi> <k>↵</k>:eval <k>⇧</k>+<k>↵</k>:dup <k>⇧</k>+<k>⌫</k>:drop
+		<k>↑</k>/<k>↓</k>: select prev/next result (<k>enter</k> to push)
 		TOS type: value<cursor class="val tight">█</cursor> function<cursor class="fun tight">█</cursor> expression<cursor class="exp tight">█</cursor> result<cursor class="res tight">█</cursor>
-		?: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a></pre>
+		<k>?</k>: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a></pre>
 	<script type="text/javascript" src="bqn.js"></script>
 	<script type="text/javascript" src="rpn.js"></script>
 	</body>

@@ -9,6 +9,7 @@ const X = Symbol("x"), W = Symbol("w"), Y = Symbol("y"); U = Symbol("unsel");
 const Results = document.getElementById('results');
 const Stack = document.getElementById('stack');
 const Imm = document.getElementById('imm');
+const Banner = document.getElementById('banner');
 const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
 const Log = document.getElementById('log');
@@ -135,7 +136,7 @@ function keydown(e) {
 			if (ss() > 0) pushr(pop().value); setres(); break;
 		case "Backspace": e.preventDefault();
 			if (cur != "") { cur = cur.slice(0, cur.length - 1); setmod(); break; }
-			if (ss() < 1) break; if (mod == Val && ((t = st(1)) == Exp || t == Res)) { mod = t; break; }
+			if (!ss()) break; if (mod == Val && ((t = st(1)) == Exp || t == Res)) { mod = t; break; }
 			if (st(1) == Val) { input(pop().value); break; }
 			m = mod; drop(); break;
 		default: return;
@@ -154,6 +155,7 @@ function cursor(mod) {
 	Stack.appendChild(html("cursor", c, res < 0 ? "█" : "⎕"));
 }
 function update() {
+	Banner.style.visibility = (ss() || rs() || cur ? "hidden" : "visible");
 	Stack.innerHTML = ''; n = ss(); if (ss()) f1 = isf(1);
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
 	for (const e of stk) {
