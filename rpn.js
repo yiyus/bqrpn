@@ -70,6 +70,7 @@ function res2tos() { if (res < 0 || res >= rs()) return; push(res, Results.child
 
 // input
 function keydown(e) {
+	if (e.ctrlKey || e.altKey || e.metaKey) return;
 	switch (e.key) {
 		// input
 		case "0": case "1": case "2": case "3": case "4": case "5":
