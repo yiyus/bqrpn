@@ -12,7 +12,6 @@ body.other { background-color: #333; color: #eee; }
 	body.other a #dark { color: #000; }
 }
 
-
 .topbar {
 	position: fixed; top:0;  width: 100%; color: #777;
 	margin: 0 0 1ex 0; padding: 3px; background-color: #ccc;
@@ -66,8 +65,15 @@ cursor.mod { color: #f00; }
 	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 14px;
 	text-align: right; color: #777; user-select: none;
 }
+#help k { display: inline-block; min-width: 1.5em; text-align: center; }
 #help a { color: #777; text-decoration: none;}
 #help d { color: #09f; }
 #help r { color: #c7e; }
 #help c { color: #e77; }
 #help #bqn { color: #1f7229;}
+
+#digits { visibility: hidden; font-size: 16px; }
+@media screen and (max-width: 640px) {
+	#digits { visibility: visible; }
+	#help { font-size: 9px; }
+}

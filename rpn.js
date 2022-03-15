@@ -70,9 +70,9 @@ function store(k) { if (!pushc()) return; monadic(k + '←'); pop(); vres[k] = r
 function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
 
 // input
-function keydown(e) { k = e.key;
-	back = back && e.key == "Backspace";
-	if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault();
+function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
+function key(k, s = false) {
+	back = back && k == "Backspace";
 	if (md1 && (k == "Enter" || k == "Escape")) { mod1(); update(); return; }
 	if (md1 == "a←" || md1 == "a") {
 		if (k >= 'A' && k <= 'Z') k = k.toLowerCase();
@@ -132,22 +132,24 @@ function keydown(e) { k = e.key;
 		case "Z": store('z'); break;
 		// interface
 		case "?": help(); break;
-		case " ": if (e.shiftKey) immediate(); else selection(); break;
+		case " ": if (s) immediate(); else selection(); break;
 		case "ArrowUp": prevres(); break;
 		case "ArrowDown": nextres(); break;
-		case "Tab": if (e.shiftKey) over(); else swap(); break;
+		case "Tab": if (s) over(); else swap(); break;
 		case "Escape":
+			if (s) { reset(); break;}
 			if (res >= 0) { setres(); break; }
-			if (e.shiftKey) reset(); else if (cur != "") cur = ""; else clear(); break;
+			if (cur != "") { cur = ""; break; }
+			clear(); break;
 		case "Enter":
-			if (e.shiftKey) { dup(); break; }
+			if (s) { dup(); break; }
 			if (cur != "") { pushc(); break; }
 			if (res >= 0) { rpush(); setres(); break; }
 			if (isres(st())) { drop(); break; }
 			if (st() == Exp) { evaluate(); break; }
 			if (ss() > 0) pushr(pop().value); setres(); break;
 		case "Backspace":
-			if (!e.shiftKey) {
+			if (!s) {
 				if (cur != "") { cur = cur.slice(0, cur.length - 1); break; }
 				if (ss() && st() == Val) { input(pop().value); break; }
 				if (ss() && !back) { back = true; setres(); break; }

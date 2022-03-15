@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="robots" content="noindex, nofollow">
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 		<link rel="icon" type="image/x-icon" href="favicon.ico">
         <link rel="stylesheet" href="style.css">       
         <title>bqrpn</title>
@@ -24,17 +25,20 @@
 	<p id="stack"></p>
 	<pre id="err"/></pre>
 	<pre id="help">
-		<d>+</d>inc/add <r>-</r>neg/sub ×<r>*</r>sgn/mul ÷inv<r>/</r>div
-		<d>%</d>÷100/pct ⋆<d>^</d>exp/pow ⍟<d>l</d>n/log √sq<d>r</d>t/root
-		<d>&lt;</d> <d>&gt;</d> <d>=</d>(NOT) ≤<d>L</d>E ≥<d>G</d>E ≠<d>N</d>E monadic: &lt;0,&gt;0,…
-		⌊floor/<d>m</d>in(AND) ⌈ceil/<d>M</d>ax(OR) <r>|</r>abs/mod
-		⍄<d>c</d>os ⍓<d>s</d>in ⍁<d>t</d>an ⍃a<d>C</d>os ⍌a<d>S</d>in ⍂a<d>T</d>an
+		<span id="digits"><k onclick="key('1');"><c>1</c></k> <k onclick="key('2');"><c>2</c></k> <k onclick="key('3');"><c>3</c></k> <k onclick="key('4');"><c>4</c></k> <k onclick="key('5');"><c>5</c></k>
+		<k onclick="key('.');"><c>.</c></k> <k onclick="key('6');"><c>6</c></k> <k onclick="key('7');"><c>7</c></k> <k onclick="key('8');"><c>8</c></k> <k onclick="key('9');"><c>9</c></k> <k onclick="key('0');"><c>0</c></k></span>
 
-		<c>p</c>i(×<c>P</c>i) in<c>f</c> ¯<c>_</c> 𝕩<c>E</c>𝕨 <c>D</c>2R <c>R</c>2D 00<c>(</c> 000<c>)</c>
-		⁼<c>i</c>nverse vars(<c>⇧</c> to assign):<c>x</c> <c>y</c> <c>z</c> <c>a</c>
+		<k onclick="key('+');"><d>+</d>inc/add</k> <k onclick="key('-');"><r>-</r>neg/sub</k> <k onclick="key('*');">×<r>*</r>sgn/mul</k> <k onclick="key('/');">÷inv<r>/</r>div</k>
+		<k onclick="key('%');"><d>%</d>÷100/pct</k> <k onclick="key('^');">⋆<d>^</d>exp/pow</k> <k onclick="key('l');">⍟<d>l</d>n/log</k> <k onclick="key('r');">√sq<d>r</d>t/root</k>
+		<k onclick="key('<');"><d>&lt;</d></k> <k onclick="key('>');"><d>&gt;</d></k> <k onclick="key('=');"><d>=</d>(NOT)</k> <k onclick="key('L');">≤<d>L</d>E</k> <k onclick="key('G');">≥<d>G</d>E</k> <k onclick="key('N');">≠<d>N</d>E</k> monadic: &lt;0,&gt;0,…
+		<k onclick="key('m');">⌊floor/<d>m</d>in(AND)</k> <k onclick="key('M');">⌈ceil/<d>M</d>ax(OR)</k> <k onclick="key('|');"><r>|</r>abs/mod</k>
+		<k onclick="key('c');">⍄<d>c</d>os</k> <k onclick="key('s');">⍓<d>s</d>in</k> <k onclick="key('t');">⍁<d>t</d>an</k> <k onclick="key('C');">⍃a<d>C</d>os</k> <k onclick="key('S');">⍌a<d>S</d>in</k> <k onclick="key('T');">⍂a<d>T</d>an</k>
 
-		<c>↹</c>:swap <c>⇧</c>+<c>↹</c>:over <c>⇧</c>+<c>⏎</c>:dup <c>⇧</c>+<c>⌫</c>:drop <c>␛</c>:clear <c>⇧</c>+<c>␛</c>:reset
-		<c>⎵</c>:F<d>𝕩</d>/<r>𝕨</r>F<d>𝕩</d>, <c>⇧</c>+<c>⎵</c>:<octi></octi> <c>⏎</c>:eval <c>↑</c>/<c>↓</c>: prev/next result (<c>⏎</c> to push)
+		<k onclick="key('p');"><c>p</c>i</k><k onclick="key('P');">(×<c>P</c>i)</k> <k onclick="key('f');">in<c>f</c></k> <k onclick="key('_');">¯<c>_</c></k> <k onclick="key('E');">𝕩<c>E</c>𝕨</k> <k onclick="key('D');"><c>D</c>2R</k> <k onclick="key('R');"><c>R</c>2D</k> <k onclick="key('(');">00<c>(</c></k> <k onclick="key(')');">000<c>)</c></k>
+		<k onclick="key('i');">⁼<c>i</c>nverse</k> vars(<c>⇧</c> to assign):<k onclick="key('x');"><c>x</c></k> <k onclick="key('y');"><c>y</c></k> <k onclick="key('z');"><c>z</c></k> <k onclick="key('A');"><c>a</c></k>
+
+		<k onclick="key('Tab');"><c>↹</c>:swap</k> <k onclick="key('Tab', true);"><c>⇧</c>+<c>↹</c>:over</k> <k onclick="key('Enter', true);"><c>⇧</c>+<c>⏎</c>:dup</k> <k onclick="key('Backspace', true);"><c>⇧</c>+<c>⌫</c>:drop</k> <k onclick="key('Escape');"><c>␛</c>:clear</k> <k onclick="key('i');"><c>⇧</c>+<c>␛</c>:reset</k>
+		<k onclick="key(' ');"><c>⎵</c>:F<d>𝕩</d>/<r>𝕨</r>F<d>𝕩</d></k>, <k onclick="key(' ', true);"><c>⇧</c>+<c>⎵</c>:<octi></octi></k> <k onclick="key('Enter');"><c>⏎</c>:eval</k> <k onclick="key('ArrowUp');"><c>↑</c>prev</k>/<k onclick="key('ArrowDown');"><c>↓</c>next</k> result (<c>⏎</c> to push)
 
 		TOS type: value<cursor class="val tight">█</cursor> function<cursor class="fun tight">█</cursor> expression<cursor class="exp tight">█</cursor> result<cursor class="res tight">█</cursor>
 		<c>?</c>: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a> (powered by <a id="bqn" href="https://mlochbaum.github.io/BQN/">BQN</a>)
