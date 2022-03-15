@@ -51,7 +51,7 @@ cursor.xxx { color: #ecf; }
 #banner h2 { font-size: 12px; font-weight: normal; color: #777; }
 
 #help {
-	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 13px;
+	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 14px;
 	text-align: right; color: #777; display: none; user-select: none;
 }
 #help a { color: #777; text-decoration: none;}
