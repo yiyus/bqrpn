@@ -2,7 +2,16 @@
 @font-face { font-family: "Octicons"; src: url("https://yelp.github.io/fonts/octicons.ttf"); }
 octi { font-family: "Octicons"; }
 
-body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; }
+body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; color: #222; }
+body.other { background-color: #333; color: #eee; }
+
+@media (prefers-color-scheme: dark) {
+	body { background-color: #333; color: #eee; }
+	body a #dark { color: #777; }
+	body.other { background-color: #fff; color: #222; }
+	body.other a #dark { color: #000; }
+}
+
 
 .topbar {
 	position: fixed; top:0;  width: 100%; color: #777;
@@ -23,9 +32,9 @@ pre { font-family: 'BQN386'; }
 
 table { border-collapse: collapse; margin-top: 2em; }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
-td.x { text-decoration: underline; text-decoration-color: #cde; text-decoration-thickness: 3px; }
-td.w { text-decoration: underline; text-decoration-color: #dbe; text-decoration-thickness: 3px; }
-tr.res td { background-color: #89b; color: white; }
+td.x { text-decoration: underline; text-decoration-color: #09f; text-decoration-thickness: 2px; }
+td.w { text-decoration: underline; text-decoration-color: #c7e; text-decoration-thickness: 2px; }
+tr.res td { background-color: #667; color: white; }
 td.exp { width: 100%; color: #8a8; }
 td.eq { color: #888; }
 
@@ -34,23 +43,23 @@ td.eq { color: #888; }
 
 #stack { padding-left: 0; }
 #stack.none { margin-top: 2em; }
-#stack span.unsel { color: #888; }
+#stack span.unsel { color: #777; }
 #stack span.x     { color: #09f; }
-#stack span.w     { color: #b0f; }
+#stack span.w     { color: #c7e; }
 
 cursor { padding: 0 0 0 1em; }
 cursor.tight { padding-left: 0; }
 cursor.val { color: #ccc; }
-cursor.res { color: #def; }
-cursor.fun { color: #fde; }
-cursor.exp { color: #cec; }
-cursor.xxx { color: #ecf; }
+cursor.res { color: #cde; }
+cursor.fun { color: #ecd; }
+cursor.exp { color: #beb; }
+cursor.xxx { color: #dbf; }
 cursor.mod { color: #f00; }
 
 #err { padding: 0 1em; background-color: #fff4f4; color: #c00; }
 
 #banner { position: absolute; top: 15%; width: 100%; font-size: 500%; text-align: center; user-select: none; }
-#banner h1 { font-size: 80px; word-spacing: -1ex; color: #222; }
+#banner h1 { font-size: 80px; word-spacing: -1ex; }
 #banner h2 { font-size: 12px; font-weight: normal; color: #777; }
 
 #help {
@@ -59,6 +68,6 @@ cursor.mod { color: #f00; }
 }
 #help a { color: #777; text-decoration: none;}
 #help d { color: #09f; }
-#help r { color: #b0f; }
+#help r { color: #c7e; }
 #help c { color: #e77; }
 #help #bqn { color: #1f7229;}

@@ -11,6 +11,7 @@ const Vars = document.getElementById('vars');
 const Stack = document.getElementById('stack');
 const Imm = document.getElementById('imm');
 const Banner = document.getElementById('banner');
+const Dark = document.getElementById('dark');
 const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
 const History = document.getElementById('history');
@@ -123,7 +124,8 @@ function keydown(e) { k = e.key;
 		case "S": ambval('⍌', '⍌'); break;
 		case "T": ambval('⍂', '⍂'); break;
 		// modifiers
-		case "i": mod1('⁼'); break;
+		case "i":
+		case "I": mod1('⁼'); break;
 		// variables
 		case "a": if (vres.length) mod1('a'); break;
 		case "A": mod1('a←'); break;
@@ -140,6 +142,7 @@ function keydown(e) { k = e.key;
 		case "ArrowDown": nextres(); break;
 		case "Tab": if (e.shiftKey) over(); else swap(); break;
 		case "Escape":
+			if (res >= 0) { setres(); break; }
 			if (e.shiftKey) reset(); else if (cur != "") cur = ""; else clear(); break;
 		case "Enter":
 			if (e.shiftKey) { dup(); break; }
@@ -185,9 +188,10 @@ function update() {
 function toggle(t, d, i) { i.className = "toggle " + (t.style.display = (getComputedStyle(t).display != d ? d : "none")); }
 function history() { toggle(Results, "table", History); Stack.className = Results.style.display; }
 function help() { toggle(Help, "block", Helping); }
+function dark() { Dark.classList.toggle("none"); document.body.classList.toggle("other"); }
 
 // reBQN
-prim = [ // 1st:key 2nd:symbol rest:function
+prim = [ // car:symbol cdr:function
 	"++⟜1⊘+", "--", "××", "÷÷", "%×⟜0.01⊘(0.01××)", "⋆⋆", "⍟⋆⁼", "√√", "⌊⌊", "⌈⌈", "||",
 	"<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
 	"⍄•math.Cos⊘(×⟜•math.Cos˜)", "⍓•math.Sin⊘(×⟜•math.Sin˜)", "⍁•math.Tan⊘(×⟜•math.Tan˜)",
