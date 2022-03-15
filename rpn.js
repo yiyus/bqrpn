@@ -13,9 +13,10 @@ const Imm = document.getElementById('imm');
 const Banner = document.getElementById('banner');
 const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
+const History = document.getElementById('history');
 const Err = document.getElementById('err');
 // globals: stack, mode, immediate, current, selection, result, mod-1, vars
-let stk = [], mod = Val, imm = false, cur = "", sel = 0, res = -1, md1 = "", vres = [];
+let stk = [], mod = Val, imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [];
 
 // stack
 function ss() { return stk.length; } // stack size
@@ -40,7 +41,7 @@ function monadic(f) { if (pushc() < 1) return; push(Exp, f + mod1() + popx()); i
 function dyadic(f) { if (pushc() < 2) return; push(Exp, popx() + f + mod1() + pop().value); if (imm && mod == Exp) evaluate(); }
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
-function immediate() { imm = !imm; Imm.className = (imm ? "on" : "off");  }
+function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
 function mod1(m = "") { if (pushc() < 1) return; r = md1; md1 = (m == r ? "" : m); return r; }
 
 // results (ro stack)
@@ -48,7 +49,7 @@ function rs() { return Results.childElementCount; } // results size
 function pushr(r, x = "") {
 	tr = document.createElement("tr"); tr.appendChild(html("td", "", r));
 	if (x != "") { tr.appendChild(html("td", "eq", "=")); tr.appendChild(html("td", Exp.description, x)); }
-	Results.appendChild(tr); return rs() - 1;
+	Results.appendChild(tr); History.title = `history (${Results.childElementCount})`; return rs() - 1;
 }
 function getr(i) { return Results.childNodes.item(i); }
 function setres(i = -1, sel = -1) {
@@ -181,10 +182,9 @@ function update() {
 	if (cur != "") element(sel > 1 ? W : X, cur); cursor(mod); setres(res, sel);
 	window.scrollTo(0, document.body.scrollHeight);
 }
-function help() {
-	h = (Help.style.display == "block");
-	Help.style.display = (h ? "none" : "block"); Helping.className = (h ? "off" : "on");
-}
+function toggle(t, d, i) { i.className = "toggle " + (t.style.display = (getComputedStyle(t).display != d ? d : "none")); }
+function history() { toggle(Results, "table", History); Stack.className = Results.style.display; }
+function help() { toggle(Help, "block", Helping); }
 
 // reBQN
 prim = [ // 1st:key 2nd:symbol rest:function
@@ -204,4 +204,4 @@ function rbqn(prim) {
 const bqrpn = rbqn(prim);
 
 // go!
-reset(); update(); help(); immediate(); document.addEventListener('keydown', keydown);
+reset(); update(); document.addEventListener('keydown', keydown);

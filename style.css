@@ -12,8 +12,8 @@ body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; }
 .topbar span { padding: 0; }
 .topbar a {	padding: 0 1em 1ex 0; text-decoration: none; color: #777; }
 .topbar a:hover, .topbar a:active { color: #000; }
-.topbar a .off, .topbar a:hover .off, .topbar a:active .off { color: #777; }
-.topbar a .on, .topbar a:hover .on, .topbar a:active .on { color: #000; }
+.topbar a .toggle, .topbar a:hover .toggle, .topbar a:active .toggle { color: #000; }
+.topbar a .toggle.none, .topbar a:hover .toggle.none, .topbar a:active .toggle.none { color: #777; }
 
 div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }
@@ -33,6 +33,7 @@ td.eq { color: #888; }
 #vars .k { user-select: none; cursor: pointer; color: #e77;  }
 
 #stack { padding-left: 0; }
+#stack.none { margin-top: 2em; }
 #stack span.unsel { color: #888; }
 #stack span.x     { color: #09f; }
 #stack span.w     { color: #b0f; }
@@ -54,7 +55,7 @@ cursor.mod { color: #f00; }
 
 #help {
 	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 14px;
-	text-align: right; color: #777; display: none; user-select: none;
+	text-align: right; color: #777; user-select: none;
 }
 #help a { color: #777; text-decoration: none;}
 #help d { color: #09f; }
