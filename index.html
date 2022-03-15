@@ -11,6 +11,7 @@
     <body>
     <div class="topbar">
 		<a href="javascript:reset();update();" title="reset"></a>
+		<a href="javascript:font(document.body);" title="zoom"></a>
 		<a href="javascript:dark();" title="light/dark"><span id="dark" class="toggle"></span></a>
 		<a href="javascript:history();" title="history"><span id="history" class="toggle"></span></a>
 		<a href="javascript:immediate();" title="immediate"><span id="imm" class="toggle"></span></a>
@@ -25,7 +26,9 @@
 	<p id="stack"></p>
 	<pre id="err"/></pre>
 	<pre id="help">
-		<span id="digits"><k onclick="key('1');"><c>1</c></k> <k onclick="key('2');"><c>2</c></k> <k onclick="key('3');"><c>3</c></k> <k onclick="key('4');"><c>4</c></k> <k onclick="key('5');"><c>5</c></k>
+		<span id="cmds">
+		<span id="digits">
+		<k onclick="key('1');"><c>1</c></k> <k onclick="key('2');"><c>2</c></k> <k onclick="key('3');"><c>3</c></k> <k onclick="key('4');"><c>4</c></k> <k onclick="key('5');"><c>5</c></k>
 		<k onclick="key('.');"><c>.</c></k> <k onclick="key('6');"><c>6</c></k> <k onclick="key('7');"><c>7</c></k> <k onclick="key('8');"><c>8</c></k> <k onclick="key('9');"><c>9</c></k> <k onclick="key('0');"><c>0</c></k></span>
 
 		<k onclick="key('+');"><d>+</d>inc/add</k> <k onclick="key('-');"><r>-</r>neg/sub</k> <k onclick="key('*');">×<r>*</r>sgn/mul</k> <k onclick="key('/');">÷inv<r>/</r>div</k>
@@ -39,11 +42,15 @@
 
 		<k onclick="key('Tab');"><c>↹</c>:swap</k> <k onclick="key('Tab', true);"><c>⇧</c>+<c>↹</c>:over</k> <k onclick="key('Enter', true);"><c>⇧</c>+<c>⏎</c>:dup</k> <k onclick="key('Backspace', true);"><c>⇧</c>+<c>⌫</c>:drop</k> <k onclick="key('Escape');"><c>␛</c>:clear</k> <k onclick="key('i');"><c>⇧</c>+<c>␛</c>:reset</k>
 		<k onclick="key(' ');"><c>⎵</c>:F<d>𝕩</d>/<r>𝕨</r>F<d>𝕩</d></k>, <k onclick="key(' ', true);"><c>⇧</c>+<c>⎵</c>:<octi></octi></k> <k onclick="key('Enter');"><c>⏎</c>:eval</k> <k onclick="key('ArrowUp');"><c>↑</c>prev</k>/<k onclick="key('ArrowDown');"><c>↓</c>next</k> result (<c>⏎</c> to push)
-
+		</span>
 		TOS type: value<cursor class="val tight">█</cursor> function<cursor class="fun tight">█</cursor> expression<cursor class="exp tight">█</cursor> result<cursor class="res tight">█</cursor>
-		<c>?</c>: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a> (powered by <a id="bqn" href="https://mlochbaum.github.io/BQN/">BQN</a>)
+		<c>?</c>: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a> (powered by <a id="bqn" href="https://mlochbaum.github.io/BQN/">BQN</a>)<k onclick="font(document.getElementById('cmds'));" style="color:#777;"><octi></octi></k>
 	</pre>
 	<script type="text/javascript" src="bqn.js"></script>
 	<script type="text/javascript" src="rpn.js"></script>
+	<script>
+		Sizes = ['100%', '120%', '150%', '200%', '75%']; FS = 0;
+		function font(e) { e.style.fontSize = Sizes[FS = (FS < Sizes.length-1 ? FS+1 : 0)]; }
+	</script>
 	</body>
 </html>
