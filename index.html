@@ -19,15 +19,19 @@
 		<cursor class="xxx tight">█</cursor> <cursor class="fun tight">█</cursor><br>b q r p n</h1>
 		<h2>big questions reverse polish notation</h2>
 	</div>
-	<table id="results"></table>
+	<table id="vars"></table><table id="results"></table>
 	<p id="stack"></p>
 	<pre id="err"/></pre>
 	<pre id="help">
-		<d>+</d> <r>-</r> ×<r>*</r> ÷<r>/</r> ⋆<d>^</d> ⍟(⋆⁼)<d>Y</d> √<d>y</d>
-		<d>%</d> <d>&lt;</d> <d>&gt;</d> <d>=</d> ≤<d>K</d> ≥<d>L</d> ≠<d>;</d> ⌊<d>k</d> ⌈<d>l</d> <r>|</r>
+		<d>+</d>inc/add <r>-</r>neg/sub ×<r>*</r>sgn/mul ÷<r>/</r>inv/div
+		<d>%</d>÷100/pct ⋆<d>^</d>exp/pow ⍟<d>l</d>n/log √s<d>r</d>t/root
+		<d>&lt;</d> <d>&gt;</d> <d>=</d>(NOT) ≤<d>J</d> ≥<d>K</d> ≠<d>L</d> monadic: &lt;0,&gt;0,=0,…
+		⌊floor/<d>m</d>in(AND) ⌈ceil/<d>M</d>ax(OR) <r>|</r>abs/mod
 		⍄<d>c</d>os ⍓<d>s</d>in ⍁<d>t</d>an ⍃a<d>C</d>os ⍌a<d>S</d>in ⍂a<d>T</d>an
-		π<v>p</v>(×<c>P</c>) ∞<v>o</v> ¯<c>_</c> 𝕩<c>e</c>𝕨 <c>d</c>2r <c>r</c>2d 00<c>(</c> 000<c>)</c>
-		<c>\</c>⁼
+
+		π<v>pi</v>(×<c>P</c>) ∞<v>o</v> ¯<c>_</c> 𝕩<c>E</c>𝕨 <c>D</c>2R <c>R</c>2D 00<c>(</c> 000<c>)</c>
+		⁼(<c>i</c>nv) vars(<c>⇧</c> to assign): <c>x</c> <c>y</c> <c>z</c> <c>a</c>
+
 		<c>↹</c>:swap <c>⇧</c>+<c>↹</c>:over <c>⇧</c>+<c>⏎</c>:dup <c>⇧</c>+<c>⌫</c>:drop <c>␛</c>:clear <c>⇧</c>+<c>␛</c>:reset
 		<c>⎵</c>:F<d>𝕩</d>/<r>𝕨</r>F<d>𝕩</d>, <c>⇧</c>+<c>⎵</c>:<octi></octi> <c>⏎</c>:eval <c>↑</c>/<c>↓</c>: prev/next result (<c>⏎</c> to push)
 

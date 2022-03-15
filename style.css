@@ -29,6 +29,8 @@ td.w { text-decoration: underline; text-decoration-color: #dbe; text-decoration-
 tr.res td { background-color: #89b; color: white; }
 td.exp { width: 100%; color: #8a8; }
 
+#vars { float: right; margin: 0 1em; font-size: small; color: #8ab }
+
 #stack { padding-left: 0; }
 #stack span.unsel { color: #888; }
 #stack span.x     { color: #09f; }
@@ -42,14 +44,14 @@ cursor.fun { color: #fde; }
 cursor.exp { color: #cec; }
 cursor.xxx { color: #ecf; }
 
-#err { background-color: #fff4f4; color: #c00; }
+#err { padding: 0 1em; background-color: #fff4f4; color: #c00; }
 
 #banner { position: absolute; top: 15%; width: 100%; font-size: 500%; text-align: center; user-select: none; }
 #banner h1 { font-size: 80px; word-spacing: -1ex; color: #222; }
 #banner h2 { font-size: 12px; font-weight: normal; color: #777; }
 
 #help {
-	position: fixed; bottom: 0; right: 1em; margin:0;
+	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 13px;
 	text-align: right; color: #777; display: none; user-select: none;
 }
 #help a { color: #777; text-decoration: none;}
