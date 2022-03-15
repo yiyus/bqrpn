@@ -48,15 +48,16 @@ function mod1(m = "") { if (pushc() < 1) return; r = md1; md1 = (m == r ? "" : m
 function rs() { return Results.childElementCount; } // results size
 function pushr(r, x = "") {
 	tr = document.createElement("tr"); tr.appendChild(html("td", "", r));
-	if (x != "") tr.appendChild(html("td", Exp.description, "= " + x));
+	if (x != "") { tr.appendChild(html("td", "eq", "=")); tr.appendChild(html("td", Exp.description, x)); }
 	Results.appendChild(tr); return rs() - 1;
 }
+function getr(i) { return Results.childNodes.item(i); }
 function setres(i = -1, sel = -1) {
 	if (typeof(i) != "number") i = -1; res = -1;
 	for (const c of Results.childNodes) { c.className = ""; if (c.firstChild) c.firstChild.className = ""; }
-	if (i >= 0 && i < rs()) { Results.childNodes.item(res = i).classList.add(Res.description); }
-	if (ss() > 1 && sel > 1 && isres(t = st(2))) Results.childNodes.item(t).firstChild.classList.add(X.description);
-	if (ss() && sel > 0 && isres(t = st(1))) Results.childNodes.item(t).firstChild.classList.add(sel > 1 ? W.description : X.description);
+	if (i >= 0 && i < rs()) { getr(res = i).classList.add(Res.description); }
+	if (ss() > 1 && sel > 1 && isres(t = st(2))) getr(t).firstChild.classList.add(X.description);
+	if (ss() && sel > 0 && isres(t = st(1))) getr(t).firstChild.classList.add((sel > 1 ? W : X).description);
 	setmod();
 }
 function isres(t) { return typeof(t) == "number"; }
@@ -67,11 +68,11 @@ function setmod(t = stk) {
 }
 function prevres() { pushc(); if(res < 0 && isres(mod)) res = mod + 1; if (res < 0) res = rs(); setres(res - 1); }
 function nextres() { pushc(); if(res < 0 && isres(mod)) res = mod - 1; if (++res >= rs()) res = -1; setres(res); }
-function res2tos() { if (res < 0 || res >= rs()) return; push(res, Results.childNodes.item(res).firstChild.innerHTML); }
+function rpush(r = null) { if(r === null) r = res; if (r >= 0) push(r, getr(r).firstChild.innerHTML); }
 
 // variables
 function store(k) { if (!pushc()) return; monadic(k + '←'); pop(); vres[k] = rs() - 1; }
-function fetch(k) { if (!k in vres) return; setres(vres[k]); res2tos(); setres(); }
+function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
 
 // input
 function keydown(e) { k = e.key;
@@ -144,7 +145,7 @@ function keydown(e) { k = e.key;
 			if (cur != "") { pushc(); break; }
 			if (mod == Exp) { evaluate(); break; }
 			if (isres(mod)) { drop(); break; }
-			if (res >= 0) { res2tos(); setres(); break; }
+			if (res >= 0) { rpush(); setres(); break; }
 			if (ss() > 0) pushr(pop().value); setres(); break;
 		case "Backspace": e.preventDefault();
 			if (!e.shiftKey) {
@@ -171,10 +172,9 @@ function cursor(mod) {
 function update() {
 	Banner.style.visibility = (ss() || rs() || cur || md1 ? "hidden" : "visible");
 	Stack.innerHTML = Err.textContent = Vars.textContent = ''; Mod1.textContent = md1; n = ss();
-	for (k in vres) {
-		tr = document.createElement("tr"); x = Results.childNodes.item(vres[k]).firstChild.innerHTML;
-		tr.appendChild(html("td", "", k)); tr.appendChild(html("td", "", x));
-		Vars.appendChild(tr);
+	for (const k in vres) {
+		(tr = document.createElement("tr")).appendChild(getr(vres[k]).firstChild.cloneNode(true));
+		tr.appendChild(html("td", "k", k)).onclick = () => { fetch(k); update(); }; Vars.appendChild(tr);
 	}
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
 	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, e.value); n--; }

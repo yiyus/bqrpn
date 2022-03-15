@@ -28,8 +28,10 @@ td.x { text-decoration: underline; text-decoration-color: #cde; text-decoration-
 td.w { text-decoration: underline; text-decoration-color: #dbe; text-decoration-thickness: 3px; }
 tr.res td { background-color: #89b; color: white; }
 td.exp { width: 100%; color: #8a8; }
+td.eq { color: #888; }
 
-#vars { float: right; margin: 0 1em; font-size: small; color: #8ab }
+#vars { float: right; margin: 0 1em; font-size: small; }
+#vars .k { user-select: none; cursor: pointer; color: #e77;  }
 
 #stack { padding-left: 0; }
 #stack span.unsel { color: #888; }
