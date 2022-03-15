@@ -10,7 +10,6 @@ const Results = document.getElementById('results');
 const Vars = document.getElementById('vars');
 const Stack = document.getElementById('stack');
 const Imm = document.getElementById('imm');
-const Mod1 = document.getElementById('mod1');
 const Banner = document.getElementById('banner');
 const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
@@ -76,10 +75,11 @@ function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
 
 // input
 function keydown(e) { k = e.key;
-	if (e.ctrlKey || e.altKey || e.metaKey) return;
+	if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault();
 	if (md1 && (k == "Enter" || k == "Escape")) { mod1(); update(); return; }
-	if (md1 == "a" || md1 == "A") {
-		if (k >= 'a' && k <= 'z') { if (md1 == "A") { md1 = ""; store(k); } else fetch(k); }
+	if (md1 == "a←" || md1 == "a") {
+		if (k >= 'A' && k <= 'Z') k = k.toLowerCase();
+		if (k >= 'a' && k <= 'z') { if (md1 == "a←") { md1 = ""; store(k); } else fetch(k); }
 		mod1(); update(); return;
 	}
 	switch (k) {
@@ -89,7 +89,7 @@ function keydown(e) { k = e.key;
 		case ".": input(cur == "" ? '0.' : '.'); break;
 		case "(": input(cur == "" ? '0.0' : '00'); break;
 		case ")": input(cur == "" ? '0.00' : '000'); break;
-		case 'o': push(Exp, '∞'); break;
+		case 'f': push(Exp, '∞'); break;
 		case 'p': push(Exp, 'π'); break;
 		// immediate
 		case "_": ambimm('-', 0); break;
@@ -112,9 +112,9 @@ function keydown(e) { k = e.key;
 		case "<": ambval('<', '<'); break;
 		case ">": ambval('>', '>'); break;
 		case "=": ambval('=', '='); break;
-		case "J": ambval('≤', '≤'); break;
-		case "K": ambval('≥', '≥'); break;
-		case "L": ambval('≠', '≠'); break;
+		case "L": ambval('≤', '≤'); break;
+		case "G": ambval('≥', '≥'); break;
+		case "N": ambval('≠', '≠'); break;
 		case "c": ambval('⍄', '⍄'); break;
 		case "s": ambval('⍓', '⍓'); break;
 		case "t": ambval('⍁', '⍁'); break;
@@ -122,10 +122,10 @@ function keydown(e) { k = e.key;
 		case "S": ambval('⍌', '⍌'); break;
 		case "T": ambval('⍂', '⍂'); break;
 		// modifiers
-		case "\\": mod1('⁼'); break;
+		case "i": mod1('⁼'); break;
 		// variables
-		case "a": mod1('a'); break;
-		case "A": mod1('A'); break;
+		case "a": if (vres.length) mod1('a'); break;
+		case "A": mod1('a←'); break;
 		case "x": fetch('x'); break;
 		case "X": store('x'); break;
 		case "y": fetch('y'); break;
@@ -137,17 +137,17 @@ function keydown(e) { k = e.key;
 		case " ": if (e.shiftKey) immediate(); else selection(); break;
 		case "ArrowUp": prevres(); break;
 		case "ArrowDown": nextres(); break;
-		case "Tab": e.preventDefault(); if (e.shiftKey) over(); else swap(); break;
-		case "Escape": e.preventDefault();
+		case "Tab": if (e.shiftKey) over(); else swap(); break;
+		case "Escape":
 			if (e.shiftKey) reset(); else if (cur != "") cur = ""; else clear(); break;
-		case "Enter": e.preventDefault();
+		case "Enter":
 			if (e.shiftKey) { dup(); break; }
 			if (cur != "") { pushc(); break; }
 			if (mod == Exp) { evaluate(); break; }
 			if (isres(mod)) { drop(); break; }
 			if (res >= 0) { rpush(); setres(); break; }
 			if (ss() > 0) pushr(pop().value); setres(); break;
-		case "Backspace": e.preventDefault();
+		case "Backspace":
 			if (!e.shiftKey) {
 				if (cur != "") { cur = cur.slice(0, cur.length - 1); setmod(); break; }
 				if (!ss()) break; if (mod == Val && ((t = st(1)) == Exp || t == Res)) { mod = t; break; }
@@ -167,11 +167,11 @@ function html(tag, cls, txt) {
 function element(type, txt) { return Stack.appendChild(html("span", type.description, txt)); }
 function cursor(mod) {
 	c = (res >= 0 ? Val : isres(mod) ? Res : mod).description + (cur != "" ? " tight" : "");
-	Stack.appendChild(html("cursor", c, res < 0 ? "█" : "⎕"));
+	Stack.appendChild(html("cursor", (md1 ? c + " mod" : c), (res < 0 ? "█" : "⎕") + md1));
 }
 function update() {
 	Banner.style.visibility = (ss() || rs() || cur || md1 ? "hidden" : "visible");
-	Stack.innerHTML = Err.textContent = Vars.textContent = ''; Mod1.textContent = md1; n = ss();
+	Stack.innerHTML = Err.textContent = Vars.textContent = ''; n = ss();
 	for (const k in vres) {
 		(tr = document.createElement("tr")).appendChild(getr(vres[k]).firstChild.cloneNode(true));
 		tr.appendChild(html("td", "k", k)).onclick = () => { fetch(k); update(); }; Vars.appendChild(tr);

@@ -14,7 +14,6 @@ body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; }
 .topbar a:hover, .topbar a:active { color: #000; }
 .topbar a .off, .topbar a:hover .off, .topbar a:active .off { color: #777; }
 .topbar a .on, .topbar a:hover .on, .topbar a:active .on { color: #000; }
-.topbar #mod1 { font-family: 'BQN386'; padding: 1em; color: #000; }
 
 div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }
@@ -45,6 +44,7 @@ cursor.res { color: #def; }
 cursor.fun { color: #fde; }
 cursor.exp { color: #cec; }
 cursor.xxx { color: #ecf; }
+cursor.mod { color: #f00; }
 
 #err { padding: 0 1em; background-color: #fff4f4; color: #c00; }
 
@@ -57,7 +57,6 @@ cursor.xxx { color: #ecf; }
 	text-align: right; color: #777; display: none; user-select: none;
 }
 #help a { color: #777; text-decoration: none;}
-#help v { color: #8a8; }
 #help d { color: #09f; }
 #help r { color: #b0f; }
 #help c { color: #e77; }
