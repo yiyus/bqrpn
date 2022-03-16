@@ -28,7 +28,6 @@ function input(c) { cur += c; setres(); sel = 1 + (ss() > 0); }
 function push(t, v) { stk.push({type: t, value: v}); sel = Math.min(ss(), 2); }
 function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
 function pop() { return stk.pop(); }
-function popx() { e = pop(); return (e.type == Exp ? `(${e.value})` : e.value); }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
 function drop() { if (n = pushc() < 1) return; t = st(); pop(); setres(isres(t) ? t : -1); sel = Math.min(ss(), sel); }
 function clear() { stk = []; cur = ""; setres(-1); sel = 0; }
@@ -37,20 +36,25 @@ function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function selection() { setres(); if (cur != "") pushc(); sel = (sel == 1 ? Math.min(ss(), 2) : sel - 1); }
+function val(e) { return (typeof(e.type) == "number" ? B.get(e.value) : e.value); }
+function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
-function evaluate() { if (pushc() < 1) return; x = pop().value; ans = bqrpn(x); push(imm != Imm ? pushr(ans, x) : Exp, ans); }
-function monadic(f) { if (pushc() < 1) return; push(Exp, f + mod1() + popx()); if (imm && st() == Exp) evaluate(); }
-function dyadic(f) { if (pushc() < 2) return; push(Exp, popx() + f + mod1() + pop().value); if (imm && st() == Exp) evaluate(); }
+function evaluate(f, x = null, w = null) {
+	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (!imm) return;
+	r = B.run(x = pop().value); push(imm < 0 ? -r : pushr(r, x), r);
+}
+function monadic(f) { if (pushc() < 1) return; evaluate(f + mod1(), pop()); }
+function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); }
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
-function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = Imm; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
+function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
 function mod1(m = "") { if (pushc() < 1) return; r = md1; md1 = (m == r ? "" : m); return r; }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
 function pushr(r, x = "") {
-	tr = document.createElement("tr"); tr.appendChild(html("td", "", r));
+	tr = document.createElement("tr"); tr.appendChild(html("td", "", x ? B.get(r) : r));
 	if (x != "") { tr.appendChild(html("td", "eq", "=")); tr.appendChild(html("td", Exp.description, x)); }
 	Results.appendChild(tr); History.title = `history (${Results.childElementCount})`; return rs() - 1;
 }
@@ -62,7 +66,7 @@ function setres(i = -1, sel = -1) {
 	if (ss() > 1 && sel > 1 && isres(t = st(2))) getr(t).firstChild.classList.add(X.description);
 	if (ss() && sel > 0 && isres(st())) getr(st()).firstChild.classList.add((sel > 1 ? W : X).description);
 }
-function isres(t) { return typeof(t) == "number"; }
+function isres(t) { return typeof(t) == "number" && t >= 0; }
 function prevres() { pushc(); if(res < 0 && isres(st())) res = st() + 1; if (res < 0) res = rs(); setres(res - 1); }
 function nextres() { pushc(); if(res < 0 && isres(st())) res = st() - 1; if (++res >= rs()) res = -1; setres(res); }
 function rpush(r = null) { if(r === null) r = res; if (r >= 0) push(r, getr(r).firstChild.innerHTML); }
@@ -149,11 +153,11 @@ function key(k, s = false) {
 			if (res >= 0) { rpush(); setres(); break; }
 			if (isres(st())) { drop(); break; }
 			if (st() == Exp) { evaluate(); break; }
-			if (ss() > 0) pushr(pop().value); setres(); break;
+			if (ss() > 0) pushr(val(pop())); setres(); break;
 		case "Backspace":
 			if (!s) {
 				if (cur != "") { cur = cur.slice(0, cur.length - 1); break; }
-				if (ss() && st() == Val) { input(pop().value); break; }
+				if (ss() && st() == Val) { input(val(pop())); break; }
 				if (ss() && !back) { back = true; setres(); break; }
 			}
 			back = false; drop(); break;
@@ -180,7 +184,7 @@ function update() {
 		tr.appendChild(html("td", "k", k)).onclick = () => { fetch(k); update(); }; Vars.appendChild(tr);
 	}
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
-	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, e.value); n--; }
+	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, val(e)); n--; }
 	if (cur != "") element(sel > 1 ? W : X, cur); cursor(cur != "" ? Val : st()); setres(res, sel);
 	window.scrollTo(0, document.body.scrollHeight);
 }
@@ -200,12 +204,19 @@ prim = [ // car:symbol cdr:function
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
-	b = bqn('•ReBQN {repl⇐"loose", primitives⇐⟨' + s + '⟩}');
-	return (x) => { try { return fmt(b(str(x))); } catch (error) {
-		Err.textContent = x + '\n' + fmt(error.message); throw(error);
-	} }
+	let [R, G, r] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩}⋄{¯1+≠r∾↩B𝕩}‿{⊑⟜r𝕩}‿{𝕩,r}');
+	let fn = (f, err) => (x) => {
+		try { return f(x); } catch (e) { Err.textContent = err + ' ERROR: ' + fmt(e.message); throw(e); }
+	};
+	return {
+		run: fn((x) => R(str(x)), "RUN"), get: fn((x) => fmt(G(x)), "GET"),
+		res: () => {
+			try { return list(r(0)); } catch (e) { Err.textContent = 'RES ERROR: ' + fmt(e.message); throw(e); }
+		}
+	}
 }
-const bqrpn = rbqn(prim);
+
+const B = rbqn(prim);
 
 // go!
 function main() {
