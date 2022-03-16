@@ -16,8 +16,10 @@ const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
 const History = document.getElementById('history');
 const Err = document.getElementById('err');
-// globals: stack, immediate, current, selection, result, mod-1, vars, backspace
-let stk = [], imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false;
+// globals: stack, immediate, current, selection, result, mod-1, vars, backspace, font sizes
+let stk = [], imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false, fs = {};
+// fontsizes
+Sizes = ['100%', '120%', '150%', '200%', '75%'];
 
 // stack
 function ss() { return stk.length; } // stack size
@@ -186,6 +188,7 @@ function toggle(t, d, i) { i.className = "toggle " + (t.style.display = (getComp
 function history() { toggle(Results, "table", History); Stack.className = Results.style.display; }
 function help() { toggle(Help, "block", Helping); }
 function dark() { Dark.classList.toggle("none"); document.body.classList.toggle("other"); }
+function zoom(e) { e.style.fontSize = Sizes[fs[i = e.id] = (!(i in fs) ? 1 : (++fs[i]) == Sizes.length ? 0 : fs[i])]; }
 
 // reBQN
 prim = [ // car:symbol cdr:function
@@ -205,4 +208,10 @@ function rbqn(prim) {
 const bqrpn = rbqn(prim);
 
 // go!
-reset(); update(); document.addEventListener('keydown', keydown);
+function init() {
+	p = new URLSearchParams(window.location.search);
+	if (p.has("?")) help(); if (p.has("h")) history(); if (p.has("i")) immediate();
+	if (p.has("z")) for (let i=0; i<parseInt(p.get("z")); i++) zoom(document.body);
+	if (p.has("hz")) for (let i=0; i<parseInt(p.get("hz")); i++) zoom(document.getElementById('cmds'));
+}
+init(); reset(); update(); document.addEventListener('keydown', keydown);

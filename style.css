@@ -62,7 +62,7 @@ cursor.mod { color: #f00; }
 #banner h2 { font-size: 12px; font-weight: normal; color: #777; }
 
 #help {
-	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 14px; line-height: 140%;
+	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 14px; line-height: 1.4;
 	text-align: right; white-space: pre-line; color: #777; user-select: none;
 }
 #help k { display: inline-block; min-width: 1.5em; text-align: center; }
