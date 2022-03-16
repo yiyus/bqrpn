@@ -57,7 +57,7 @@ cursor.mod { color: #f00; }
 
 #err { padding: 0 1em; background-color: #fff4f4; color: #c00; }
 
-#banner { position: absolute; top: 15%; width: 100%; font-size: 500%; text-align: center; user-select: none; }
+#banner { position: absolute; top: 10%; width: 100%; font-size: 500%; text-align: center; user-select: none; }
 #banner h1 { font-size: 80px; word-spacing: -1ex; }
 #banner h2 { font-size: 12px; font-weight: normal; color: #777; }
 

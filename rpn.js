@@ -16,8 +16,10 @@ const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
 const History = document.getElementById('history');
 const Err = document.getElementById('err');
-// globals: stack, results stack, immediate, current, selection, result, mod-1, vars, backspace, font sizes
-let stk = [], rstk = [], imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false, fs = {};
+// globals: stack, results stack, font sizes
+let stk = [], rstk = [], fs = {};
+// state: immediate, current, selection, result, modifiers, vars, backspace
+let imm = true, cur = "", sel = 0, res = -1, mds = [], vres = [], back = false;
 // fontsizes
 Sizes = ['100%', '120%', '150%', '200%', '75%'];
 
@@ -41,15 +43,20 @@ function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
 function evaluate(f, x = null, w = null) {
+	if (mds.length) {
+		if ((md = mds.pop()).g) { mds.push({m: md.m + f, g: 0}); if (w) stk.push(w); if (x) stk.push(x); return; }
+		f += md.m;
+	}
 	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (!imm) return;
 	x = pop().value; if (imm < 0) push(Val, fmt(B.bqn(x))); else push(pushr(r = B.run(x), x), r);
 }
-function monadic(f) { if (pushc() < 1) return; evaluate(f + mod1(), pop()); }
+function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
 function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); }
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
-function mod1(m = "") { if (pushc() < 1) return; r = md1; md1 = (m == r ? "" : m); return r; }
+function mod(m = "", g = 0) { if (pushc() < 1) return; if (getm() == m || !m) mds.pop(); else if (m) mds.push({m: m, g: g}); }
+function getm() { return ((n = mds.length) ? mds[n-1].m : ""); }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -81,11 +88,11 @@ function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
 function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
 function key(k, s = false) {
 	back = back && k == "Backspace";
-	if (md1 && (k == "Enter" || k == "Escape")) { mod1(); update(); return; }
-	if (md1 == "a←" || md1 == "a") {
+	if ((m = getm().m) && (k == "Enter" || k == "Escape")) { mds = []; update(); return; }
+	if (m == "a←" || m == "a") {
 		if (k >= 'A' && k <= 'Z') k = k.toLowerCase();
-		if (k >= 'a' && k <= 'z') { if (md1 == "a←") { md1 = ""; store(k); } else fetch(k); }
-		mod1(); update(); return;
+		if (k >= 'a' && k <= 'z') { if (m == "a←") { mds.pop(); store(k); } else fetch(k); }
+		mod(); update(); return;
 	}
 	switch (k) {
 		// input
@@ -128,10 +135,12 @@ function key(k, s = false) {
 		case "T": ambval('⍂', '⍂'); break;
 		// modifiers
 		case "i":
-		case "I": mod1('⁼'); break;
+		case "I": mod('⁼'); break;
+		case "u":
+		case "U": mod('⌾', 2); break;
 		// variables
-		case "a": if (vres.length) mod1('a'); break;
-		case "A": mod1('a←'); break;
+		case "a": if (vres.length) mod('a'); break;
+		case "A": mod('a←'); break;
 		case "x": fetch('x'); break;
 		case "X": store('x'); break;
 		case "y": fetch('y'); break;
@@ -176,10 +185,11 @@ function html(tag, cls, txt) {
 function element(type, txt) { return Stack.appendChild(html("span", type.description, txt)); }
 function cursor(t) {
 	c = (res >= 0 ? Val : isres(t) ? Res : t).description + (cur != "" || back ? " tight" : "");
-	Stack.appendChild(html("cursor", (md1 ? c + " mod" : c), (res < 0 ? "█" : "⎕") + md1));
+	p = s = ""; if (m = getm()) { c += " mod"; if (mds[mds.length-1].g) p = m; else s = m; }
+	Stack.appendChild(html("cursor", c, p + (res < 0 ? "█" : "⎕") + s));
 }
 function update() {
-	Banner.style.visibility = (ss() || rs() || cur || md1 ? "hidden" : "visible");
+	Banner.style.visibility = (ss() || rs() || cur || getm() ? "hidden" : "visible");
 	Stack.innerHTML = Err.textContent = Vars.textContent = ''; n = ss();
 	for (const k in vres) {
 		(tr = document.createElement("tr")).appendChild(getr(vres[k]).firstChild.cloneNode(true));
@@ -202,7 +212,7 @@ prim = [ // car:symbol cdr:function
 	"<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
 	"⍄•math.Cos⊘(×⟜•math.Cos˜)", "⍓•math.Sin⊘(×⟜•math.Sin˜)", "⍁•math.Tan⊘(×⟜•math.Tan˜)",
 	"⍃•math.Cos⁼⊘(÷⟜•math.Cos˜)", "⍌•math.Sin⁼⊘(÷⟜•math.Sin˜)", "⍂•math.Tan⁼⊘•math.ATan2",
-	"⁼⁼"
+	"⁼⁼", "⌾⌾"
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
