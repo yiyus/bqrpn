@@ -16,8 +16,8 @@ const Help = document.getElementById('help');
 const Helping = document.getElementById('helping');
 const History = document.getElementById('history');
 const Err = document.getElementById('err');
-// globals: stack, immediate, current, selection, result, mod-1, vars, backspace, font sizes
-let stk = [], imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false, fs = {};
+// globals: stack, results stack, immediate, current, selection, result, mod-1, vars, backspace, font sizes
+let stk = [], rstk = [], imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false, fs = {};
 // fontsizes
 Sizes = ['100%', '120%', '150%', '200%', '75%'];
 
@@ -36,13 +36,13 @@ function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function selection() { setres(); if (cur != "") pushc(); sel = (sel == 1 ? Math.min(ss(), 2) : sel - 1); }
-function val(e) { return (typeof(e.type) == "number" ? B.get(e.value) : e.value); }
+function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type] < 0 ? e.value : B.get(e.value)); }
 function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
 function evaluate(f, x = null, w = null) {
 	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (!imm) return;
-	r = B.run(x = pop().value); push(imm < 0 ? -r : pushr(r, x), r);
+	x = pop().value; if (imm < 0) push(Val, fmt(B.bqn(x))); else push(pushr(r = B.run(x), x), r);
 }
 function monadic(f) { if (pushc() < 1) return; evaluate(f + mod1(), pop()); }
 function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); }
@@ -54,8 +54,8 @@ function mod1(m = "") { if (pushc() < 1) return; r = md1; md1 = (m == r ? "" : m
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
 function pushr(r, x = "") {
-	tr = document.createElement("tr"); tr.appendChild(html("td", "", x ? B.get(r) : r));
-	if (x != "") { tr.appendChild(html("td", "eq", "=")); tr.appendChild(html("td", Exp.description, x)); }
+	rstk.push(x ? r : -1); tr = document.createElement("tr"); tr.appendChild(html("td", "", x ? B.get(r) : r));
+	if (x) { tr.appendChild(html("td", "eq", "=")); tr.appendChild(html("td", Exp.description, x)); }
 	Results.appendChild(tr); History.title = `history (${Results.childElementCount})`; return rs() - 1;
 }
 function getr(i) { return Results.childNodes.item(i); }
@@ -66,10 +66,12 @@ function setres(i = -1, sel = -1) {
 	if (ss() > 1 && sel > 1 && isres(t = st(2))) getr(t).firstChild.classList.add(X.description);
 	if (ss() && sel > 0 && isres(st())) getr(st()).firstChild.classList.add((sel > 1 ? W : X).description);
 }
-function isres(t) { return typeof(t) == "number" && t >= 0; }
-function prevres() { pushc(); if(res < 0 && isres(st())) res = st() + 1; if (res < 0) res = rs(); setres(res - 1); }
-function nextres() { pushc(); if(res < 0 && isres(st())) res = st() - 1; if (++res >= rs()) res = -1; setres(res); }
-function rpush(r = null) { if(r === null) r = res; if (r >= 0) push(r, getr(r).firstChild.innerHTML); }
+function isres(t) { return typeof(t) == "number"; }
+function prevres() { pushc(); if(res < 0) res = rs(); if (res < 0) res = rs(); setres(res - 1); }
+function nextres() { pushc(); if(res < 0) res = -1; if (++res >= rs()) res = -1; setres(res); }
+function rpush(r = null) {
+	if(r === null) r = res; if (r >= 0) push(r, (br = rstk[r]) >= 0 ? br : getr(r).firstChild.textContent);
+}
 
 // variables
 function store(k) { if (!pushc()) return; monadic(k + '←'); pop(); vres[k] = rs() - 1; }
@@ -204,14 +206,14 @@ prim = [ // car:symbol cdr:function
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
-	let [R, G, r] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩}⋄{¯1+≠r∾↩B𝕩}‿{⊑⟜r𝕩}‿{𝕩,r}');
+	let [B, R, G, r] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩}⋄b‿{¯1+≠r∾↩B𝕩}‿{⊑⟜r𝕩}‿{𝕩,r}');
 	let fn = (f, err) => (x) => {
-		try { return f(x); } catch (e) { Err.textContent = err + ' ERROR: ' + fmt(e.message); throw(e); }
+		try { return f(x); } catch (e) { Err.textContent = err + ' ERROR\n' + fmt(e.message); throw(e); }
 	};
 	return {
-		run: fn((x) => R(str(x)), "RUN"), get: fn((x) => fmt(G(x)), "GET"),
+		bqn: fn((x) => B(str(x)), "BQN"), run: fn((x) => R(str(x)), "RUN"), get: fn((x) => fmt(G(x)), "GET"),
 		res: () => {
-			try { return list(r(0)); } catch (e) { Err.textContent = 'RES ERROR: ' + fmt(e.message); throw(e); }
+			try { return list(r(0)); } catch (e) { Err.textContent = 'RES ERROR\n' + fmt(e.message); throw(e); }
 		}
 	}
 }
