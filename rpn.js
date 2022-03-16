@@ -49,7 +49,7 @@ function evaluate(f, x = null, w = null) {
 			mds.push({m: f, g: md.g - 1}); if (w) stk.push(w); if (x) stk.push(x); return false;
 		} else f = (md.m[0] == '(' ? '(' + f + md.m.slice(1) : f + md.m);
 	}
-	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (!imm) return;
+	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
 	x = pop().value; if (imm < 0) push(Val, fmt(B.bqn(x))); else push(pushr(r = B.run(x), x), r);
 }
 function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
@@ -58,11 +58,9 @@ function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dy
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
 function mod(m = "", g = 0) {
-	if (pushc() < 1) return; if (getm() == m || !m) mds.pop();
-	else if (m == '()' && getm()) {
-		m = mds.pop().m; if (m[0] != '(') m = '(' + m + ')'; mds.push({m: m, g: 1});
-	}
-	else if (m) mds.push({m: m, g: g});
+	if (pushc() < 1) return; if (getm() == m || !m) { mds.pop(); return; }
+	if (m == '()' && getm()) { p = mds.pop(); if (p.m[0] == '(') { mds.push({m: p.m, g: 1}); return; } mds.push(p);	}
+	if (m) mds.push({m: m, g: g});
 }
 function getm() { return ((n = mds.length) ? mds[n-1].m : ""); }
 
@@ -199,6 +197,7 @@ function cursor(t) {
 		if (mds[mds.length-1].g) {
 			if (m[0] == '(') { p = m.slice(0, m.length-1); s = ')'; } else p = m
 		} else if (m[0] == '(') { p = '('; s = m.slice(1); } else s = m;
+		if (mds.length > 1) s += '...';
 	}
 	Stack.appendChild(html("cursor", c, p + (res < 0 ? "█" : "⎕") + s));
 }
@@ -231,13 +230,14 @@ prim = [ // car:symbol cdr:function
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
 	let [B, R, G, r] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩}⋄b‿{¯1+≠r∾↩B𝕩}‿{⊑⟜r𝕩}‿{𝕩,r}');
+	let fe = (e) => (x = fmtErr(e)).substring(0, x.slice(0, x.length - 2).lastIndexOf('\n'));
 	let fn = (f, err) => (x) => {
-		try { return f(x); } catch (e) { Err.textContent = err + ' ERROR\n' + fmt(e.message); throw(e); }
+		try { return f(x); } catch (e) { Err.textContent = err + ' ERROR\n' + fe(e); throw(e); }
 	};
 	return {
 		bqn: fn((x) => B(str(x)), "BQN"), run: fn((x) => R(str(x)), "RUN"), get: fn((x) => fmt(G(x)), "GET"),
 		res: () => {
-			try { return list(r(0)); } catch (e) { Err.textContent = 'RES ERROR\n' + fmt(e.message); throw(e); }
+			try { return list(r(0)); } catch (e) { Err.textContent = 'RES ERROR\n' + fe(e); throw(e); }
 		}
 	}
 }

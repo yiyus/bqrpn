@@ -42,6 +42,7 @@ td.eq { color: #888; }
 
 #stack { padding-left: 0; }
 #stack.none { margin-top: 2em; }
+#stack span { display: inline-block; }
 #stack span.unsel { color: #777; }
 #stack span.x     { color: #09f; }
 #stack span.w     { color: #c7e; }
