@@ -1,0 +1,17 @@
+{
+  "name": "bqrpn",
+  "short_name": "bqrpn",
+  "lang": "en",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#777",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-384x384.png",
+      "type": "image/png",
+      "sizes": "384x384"
+    }
+  ]
+}

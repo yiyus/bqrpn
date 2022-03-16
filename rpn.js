@@ -208,10 +208,12 @@ function rbqn(prim) {
 const bqrpn = rbqn(prim);
 
 // go!
-function init() {
+function main() {
 	p = new URLSearchParams(window.location.search);
 	if (p.has("?")) help(); if (p.has("h")) history(); if (p.has("i")) immediate();
 	if (p.has("z")) for (let i=0; i<parseInt(p.get("z")); i++) zoom(document.body);
 	if (p.has("hz")) for (let i=0; i<parseInt(p.get("hz")); i++) zoom(document.getElementById('cmds'));
+	if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
+	reset(); update(); document.addEventListener('keydown', keydown);
 }
-init(); reset(); update(); document.addEventListener('keydown', keydown);
+main();
