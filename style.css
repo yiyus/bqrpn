@@ -65,7 +65,7 @@ td.eq { color: #888; }
 #stack span.x     { color: var(--color-x); }
 #stack span.w     { color: var(--color-w); }
 
-cursor { padding: 0 0 0 1em; }
+cursor { padding: 0 0 0 1em; user-select: none; }
 cursor.tight { padding-left: 0; }
 cursor.val { color: #ccc; }
 cursor.res { color: #cde; }
@@ -88,7 +88,7 @@ cursor.mod { color: #f00; }
 #help k { display: inline-block; min-width: 1.5em; text-align: center; }
 #help a { color: var(--color-off); text-decoration: none;}
 #help d { color: var(--color-x); }
-#help r { color: var(--color-r); }
+#help r { color: var(--color-w); }
 #help c { color: var(--color-f); }
 #help e { color: var(--color-e); }
 #digits { display: none; font-size: 180%; }
@@ -100,7 +100,7 @@ cursor.mod { color: #f00; }
 c, d, r, e {
 	border-radius: 4px; border: solid 1px; display: inline-block; opacity: 80%;
 	background-color: var(--key-bg-l); box-shadow: 1px 1px var(--color-off); 
-	margin: 2px; padding: 1px 4px 2px 4px; letter-spacing: .05em; line-height: .75em; white-space: nowrap;
+	margin: 2px; padding: 2px 5px 3px 5px; letter-spacing: .05em; line-height: .75em; white-space: nowrap;
 }
 body.other c, body.other d, body.other r, body.other e {
 	background-color: var(--key-bg-d); box-shadow: -1px -1px var(--color-off);
