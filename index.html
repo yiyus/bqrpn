@@ -11,18 +11,20 @@
         <title>bqrpn</title>
     </head>
     <body>
-    <div class="topbar">
+	<div id="banner"><h1>
+		<cursor class="val tight">█</cursor> <cursor class="exp tight">█</cursor> <cursor class="res tight">█</cursor>
+		<cursor class="xxx tight">█</cursor> <cursor class="fun tight">█</cursor><br>
+		<a href="https://github.com/yiyus/bqrpn">b q r p n</a></h1>
+		<h2>big questions reverse polish notation</h2>
+	</div>
+	<div id="all">
+	<div class="topbar">
 		<a href="javascript:reset();update();" title="reset"></a>
 		<a href="javascript:zoom(document.body);" title="zoom"></a>
 		<a href="javascript:dark();" title="light/dark"><span id="dark" class="toggle"></span></a>
 		<a href="javascript:history();" title="history"><span id="history" class="toggle"></span></a>
 		<a href="javascript:immediate();" title="immediate"><span id="imm" class="toggle"></span></a>
 		<a href="javascript:help();" title="help"><span id="helping" class="toggle"></span></a>
-	</div>
-	<div id="banner"><h1>
-		<cursor class="val tight">█</cursor> <cursor class="exp tight">█</cursor> <cursor class="res tight">█</cursor>
-		<cursor class="xxx tight">█</cursor> <cursor class="fun tight">█</cursor><br>b q r p n</h1>
-		<h2>big questions reverse polish notation</h2>
 	</div>
 	<table id="vars"></table><table id="results"></table>
 	<p id="stack"></p>
@@ -33,7 +35,7 @@
 		<k onclick="key('7');"><e>7</e></k> <k onclick="key('8');"><e>8</e></k> <k onclick="key('9');"><e>9</e></k>
 		<k onclick="key('.');"><e>.</e></k> <k onclick="key('4');"><e>4</e></k> <k onclick="key('5');"><e>5</e></k> <k onclick="key('6');"><e>6</e></k>
 		<k onclick="key('0');"><e>0</e></k> <k onclick="key('1');"><e>1</e></k> <k onclick="key('2');"><e>2</e></k> <k onclick="key('3');"><e>3</e></k></span>
-		<k onclick="key('p');">π<e>p</e>i</k> <k onclick="key('f');">∞in<e>f</e></k> <k onclick="key('(');">00<e>(</e></k> <k onclick="key(')');">000<e>)</e></k> <a href="javascript:digits();" style="color:var(--color-e);">0-9.</a>
+	    <a href="javascript:digits();" style="color:var(--color-e);">0-9.</a> <k onclick="key('(');">00<e>(</e></k> <k onclick="key(')');">000<e>)</e></k> <k onclick="key('p');">π<e>p</e>i</k> <k onclick="key('f');">∞in<e>f</e></k>
 		<k onclick="key('_');">¯<c>_</c></k> <k onclick="key('E');">𝕩<c>E</c>𝕨</k> <k onclick="key('D');"><c>D</c>2R</k> <k onclick="key('R');"><c>R</c>2D</k> <k onclick="key('P');">×<c>P</c>i</k>
 		<k onclick="key('+');"><d>+</d>inc/add</k> <k onclick="key('-');"><r>-</r>neg/sub</k> <k onclick="key('*');">×<r>*</r>sgn/mul</k> <k onclick="key('/');">÷inv<r>/</r>div</k>
 		<k onclick="key('%');"><d>%</d>÷100/pct</k> <k onclick="key('^');">⋆<d>^</d>exp/pow</k> <k onclick="key('l');">⍟<d>l</d>n/log</k> <k onclick="key('r');">√sq<d>r</d>t/root</k>
@@ -49,12 +51,13 @@
 		TOS type: value<cursor class="val tight">▇</cursor> function<cursor class="fun tight">▇</cursor> expression<cursor class="exp tight">▇</cursor> result<cursor class="res tight">▇</cursor>
 		<c>?</c>: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a> <a href="https://mlochbaum.github.io/BQN/" target="_blank"><e>powered by BQN</e></a><k onclick="zoom(document.getElementById('cmds'));" style="color:#777;"><octi></octi></k>
 	</pre>
+	</div>
 	<script type="text/javascript" src="bqn.js"></script>
 	<script type="text/javascript" src="rpn.js"></script>
 	<script type="text/javascript">
 		function digits() {
 			d = document.getElementById('digits');
-			d.style.visibility = (d.style.visibility != "visible" ? "visible" : "hidden");
+			d.style.display = (d.style.display != "inline" ? "inline" : "none");
 		}
 	</script>
 	</body>

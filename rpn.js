@@ -263,4 +263,4 @@ function main() {
 	if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
 	reset(); update(); document.addEventListener('keydown', keydown);
 }
-main(); document.body.style.visibility = "visible";
+main(); document.getElementById('all').classList.toggle("on");

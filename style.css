@@ -10,7 +10,6 @@ octi { font-family: "Octicons"; }
 }
 
 body {
-	visibility: hidden;
 	margin: 0; padding: 0; font-family: "BQN386"; font-size: 1.5em;
 	background-color: var(--bg-color-l); color: var(--color-l);
 }
@@ -26,6 +25,9 @@ body.other tr { border-bottom-color: var(--color-l); }
 	body.other a #dark { color: var(--color-on); }
 	body.other tr { border-bottom-color: (--color-d); }
 }
+
+#all { visibility: hidden; }
+#all.on { visibility: visible; }
 
 .topbar {
 	position: fixed; top:0;  width: 100%; color: var(--color-off);
@@ -77,6 +79,7 @@ cursor.mod { color: #f00; }
 #banner { position: absolute; top: 10%; width: 100%; font-size: 500%; text-align: center; user-select: none; }
 #banner h1 { font-size: 80px; word-spacing: -1ex; }
 #banner h2 { font-size: 12px; font-weight: normal; color: var(--color-off); }
+#banner a { color: inherit; text-decoration: none; }
 
 #help {
 	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 11px; line-height: 1.4;
@@ -88,14 +91,12 @@ cursor.mod { color: #f00; }
 #help r { color: var(--color-r); }
 #help c { color: var(--color-f); }
 #help e { color: var(--color-e); }
-
-#digits { visibility: hidden; font-size: 180%; }
+#digits { display: none; font-size: 180%; }
 #digits e { padding: 3px 8px; }
 @media screen and (max-width: 640px) {
-	#digits { visibility: visible; }
+	#digits { display: block; }
 	#help { font-size: 9px; }
 }
-
 c, d, r, e {
 	border-radius: 4px; border: solid 1px; display: inline-block; opacity: 80%;
 	background-color: var(--key-bg-l); box-shadow: 1px 1px var(--color-off); 
