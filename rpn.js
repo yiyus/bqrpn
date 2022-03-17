@@ -260,7 +260,7 @@ function main() {
 	if (p.has("z")) for (let i=0; i<parseInt(p.get("z")); i++) zoom(document.body);
 	hz = (p.has("hz") ? p.get("hz") : 1);
 	for (let i=0; i<parseInt(hz); i++) zoom(document.getElementById('cmds'));
-	if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
+	if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
 	reset(); update(); document.addEventListener('keydown', keydown);
 }
 main(); document.getElementById('all').classList.toggle("on");
