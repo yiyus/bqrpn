@@ -26,8 +26,11 @@ Sizes = ['100%', '120%', '150%', '200%', '75%'];
 // stack
 function ss() { return stk.length; } // stack size
 function st(i = 1) { return i > stk.length ? Val : stk[stk.length-i].type } // stack (element) type
-function input(c) { cur += c; setres(); sel = 1 + (ss() > 0); }
-function push(t, v) { stk.push({type: t, value: v}); sel = Math.min(ss(), 2); }
+function input(c) { if (getm()) return; cur += c; setres(); sel = 1 + (ss() > 0); }
+function push(t, v) {
+	if (typeof(v) == "string" && v[v.length-1] == '.') v += '0';
+	stk.push({type: t, value: v}); sel = Math.min(ss(), 2);
+}
 function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
 function pop() { return stk.pop(); }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
@@ -94,6 +97,7 @@ function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
 function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
 function key(k, s = false) {
 	back = back && k == "Backspace"; m = getm();
+	if (m && m[0] == '(' && (k == "Enter" || k == " ")) { ambval("", ""); if (s) mod('()', 1); }
 	if (m && (k == "Enter" || k == "Escape")) { mds = []; update(); return; }
 	if (m == "a←" || m == "a") {
 		if (k >= 'A' && k <= 'Z') k = k.toLowerCase();
