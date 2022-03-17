@@ -48,7 +48,7 @@ function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 function evaluate(f, x = null, w = null) {
 	while (mds.length) {
 		if ((md = mds.pop()).g > 0) {
-			f = (md.m[0] == '(' ? md.m.slice(0, md.m.length - 1) + f + ')' : md.m + f);
+			f = (md.m.startsWith('( ') ? '(' + f + md.m.slice(2) : md.m + f);
 			mds.push({m: f, g: md.g - 1}); if (w) stk.push(w); if (x) stk.push(x); return false;
 		} else f = (md.m[0] == '(' ? '(' + f + md.m.slice(1) : f + md.m);
 	}
@@ -62,7 +62,11 @@ function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m,
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
 function mod(m = "", g = 0) {
 	if (pushc() < 1) return; if (getm() == m || !m) { mds.pop(); return; }
-	if (m == '()' && getm()) { p = mds.pop(); if (p.m[0] == '(') { mds.push({m: p.m, g: 1}); return; } mds.push(p);	}
+	if (m == '( )' && getm()) {
+		p = mds.pop();
+		if (p.m[0] == '(' && p.m[1] !=' ') { mds.push({m: '( ' + p.m.slice(1), g: 1}); return; }
+		mds.push(p);
+	}
 	if (m) mds.push({m: m, g: g});
 }
 function getm() { return ((n = mds.length) ? mds[n-1].m : ""); }
@@ -97,7 +101,7 @@ function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
 function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
 function key(k, s = false) {
 	back = back && k == "Backspace"; m = getm();
-	if (m && m[0] == '(' && (k == "Enter" || k == " ")) { ambval("", ""); if (s) mod('()', 1); }
+	if (m && m[0] == '(' && (k == "Enter" || k == " ")) { ambval("", ""); if (s) mod('( )', 1); }
 	if (m && (k == "Enter" || k == "Escape")) { mds = []; update(); return; }
 	if (m == "a←" || m == "a") {
 		if (k >= 'A' && k <= 'Z') k = k.toLowerCase();
@@ -149,7 +153,7 @@ function key(k, s = false) {
 		case "u":
 		case "U": mod('⌾', 1); break;
 		case '"':
-		case "'": mod('()', 1); break;
+		case "'": mod('( )', 1); break;
 		// variables
 		case "a": if (vres.length) mod('a'); break;
 		case "A": mod('a←'); break;
@@ -199,9 +203,9 @@ function cursor(t) {
 	c = (res >= 0 ? Val : isres(t) ? Res : t).description + (cur != "" || back ? " tight" : "");
 	p = s = ""; if (m = getm()) { c += " mod";
 		if (mds[mds.length-1].g) {
-			if (m[0] == '(') { p = m.slice(0, m.length-1); s = ')'; } else p = m
+			if (m[0] == '(') { p = m.startsWith('( ') ? '( ' : '('; s = m.slice(2); } else p = m
 		} else if (m[0] == '(') { p = '('; s = m.slice(1); } else s = m;
-		if (mds.length > 1) s += '...';
+		if (mds.length > 1) s += '…';
 	}
 	Stack.appendChild(html("cursor", c, p + (res < 0 ? "█" : "⎕") + s));
 }

@@ -13,13 +13,17 @@ body {
 	margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px;
 	background-color: var(--bg-color-l); color: var(--color-l);
 }
+body tr { border-bottom-color: var(--color-d); }
 body.other { background-color: var(--bg-color-d); color: var(--color-d); }
+body.other tr { border-bottom-color: var(--color-l); }
 
 @media (prefers-color-scheme: dark) {
 	body { background-color: var(--bg-color-d); color: var(--color-d); }
 	body a #dark { color: var(--color-off); }
+	body tr { border-bottom-color: (--color-l); }
 	body.other { background-color: var(--bg-color-l); color: var(--color-l); }
 	body.other a #dark { color: var(--color-on); }
+	body.other tr { border-bottom-color: (--color-d); }
 }
 
 .topbar {
@@ -40,6 +44,7 @@ p:empty { display: none; }
 pre { font-family: 'BQN386'; }
 
 table { border-collapse: collapse; margin-top: 2em; }
+body tr { display: block; min-width: 10em; border-bottom: solid 3px var(--color-d); }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
 td.x { text-decoration: underline; text-decoration-color: var(--color-x); text-decoration-thickness: 2px; }
 td.w { text-decoration: underline; text-decoration-color: var(--color-w); text-decoration-thickness: 2px; }
