@@ -33,21 +33,21 @@
 		<k onclick="key('7');"><e>7</e></k> <k onclick="key('8');"><e>8</e></k> <k onclick="key('9');"><e>9</e></k>
 		<k onclick="key('.');"><e>.</e></k> <k onclick="key('4');"><e>4</e></k> <k onclick="key('5');"><e>5</e></k> <k onclick="key('6');"><e>6</e></k>
 		<k onclick="key('0');"><e>0</e></k> <k onclick="key('1');"><e>1</e></k> <k onclick="key('2');"><e>2</e></k> <k onclick="key('3');"><e>3</e></k></span>
-		<k onclick="key('p');"><e>p</e>i</k> <k onclick="key('f');">in<e>f</e></k> <k onclick="key('(');">00<e>(</g></k> <k onclick="key(')');">000<e>)</e></k> <a href="javascript:digits();">0-9.</a>
-		<k onclick="key('_');">¯<c>_</c></k> <k onclick="key('E');">𝕩<c>E</c>𝕨</k> <k onclick="key('D');"><c>D</c>2R</k> <k onclick="key('R');"><c>R</c>2D</k> <k onclick="key('P');">(×<c>P</c>i)</k>
+		<k onclick="key('p');">π<e>p</e>i</k> <k onclick="key('f');">∞in<e>f</e></k> <k onclick="key('(');">00<e>(</e></k> <k onclick="key(')');">000<e>)</e></k> <a href="javascript:digits();" style="color:var(--color-e);">0-9.</a>
+		<k onclick="key('_');">¯<c>_</c></k> <k onclick="key('E');">𝕩<c>E</c>𝕨</k> <k onclick="key('D');"><c>D</c>2R</k> <k onclick="key('R');"><c>R</c>2D</k> <k onclick="key('P');">×<c>P</c>i</k>
 		<k onclick="key('+');"><d>+</d>inc/add</k> <k onclick="key('-');"><r>-</r>neg/sub</k> <k onclick="key('*');">×<r>*</r>sgn/mul</k> <k onclick="key('/');">÷inv<r>/</r>div</k>
 		<k onclick="key('%');"><d>%</d>÷100/pct</k> <k onclick="key('^');">⋆<d>^</d>exp/pow</k> <k onclick="key('l');">⍟<d>l</d>n/log</k> <k onclick="key('r');">√sq<d>r</d>t/root</k>
 		<k onclick="key('<');"><d>&lt;</d></k> <k onclick="key('>');"><d>&gt;</d></k> <k onclick="key('=');"><d>=</d>(NOT)</k> <k onclick="key('L');">≤<d>L</d>E</k> <k onclick="key('G');">≥<d>G</d>E</k> <k onclick="key('N');">≠<d>N</d>E</k> monadic: &lt;0,&gt;0,…
 		<k onclick="key('m');">⌊floor/<d>m</d>in(AND)</k> <k onclick="key('M');">⌈ceil/<d>M</d>ax(OR)</k> <k onclick="key('|');"><r>|</r>abs/mod</k>
 		<k onclick="key('c');">⍄<d>c</d>os</k> <k onclick="key('s');">⍓<d>s</d>in</k> <k onclick="key('t');">⍁<d>t</d>an</k> <k onclick="key('C');">⍃a<d>C</d>os</k> <k onclick="key('S');">⍌a<d>S</d>in</k> <k onclick="key('T');">⍂a<d>T</d>an</k>
-		modifiers: <k onclick="key('i');">⁼<c>i</c>nverse</k> <k onclick="key('u');">⁼<c>u</c>nder</k> <k onclick="key('&quot;');">train:(&nbsp;<c>'</c>&nbsp;)</k>
+		modifiers: <k onclick="key('i');">⁼<c>i</c>nverse</k> <k onclick="key('u');">⁼<c>u</c>nder</k> <k onclick="key('&quot;');">train:(<c>'</c><span style="all:unset;color:var(--color-f);">▇</span>)</k>
 		vars(<c>⇧</c> to assign):<k onclick="key('x');"><c>x</c></k> <k onclick="key('y');"><c>y</c></k> <k onclick="key('z');"><c>z</c></k> <k onclick="key('A');"><c>a</c></k>
 
 		<k onclick="key('Tab');"><c>↹</c>:swap</k> <k onclick="key('Tab', true);"><c>⇧</c>+<c>↹</c>:over</k> <k onclick="key('Enter', true);"><c>⇧</c>+<c>⏎</c>:dup</k> <k onclick="key('Backspace', true);"><c>⇧</c>+<c>⌫</c>:drop</k> <k onclick="key('Escape');"><c>␛</c>:clear</k> <k onclick="key('i');"><c>⇧</c>+<c>␛</c>:reset</k>
 		<k onclick="key(' ');"><c>⎵</c>:F𝕩/𝕨F𝕩</k>, <k onclick="key(' ', true);"><c>⇧</c>+<c>⎵</c>:<octi></octi></k> <k onclick="key('Enter');"><c>⏎</c>:eval</k> <k onclick="key('ArrowUp');"><c>↑</c>prev</k>/<k onclick="key('ArrowDown');"><c>↓</c>next</k> result (<c>⏎</c> to push)
 		</span>
-		TOS type: value<cursor class="val tight">█</cursor> function<cursor class="fun tight">█</cursor> expression<cursor class="exp tight">█</cursor> result<cursor class="res tight">█</cursor>
-		<c>?</c>: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a> <a href="https://mlochbaum.github.io/BQN/"><e>powered by BQN</e></a><k onclick="zoom(document.getElementById('cmds'));" style="color:#777;"><octi></octi></k>
+		TOS type: value<cursor class="val tight">▇</cursor> function<cursor class="fun tight">▇</cursor> expression<cursor class="exp tight">▇</cursor> result<cursor class="res tight">▇</cursor>
+		<c>?</c>: show/hide help <a href="https://github.com/yiyus/bqrpn" target="_blank" id="gh"><octi></octi> github.com/yiyus/bqrpn</a> <a href="https://mlochbaum.github.io/BQN/" target="_blank"><e>powered by BQN</e></a><k onclick="zoom(document.getElementById('cmds'));" style="color:#777;"><octi></octi></k>
 	</pre>
 	<script type="text/javascript" src="bqn.js"></script>
 	<script type="text/javascript" src="rpn.js"></script>
