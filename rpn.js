@@ -21,7 +21,7 @@ let stk = [], rstk = [], fs = {};
 // state: immediate, current, selection, result, modifiers, vars, backspace
 let imm = true, cur = "", sel = 0, res = -1, mds = [], vres = [], back = false;
 // fontsizes
-Sizes = ['100%', '120%', '150%', '200%', '75%'];
+Sizes = ['1.5em', '2em', '2.5em', '1em']; fs[''] = 0; fs['cmds'] = 3;
 
 // stack
 function ss() { return stk.length; } // stack size
@@ -225,7 +225,7 @@ function toggle(t, d, i) { i.className = "toggle " + (t.style.display = (getComp
 function history() { toggle(Results, "table", History); Stack.className = Results.style.display; }
 function help() { toggle(Help, "block", Helping); }
 function dark() { Dark.classList.toggle("none"); document.body.classList.toggle("other"); }
-function zoom(e) { e.style.fontSize = Sizes[fs[i = e.id] = (!(i in fs) ? 1 : (++fs[i]) == Sizes.length ? 0 : fs[i])]; }
+function zoom(e) { e.style.fontSize = Sizes[fs[i = e.id] = (++fs[i] == Sizes.length ? 0 : fs[i])]; }
 
 // reBQN
 prim = [ // car:symbol cdr:function
@@ -257,7 +257,8 @@ function main() {
 	p = new URLSearchParams(window.location.search);
 	if (p.has("?")) help(); if (p.has("h")) history(); if (p.has("i")) immediate();
 	if (p.has("z")) for (let i=0; i<parseInt(p.get("z")); i++) zoom(document.body);
-	if (p.has("hz")) for (let i=0; i<parseInt(p.get("hz")); i++) zoom(document.getElementById('cmds'));
+	hz = (p.has("hz") ? p.get("hz") : 1);
+	for (let i=0; i<parseInt(hz); i++) zoom(document.getElementById('cmds'));
 	if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
 	reset(); update(); document.addEventListener('keydown', keydown);
 }

@@ -10,7 +10,7 @@ octi { font-family: "Octicons"; }
 }
 
 body {
-	margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px;
+	margin: 0; padding: 0; font-family: "BQN386"; font-size: 1.5em;
 	background-color: var(--bg-color-l); color: var(--color-l);
 }
 body tr { border-bottom-color: var(--color-d); }
@@ -78,7 +78,7 @@ cursor.mod { color: #f00; }
 #banner h2 { font-size: 12px; font-weight: normal; color: var(--color-off); }
 
 #help {
-	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 14px; line-height: 1.4;
+	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 10px; line-height: 1.4;
 	text-align: right; white-space: pre-line; color: var(--color-off); user-select: none;
 }
 #help k { display: inline-block; min-width: 1.5em; text-align: center; }
