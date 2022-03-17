@@ -34,7 +34,7 @@ function push(t, v) {
 function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
 function pop() { return stk.pop(); }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
-function drop() { if (n = pushc() < 1) return; t = st(); pop(); setres(isres(t) ? t : -1); sel = Math.min(ss(), sel); }
+function drop() { if (pushc() > 0) { t = st(); pop(); setres(isres(t) ? t : -1); }; sel = Math.min(ss(), sel); }
 function clear() { stk = []; cur = ""; setres(-1); sel = 0; }
 function reset() { clear(); setres(); vres = []; Results.innerHTML = Stack.innerHTML = Err.innerHTML = ""; }
 function id(x) { return x; }
@@ -179,7 +179,7 @@ function key(k, s = false) {
 			if (ss() > 0) pushr(val(pop())); setres(); break;
 		case "Backspace":
 			if (!s) {
-				if (cur != "") { cur = cur.slice(0, cur.length - 1); break; }
+				if (cur != "") { cur = cur.slice(0, cur.length - 1); sel = Math.min(sel, ss()); break; }
 				if (ss() && st() == Val) { input(val(pop())); break; }
 				if (ss() && !back) { back = true; setres(); break; }
 			}
