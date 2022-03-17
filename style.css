@@ -2,13 +2,13 @@
 @font-face { font-family: "Octicons"; src: url("https://yelp.github.io/fonts/octicons.ttf"); }
 octi { font-family: "Octicons"; }
 
-body { margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; color: #222; }
+body { background-color: #fdfdfc; margin: 0; padding: 0; font-family: "BQN386"; font-size: 16px; color: #222; }
 body.other { background-color: #333; color: #eee; }
 
 @media (prefers-color-scheme: dark) {
 	body { background-color: #333; color: #eee; }
 	body a #dark { color: #777; }
-	body.other { background-color: #fff; color: #222; }
+	body.other { background-color: #fdfdfc; color: #222; }
 	body.other a #dark { color: #000; }
 }
 
@@ -78,3 +78,15 @@ cursor.mod { color: #f00; }
 	#digits { visibility: visible; }
 	#help { font-size: 9px; }
 }
+
+c, d, r {
+	background-color: #ffffff; box-shadow: 1px 1px #999; border-radius: 3px;
+	font-size: .85em; line-height: .85em; font-weight: 600;
+	display: inline-block; margin: 3px; padding: 3px 5px; letter-spacing: .05em; white-space: nowrap;
+}
+body.other c, body.other d, body.other r { background-color: #333; box-shadow: -1px -1px #666; }
+@media (prefers-color-scheme: dark) {
+	c, d, r { background-color: #333; box-shadow: -1px -1px #666; }
+	body.other c, body.other d, body.other r { background-color: #ffffff; box-shadow: 1px 1px #999; }
+}
+
