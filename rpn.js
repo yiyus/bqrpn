@@ -129,8 +129,9 @@ function key(k, s = false) {
 		case "*": ambval('×', '×'); break;
 		case "/": ambval('÷', '÷', true); break;
 		case "%": ambval('%', '%'); break;
-		case "^": ambval('⋆', '⋆', true); break;
+		case "^": ambval('^', '^', true); break;
 		case "r": ambval('√', '√'); break;
+		case "e": ambval('⋆', '⋆'); break;
 		case "l": ambval('⍟', '⍟'); break;
 		case "|": ambval('|', '|', true); break;
 		case "m": ambval('⌊', '⌊'); break;
@@ -230,8 +231,8 @@ function zoom(e) { e.style.fontSize = Sizes[fs[i = e.id] = (++fs[i] == Sizes.len
 
 // reBQN
 prim = [ // car:symbol cdr:function
-	"++⟜1⊘+", "--", "××", "÷÷", "%×⟜0.01⊘(0.01××)", "⋆⋆", "⍟⋆⁼", "√√", "⌊⌊", "⌈⌈", "||",
-	"<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
+	"++⟜1⊘+", "--", "××", "÷÷", "%×⟜0.01⊘(0.01××)", "⋆⋆", "⍟⋆⁼", "^⋆⟜2⊘⋆",
+	"√√", "⌊⌊", "⌈⌈", "||", "<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
 	"⍄•math.Cos⊘(×⟜•math.Cos˜)", "⍓•math.Sin⊘(×⟜•math.Sin˜)", "⍁•math.Tan⊘(×⟜•math.Tan˜)",
 	"⍃•math.Cos⁼⊘(÷⟜•math.Cos˜)", "⍌•math.Sin⁼⊘(÷⟜•math.Sin˜)", "⍂•math.Tan⁼⊘•math.ATan2",
 	"⁼⁼", "⌾⌾"

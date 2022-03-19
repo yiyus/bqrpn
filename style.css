@@ -82,7 +82,7 @@ cursor.mod { color: #f00; }
 #banner a { color: inherit; text-decoration: none; }
 
 #help {
-	position: fixed; bottom: 0; right: 1em; margin:0; font-size: 11px; line-height: 1.4;
+	position: fixed; bottom: 3px; right: 1em; margin:0; font-size: 11px; line-height: 1.4;
 	text-align: right; white-space: pre-line; color: var(--color-off); user-select: none;
 }
 #help k { display: inline-block; min-width: 1.5em; text-align: center; }
