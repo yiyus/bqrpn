@@ -54,6 +54,7 @@ function evaluate(f, x = null, w = null) {
 	}
 	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
 	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
+	if (isres(x.type) && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
 	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
 }
 function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
@@ -239,7 +240,7 @@ prim = [ // car:symbol cdr:function
 	"√√", "⌊⌊", "⌈⌈", "||", "<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
 	"⍄•math.Cos⊘(×⟜•math.Cos˜)", "⍓•math.Sin⊘(×⟜•math.Sin˜)", "⍁•math.Tan⊘(×⟜•math.Tan˜)",
 	"⍃•math.Cos⁼⊘(÷⟜•math.Cos˜)", "⍌•math.Sin⁼⊘(÷⟜•math.Sin˜)", "⍂•math.Tan⁼⊘•math.ATan2",
-	"⁼⁼", "⌾⌾"
+	"⁼⁼", "⌾⌾", "˜˜"
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
