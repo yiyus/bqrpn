@@ -1,9 +1,9 @@
 const app = "bqrpn-v0";
 const assets = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/rpn.js"
+  "bqrpn/",
+  "bqrpn/index.html",
+  "bqrpn/style.css",
+  "bqrpn/rpn.js"
 ];
 
 self.addEventListener("install", ev => ev.waitUntil(caches.open(app).then(c => c.addAll(assets))));
