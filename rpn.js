@@ -36,7 +36,7 @@ function pop() { return stk.pop(); }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
 function drop() { if (pushc() > 0) { t = st(); pop(); setres(isres(t) ? t : -1); }; sel = Math.min(ss(), sel); }
 function clear() { stk = []; cur = ""; setres(-1); sel = 0; }
-function reset() { clear(); setres(); vres = []; Results.innerHTML = Stack.innerHTML = Err.innerHTML = ""; }
+function reset() { clear(); setres(); B.clear(); vres = []; rstk = []; Results.innerHTML = ""; Stack.innerHTML = ""; Err.innerHTML = ""; }
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
@@ -243,7 +243,8 @@ prim = [ // car:symbol cdr:function
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
-	let [B, R, G, r] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩}⋄b‿{¯1+≠r∾↩B𝕩}‿{⊑⟜r𝕩}‿{𝕩,r}');
+	let [B, R, G, r, c] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩},' +
+		'b‿{¯1+≠r∾↩B𝕩}‿{⊑⟜r𝕩}‿{𝕩,r}‿{𝕩,r↩⟨⟩}');
 	let fe = (e) => (x = fmtErr(e)).substring(0, x.slice(0, x.length - 2).lastIndexOf('\n'));
 	let fn = (f, err) => (x) => {
 		try { return f(x); } catch (e) { Err.textContent = err + ' ERROR\n' + fe(e); throw(e); }
@@ -252,6 +253,9 @@ function rbqn(prim) {
 		bqn: fn((x) => B(str(x)), "BQN"), run: fn((x) => R(str(x)), "RUN"), get: fn((x) => fmt(G(x)), "GET"),
 		res: () => {
 			try { return list(r(0)); } catch (e) { Err.textContent = 'RES ERROR\n' + fe(e); throw(e); }
+		},
+		clear: () => {
+			try { c(0); } catch (e) { Err.textContent = 'CLEAR ERROR\n' + fe(e); throw(e); }
 		}
 	}
 }
