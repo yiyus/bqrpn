@@ -117,7 +117,7 @@ function key(k, s = false) {
 		// input
 		case "0": case "1": case "2": case "3": case "4": case "5":
 		case "6": case "7": case "8": case "9": input(k); break;
-		case ".": input(cur == "" ? '0.' : '.'); break;
+		case ".": if (cur.includes(".")) pushc(); input(cur == "" ? '0.' : '.'); break;
 		case "(": input(cur == "" ? '0.0' : '00'); break;
 		case ")": input(cur == "" ? '0.00' : '000'); break;
 		case 'f': push(Exp, '∞'); break;
