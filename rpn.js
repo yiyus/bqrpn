@@ -53,7 +53,8 @@ function evaluate(f, x = null, w = null) {
 		} else f = (md.m[0] == '(' ? '(' + f + md.m.slice(1) : f + md.m);
 	}
 	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
-	x = pop().value; if (imm < 0) push(Val, fmt(B.bqn(x))); else push(pushr(r = B.run(x), x), r);
+	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
+	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
 }
 function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
 function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); }
@@ -92,6 +93,9 @@ function nextres() { pushc(); if(res < 0) res = -1; if (++res >= rs()) res = -1;
 function rpush(r = null) {
 	if(r === null) r = res; if (r >= 0) push(r, (br = rstk[r]) >= 0 ? br : getr(r).firstChild.textContent);
 }
+function rval(e) { return isres(e.type) ? getr(e.type).childNodes[2].textContent : val(e); }
+Exps = ['π', '∞'];
+function rexp(e) { return (e.type == Val || Exps.includes(e.value) ? val(e) : `(${rval(e)})`) }
 
 // variables
 function store(k) { if (!pushc()) return; monadic(k + '←'); pop(); vres[k] = rs() - 1; }
