@@ -46,18 +46,20 @@ function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
 function evaluate(f, x = null, w = null) {
-	if (md1 != "a" && md1 != "a←") f += md1;
-	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
+	if (x != null && (md1 == "keep" || md1 == "KEEP")) stk.push(x); if (md1 == "keep") md1 = "";
+	if (md1 == "⁼") f += md1; if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
 	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
 	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
 	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
+	if (md1 == "copy" || md1 == "COPY") { stk.push(x); if (w != null) stk.push(w); }
+	if (md1 == "copy") md1 = "";
 }
 function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
 function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); }
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
-function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (m == md1 ? "" : m); }
+function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (m.toLowerCase() == md1.toLowerCase() ? "" : m); }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -140,6 +142,10 @@ function key(k, s = false) {
 		// modifiers
 		case "i":
 		case "I": mod('⁼'); break;
+		case ";": mod('keep'); break;
+		case ":": mod('KEEP'); break;
+		case "'": mod('copy'); break;
+		case '"': mod('COPY'); break;
 		// variables
 		case "a": if (Object.keys(vres).length) mod('a'); break;
 		case "A": mod('a←'); break;
