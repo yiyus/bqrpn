@@ -40,13 +40,14 @@ function reset() { clear(); setres(); B.clear(); vres = []; rstk = []; Results.i
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
-function selection() { setres(); if (cur != "") pushc(); sel = (sel == 1 ? sets(2) : sel - 1); }
+function selection() { if (md1 == "○") return; setres(); if (cur != "") pushc(); sel = (sel == 1 ? sets(2) : sel - 1); }
 function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type] < 0 ? e.value : B.get(e.value)); }
 function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
 function evaluate(f, x = null, w = null) {
 	if (x != null && (md1 == "↙" || md1 == "↙↙")) stk.push(x); if (md1 == "↙") md1 = "";
+	if (md1 == "○") { md1 = ""; evaluate(f, w); evaluate(f, x); return; }
 	if (md1 == "⁼") f += md1; if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
 	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
 	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
@@ -58,7 +59,9 @@ function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); 
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sets(ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
-function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] == md1[0] ? "" : m); }
+function mod(m = "") {
+	if (pushc() < 1 + (o = md1 == "○") && m != "a") return; md1 = (!m || m[0] == md1[0] ? "" : m); if (o) sel = 2;
+}
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -141,6 +144,8 @@ function key(k, s = false) {
 		// modifiers
 		case "i":
 		case "I": mod('⁼'); break;
+		case "o":
+		case "O": mod('○'); break;
 		case ";": mod('↙'); break;
 		case ":": mod('↙↙'); break;
 		case "'": mod('↘'); break;
@@ -219,7 +224,7 @@ prim = [ // car:symbol cdr:function
 	"√√", "⌊⌊", "⌈⌈", "||", "<<⟜0⊘<", ">>⟜0⊘>", "==⟜0⊘=", "≤≤⟜0⊘≤", "≥≥⟜0⊘≥", "≠≠⟜0⊘≠",
 	"⍄•math.Cos⊘(×⟜•math.Cos˜)", "⍓•math.Sin⊘(×⟜•math.Sin˜)", "⍁•math.Tan⊘(×⟜•math.Tan˜)",
 	"⍃•math.Cos⁼⊘(÷⟜•math.Cos˜)", "⍌•math.Sin⁼⊘(÷⟜•math.Sin˜)", "⍂•math.Tan⁼⊘•math.ATan2",
-	"⁼⁼", "⌾⌾", "˜˜"
+	"⁼⁼", "˜˜", "○○"
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
