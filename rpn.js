@@ -18,15 +18,15 @@ const History = document.getElementById('history');
 const Err = document.getElementById('err');
 // globals: stack, results stack, font sizes
 let stk = [], rstk = [], fs = {};
-// state: immediate, current, selection, result, modifiers, vars, backspace
-let imm = true, cur = "", sel = 0, res = -1, mds = [], vres = [], back = false;
+// state: immediate, current, selection, result, modifier, vars, backspace
+let imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false;
 // fontsizes
 Sizes = ['1.5em', '2em', '2.5em', '1em']; fs[''] = 0; fs['cmds'] = 3;
 
 // stack
 function ss() { return stk.length; } // stack size
 function st(i = 1) { return i > stk.length ? Val : stk[stk.length-i].type } // stack (element) type
-function input(c) { if (getm()) return; cur += c; setres(); sel = 1 + (ss() > 0); }
+function input(c) { if (md1) return; cur += c; setres(); sel = 1 + (ss() > 0); }
 function push(t, v) {
 	if (typeof(v) == "string" && v[v.length-1] == '.') v += '0';
 	stk.push({type: t, value: v}); sel = Math.min(ss(), 2);
@@ -46,12 +46,7 @@ function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
 function evaluate(f, x = null, w = null) {
-	while (mds.length) {
-		if ((md = mds.pop()).g > 0) {
-			f = (md.m.startsWith('( ') ? '(' + f + md.m.slice(2) : md.m + f);
-			mds.push({m: f, g: md.g - 1}); if (w) stk.push(w); if (x) stk.push(x); return false;
-		} else f = (md.m[0] == '(' ? '(' + f + md.m.slice(1) : f + md.m);
-	}
+	if (md1 != "a" && md1 != "a←") f += md1;
 	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
 	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
 	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
@@ -62,16 +57,7 @@ function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); 
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
-function mod(m = "", g = 0) {
-	if (pushc() < 1 && m != "a") return; if (getm() == m || !m) { mds.pop(); return; }
-	if (m == '( )' && getm()) {
-		p = mds.pop();
-		if (p.m[0] == '(' && p.m[1] !=' ') { mds.push({m: '( ' + p.m.slice(1), g: 1}); return; }
-		mds.push(p);
-	}
-	if (m) mds.push({m: m, g: g});
-}
-function getm() { return ((n = mds.length) ? mds[n-1].m : ""); }
+function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (m == md1 ? "" : m); }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -105,15 +91,13 @@ function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
 // input
 function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
 function key(k, s = false) {
-	back = back && k == "Backspace"; m = getm();
-	if (m && m[0] == '(' && (k == "Enter" || k == " ")) { ambval("", ""); if (s) mod('( )', 1); }
-	if (m && (k == "Enter" || k == "Escape")) { mds = []; update(); return; }
-	if (m == "a←" || m == "a") {
+	back = back && k == "Backspace";
+	if (md1 == "a←" || md1 == "a") {
 		if (k >= 'A' && k <= 'Z') k = k.toLowerCase();
-		if (k >= 'a' && k <= 'z') { if (m == "a←") { mds.pop(); store(k); } else fetch(k); }
-		mod(); update(); return;
+		if (k >= 'a' && k <= 'z') { if (md1 == "a←") store(k); else fetch(k); }
+		md1 = "";
 	}
-	switch (k) {
+	else switch (k) {
 		// input
 		case "0": case "1": case "2": case "3": case "4": case "5":
 		case "6": case "7": case "8": case "9": input(k); break;
@@ -156,10 +140,6 @@ function key(k, s = false) {
 		// modifiers
 		case "i":
 		case "I": mod('⁼'); break;
-		case "u":
-		case "U": mod('⌾', 1); break;
-		case '"':
-		case "'": mod('( )', 1); break;
 		// variables
 		case "a": if (Object.keys(vres).length) mod('a'); break;
 		case "A": mod('a←'); break;
@@ -207,16 +187,10 @@ function html(tag, cls, txt) {
 function element(type, txt) { return Stack.appendChild(html("span", type.description, txt)); }
 function cursor(t) {
 	c = (res >= 0 ? Val : isres(t) ? Res : t).description + (cur != "" || back ? " tight" : "");
-	p = s = ""; if (m = getm()) { c += " mod";
-		if (mds[mds.length-1].g) {
-			if (m[0] == '(') { p = m.startsWith('( ') ? '( ' : '('; s = m.slice(2); } else p = m
-		} else if (m[0] == '(') { p = '('; s = m.slice(1); } else s = m;
-		if (mds.length > 1) s += '…';
-	}
-	Stack.appendChild(html("cursor", c, p + (res < 0 ? "█" : "⎕") + s));
+	Stack.appendChild(html("cursor", c + (md1 ? " mod" : ""), (res < 0 ? "█" : "⎕") + md1));
 }
 function update() {
-	Banner.style.visibility = (ss() || rs() || cur || getm() ? "hidden" : "visible");
+	Banner.style.visibility = (ss() || rs() || cur || md1 ? "hidden" : "visible");
 	Stack.innerHTML = Err.textContent = Vars.textContent = ''; n = ss();
 	for (const k in vres) {
 		(td = document.createElement("td")).textContent = getr(vres[k]).firstChild.textContent;
@@ -244,7 +218,7 @@ prim = [ // car:symbol cdr:function
 ];
 function rbqn(prim) {
 	s = ""; for (const p of prim) s += "'" + p[0] + "'‿(" + p.slice(1) + "), ";
-	let [B, R, G, r, c] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩},' +
+	let [B, R, G, r, c] = bqn('r←⟨⟩⋄b←•ReBQN {repl⇐"loose",primitives⇐⟨' + s + '⟩}\n' +
 		'b‿{¯1+≠r∾↩B𝕩}‿{⊑⟜r𝕩}‿{𝕩,r}‿{𝕩,r↩⟨⟩}');
 	let fe = (e) => (x = fmtErr(e)).substring(0, x.slice(0, x.length - 2).lastIndexOf('\n'));
 	let fn = (f, err) => (x) => {
