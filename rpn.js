@@ -63,7 +63,7 @@ function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dy
 function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
 function mod(m = "", g = 0) {
-	if (pushc() < 1) return; if (getm() == m || !m) { mds.pop(); return; }
+	if (pushc() < 1 && m != "a") return; if (getm() == m || !m) { mds.pop(); return; }
 	if (m == '( )' && getm()) {
 		p = mds.pop();
 		if (p.m[0] == '(' && p.m[1] !=' ') { mds.push({m: '( ' + p.m.slice(1), g: 1}); return; }
@@ -161,7 +161,7 @@ function key(k, s = false) {
 		case '"':
 		case "'": mod('( )', 1); break;
 		// variables
-		case "a": if (vres.length) mod('a'); break;
+		case "a": if (Object.keys(vres).length) mod('a'); break;
 		case "A": mod('a←'); break;
 		case "x": fetch('x'); break;
 		case "X": store('x'); break;
