@@ -25,41 +25,40 @@ Sizes = ['1.5em', '2em', '2.5em', '1em']; fs[''] = 0; fs['cmds'] = 3;
 
 // stack
 function ss() { return stk.length; } // stack size
+function sets(n) { return (sel = Math.min(ss(), n)); }
 function st(i = 1) { return i > stk.length ? Val : stk[stk.length-i].type } // stack (element) type
 function input(c) { if (md1) return; cur += c; setres(); sel = 1 + (ss() > 0); }
 function push(t, v) {
-	if (typeof(v) == "string" && v[v.length-1] == '.') v += '0';
-	stk.push({type: t, value: v}); sel = Math.min(ss(), 2);
+	if (typeof(v) == "string" && v[v.length-1] == '.') v += '0'; stk.push({type: t, value: v}); sets(2);
 }
 function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
 function pop() { return stk.pop(); }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
-function drop() { if (pushc() > 0) { t = st(); pop(); setres(isres(t) ? t : -1); }; sel = Math.min(ss(), sel); }
+function drop() { if (pushc() > 0) { t = st(); pop(); setres(isres(t) ? t : -1); }; sets(sel); }
 function clear() { stk = []; cur = ""; setres(-1); sel = 0; }
 function reset() { clear(); setres(); B.clear(); vres = []; rstk = []; Results.innerHTML = ""; Stack.innerHTML = ""; Err.innerHTML = ""; }
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
-function selection() { setres(); if (cur != "") pushc(); sel = (sel == 1 ? Math.min(ss(), 2) : sel - 1); }
+function selection() { setres(); if (cur != "") pushc(); sel = (sel == 1 ? sets(2) : sel - 1); }
 function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type] < 0 ? e.value : B.get(e.value)); }
 function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
 function evaluate(f, x = null, w = null) {
-	if (x != null && (md1 == "keep" || md1 == "KEEP")) stk.push(x); if (md1 == "keep") md1 = "";
+	if (x != null && (md1 == "↙" || md1 == "↙↙")) stk.push(x); if (md1 == "↙") md1 = "";
 	if (md1 == "⁼") f += md1; if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
 	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
 	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
 	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
-	if (md1 == "copy" || md1 == "COPY") { stk.push(x); if (w != null) stk.push(w); }
-	if (md1 == "copy") md1 = "";
+	if (md1 == "↘" || md1 == "↘↘") { stk.push(x); if (w != null) stk.push(w); sets(2); if (md1 == "↘") md1 = ""; }
 }
 function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
 function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); }
 function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
-function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sel = Math.min(ss(), ps); }
+function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sets(ps); }
 function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
-function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (m.toLowerCase() == md1.toLowerCase() ? "" : m); }
+function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] == md1[0] ? "" : m); }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -142,10 +141,10 @@ function key(k, s = false) {
 		// modifiers
 		case "i":
 		case "I": mod('⁼'); break;
-		case ";": mod('keep'); break;
-		case ":": mod('KEEP'); break;
-		case "'": mod('copy'); break;
-		case '"': mod('COPY'); break;
+		case ";": mod('↙'); break;
+		case ":": mod('↙↙'); break;
+		case "'": mod('↘'); break;
+		case '"': mod('↘↘'); break;
 		// variables
 		case "a": if (Object.keys(vres).length) mod('a'); break;
 		case "A": mod('a←'); break;
@@ -175,7 +174,7 @@ function key(k, s = false) {
 			if (ss() > 0) pushr(val(pop())); setres(); break;
 		case "Backspace":
 			if (!s) {
-				if (cur != "") { cur = cur.slice(0, cur.length - 1); sel = Math.min(sel, ss()); break; }
+				if (cur != "") { cur = cur.slice(0, cur.length - 1); sets(sel); break; }
 				if (ss() && st() == Val) { input(val(pop())); break; }
 				if (ss() && !back) { back = true; setres(); break; }
 			}
