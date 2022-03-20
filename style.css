@@ -3,7 +3,7 @@
 octi { font-family: "Octicons"; }
 
 :root {
-	--bg-color-l: #fdfdfb; --color-l: #222; --key-bg-l: #ffffff;
+	--bg-color-l: #fdfcfa; --color-l: #222; --key-bg-l: #ffffff;
 	--bg-color-d: #333333; --color-d: #eee; --key-bg-d: #000000;
 	--color-x: #09f; --color-w: #c7e; --color-f: #e77; --color-e: #8a8;
 	--color-on: #000; --color-off: #777;
@@ -98,17 +98,17 @@ cursor.mod { color: #f00; }
 	#help { font-size: 9px; }
 }
 c, d, r, e {
-	border-radius: 4px; border: solid 1px; display: inline-block; opacity: 80%;
-	background-color: var(--key-bg-l); box-shadow: 1px 1px var(--color-off); 
+	border-radius: 4px; border: dotted 1px; display: inline-block; opacity: 80%;
+	background-color: var(--key-bg-l); box-shadow: 1px 2px var(--color-off); 
 	margin: 2px; padding: 2px 5px 3px 5px; letter-spacing: .05em; line-height: .75em; white-space: nowrap;
 }
 body.other c, body.other d, body.other r, body.other e {
-	background-color: var(--key-bg-d); box-shadow: -1px -1px var(--color-off);
+	background-color: var(--key-bg-d); box-shadow: -1px -2px var(--color-off);
 }
 @media (prefers-color-scheme: dark) {
-	c, d, r, e { background-color: var(--key-bg-d); box-shadow: -1px -1px var(--color-off); }
+	c, d, r, e { background-color: var(--key-bg-d); box-shadow: -1px -2px var(--color-off); }
 	body.other c, body.other d, body.other r, body.other e {
-		background-color: var(--key-bg-l); box-shadow: 1px 1px var(--color-off);
+		background-color: var(--key-bg-l); box-shadow: 1px 2px var(--color-off);
 	}
 }
 

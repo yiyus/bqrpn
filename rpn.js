@@ -54,7 +54,7 @@ function evaluate(f, x = null, w = null) {
 	}
 	if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
 	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
-	if (isres(x.type) && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
+	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
 	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
 }
 function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
@@ -124,7 +124,7 @@ function key(k, s = false) {
 		case 'p': push(Exp, 'π'); break;
 		// immediate
 		case "_": ambimm('-', 0); break;
-		case 'E': ambimm('10⋆', '×10⋆', true); break;
+		case 'E': ambimm('10^', '×10^', true); break;
 		case 'D': ambimm('(π÷180)×', 0); break;
 		case 'R': ambimm('(180÷π)×', 0); break;
 		case 'P': ambimm('π×', 0); break;
