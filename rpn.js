@@ -36,7 +36,7 @@ function pop() { return stk.pop(); }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
 function drop() { if (pushc() > 0) { t = st(); pop(); setres(isres(t) ? t : -1); }; sets(sel); }
 function clear() { stk = []; cur = ""; setres(-1); sel = 0; }
-function reset() { clear(); setres(); B.clear(); vres = []; rstk = []; Results.innerHTML = ""; Stack.innerHTML = ""; Err.innerHTML = ""; }
+function reset() { clear(); setres(); B.clear(); vres = []; rstk = []; md1 = ""; Results.innerHTML = ""; Stack.innerHTML = ""; Err.innerHTML = ""; }
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
@@ -101,6 +101,7 @@ function key(k, s = false) {
 		if (k >= 'a' && k <= 'z') { if (md1 == "a←") store(k); else fetch(k); }
 		md1 = "";
 	}
+	else if (md1 && (k == 'Enter' || k == 'Escape')) md1 = "";
 	else switch (k) {
 		// input
 		case "0": case "1": case "2": case "3": case "4": case "5":
