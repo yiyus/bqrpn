@@ -26,7 +26,7 @@ body.other tr { border-bottom-color: var(--color-l); }
 	body.other tr { border-bottom-color: (--color-d); }
 }
 
-#all { visibility: hidden; }
+#all { visibility: hidden; background-color: inherit; }
 #all.on { visibility: visible; }
 
 .topbar {
@@ -47,7 +47,7 @@ p:empty { display: none; }
 pre { font-family: 'BQN386'; }
 
 table { border-collapse: collapse; margin-top: 2em; }
-body tr { display: block; min-width: 10em; border-bottom: solid 3px var(--color-d); }
+body tr { min-width: 10em; border-bottom: solid 3px var(--color-d); }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
 td.x { text-decoration: underline; text-decoration-color: var(--color-x); text-decoration-thickness: 2px; }
 td.w { text-decoration: underline; text-decoration-color: var(--color-w); text-decoration-thickness: 2px; }
@@ -55,8 +55,9 @@ tr.res td { background-color: #667; color: white; }
 td.exp { width: 100%; color: var(--color-e); }
 td.eq { color: #888; }
 
-#vars { float: right; margin: 0 1em; font-size: small; }
+#vars { background-color: inherit; position: fixed; top: 2em; right: 0; margin: 0; font-size: small; }
 #vars .k { user-select: none; cursor: pointer; color: var(--color-f);  }
+#vars td { padding-right: 1em; }
 
 #stack { padding-left: 0; }
 #stack.none { margin-top: 2em; }
