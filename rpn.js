@@ -149,6 +149,7 @@ function key(k, s = false) {
 		case "O": mod('○'); break;
 		case ";": mod('↙'); break;
 		case ":": mod('↙↙'); break;
+		case "Quote":
 		case "'": mod('↘'); break;
 		case '"': mod('↘↘'); break;
 		// variables
