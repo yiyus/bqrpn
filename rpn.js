@@ -9,7 +9,6 @@ const X = Symbol("x"), W = Symbol("w"), Y = Symbol("y"); U = Symbol("unsel");
 const Results = document.getElementById('results');
 const Vars = document.getElementById('vars');
 const Stack = document.getElementById('stack');
-const Imm = document.getElementById('imm');
 const Banner = document.getElementById('banner');
 const Dark = document.getElementById('dark');
 const Help = document.getElementById('help');
@@ -18,8 +17,8 @@ const History = document.getElementById('history');
 const Err = document.getElementById('err');
 // globals: stack, results stack, font sizes
 let stk = [], rstk = [], fs = {};
-// state: immediate, current, selection, result, modifier, vars, backspace
-let imm = true, cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false;
+// state: current, selection, result, modifier, vars, backspace
+let cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false;
 // fontsizes
 Sizes = ['1.5em', '2em', '2.5em', '1em']; fs[''] = 0; fs['cmds'] = 3;
 
@@ -45,23 +44,17 @@ function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type] < 
 function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
-function evaluate(f, x = null, w = null) {
-	if (x != null && (md1 == "↙" || md1 == "↙↙")) stk.push(x); if (md1 == "↙") md1 = "";
-	if (md1 == "○") { md1 = ""; evaluate(f, w); evaluate(f, x); return; }
-	if (md1 == "⁼") f += md1; if (x != null) push(Exp, (w == null ? f : exp(w) + f) + val(x)); if (x && !imm) return;
-	xp = pop().value; if (imm < 0) { push(Val, fmt(B.bqn(xp))); return; }
+function expression(f, x = null, w = null) { return (w == null ? f : exp(w) + f) + val(x); }
+function evaluate(imm, f, x = null, w = null) {
+	xp = expression(f, x, w); if (imm) { push(Val, fmt(B.bqn(xp))); return; }
 	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
 	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
-	if (md1 == "↘" || md1 == "↘↘") { stk.push(x); if (w != null) stk.push(w); sets(2); if (md1 == "↘") md1 = ""; }
 }
-function monadic(f) { if (pushc() < 1) return; evaluate(f, pop()); }
-function dyadic(f) { if (pushc() < 2) return; w = pop(); evaluate(f, pop(), w); }
-function ambval(m, d = null, s = false) { if (sel == 2 && d) { if (s) swap(); dyadic(d); } else if (sel >= 1) monadic(m); }
-function ambimm(m, d = null, s = false) { ps = sel; i = imm; imm = -1; ambval(m, d, s); imm = i; sets(ps); }
-function immediate() { imm = !imm; Imm.className = "toggle " + (imm ? "" : "none");  }
-function mod(m = "") {
-	if (pushc() < 1 + (o = md1 == "○") && m != "a") return; md1 = (!m || m[0] == md1[0] ? "" : m); if (o) sel = 2;
-}
+function monadic(f, imm = false) { if (pushc() < 1) return; evaluate(imm, f, pop()); }
+function dyadic(f, s, imm = false) { if (pushc() < 2) return; if (s) swap(); w = pop(); evaluate(imm, f, pop(), w); }
+function ambval(m, d = null, s = false, imm = false) { if (sel == 2 && d) dyadic(d, s, imm); else if (sel >= 1) monadic(m, imm); }
+function ambimm(m, d = null, s = false) { ps = sel; ambval(m, d, s, true); sets(ps); }
+function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] == md1[0] ? "" : m); }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -142,16 +135,6 @@ function key(k, s = false) {
 		case "C": ambval('⍃', '⍃'); break;
 		case "S": ambval('⍌', '⍌'); break;
 		case "T": ambval('⍂', '⍂'); break;
-		// modifiers
-		case "i":
-		case "I": mod('⁼'); break;
-		case "o":
-		case "O": mod('○'); break;
-		case ";": mod('↙'); break;
-		case ":": mod('↙↙'); break;
-		case "Quote":
-		case "'": mod('↘'); break;
-		case '"': mod('↘↘'); break;
 		// variables
 		case "a": if (Object.keys(vres).length) mod('a'); break;
 		case "A": mod('a←'); break;
@@ -177,7 +160,6 @@ function key(k, s = false) {
 			if (cur != "") { pushc(); break; }
 			if (res >= 0) { rpush(); setres(); break; }
 			if (isres(st())) { drop(); break; }
-			if (st() == Exp) { evaluate(); break; }
 			if (ss() > 0) pushr(val(pop())); setres(); break;
 		case "Backspace":
 			if (!s) {
@@ -252,10 +234,8 @@ const B = rbqn(prim);
 // go!
 function main() {
 	p = new URLSearchParams(window.location.search);
-	if (p.has("?")) help(); if (p.has("h")) history(); if (p.has("i")) immediate();
-	if (p.has("z")) for (let i=0; i<parseInt(p.get("z")); i++) zoom(document.body);
-	hz = (p.has("hz") ? p.get("hz") : 1);
-	for (let i=0; i<parseInt(hz); i++) zoom(document.getElementById('cmds'));
+	if (p.has("?")) help(); if (p.has("h")) history(); if (p.has("z")) for (let i=0; i<parseInt(p.get("z")); i++) zoom(document.body);
+	hz = (p.has("hz") ? p.get("hz") : 1); for (let i=0; i<parseInt(hz); i++) zoom(document.getElementById('cmds'));
 	if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
 	reset(); update(); document.addEventListener('keydown', keydown);
 }

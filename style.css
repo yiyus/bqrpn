@@ -46,7 +46,7 @@ p { margin: 0; padding: 0.25ex 0 0.25ex 1em; max-width: 100%; }
 p:empty { display: none; }
 pre { font-family: 'BQN386'; }
 
-table { border-collapse: collapse; margin-top: 2em; }
+table { border-collapse: collapse; margin-top: 1.25em; }
 body tr { min-width: 10em; border-bottom: solid 3px var(--color-d); }
 td { padding: 0.25ex 0 0.25ex 1em; vertical-align: top; }
 td.x { text-decoration: underline; text-decoration-color: var(--color-x); text-decoration-thickness: 2px; }
@@ -55,7 +55,7 @@ tr.res td { background-color: #667; color: white; }
 td.exp { width: 100%; color: var(--color-e); }
 td.eq { color: #888; }
 
-#vars { background-color: inherit; position: fixed; top: 2em; right: 0; margin: 0; font-size: small; }
+#vars { background-color: inherit; position: fixed; top: 2.5em; right: 0; margin: 0; font-size: small; }
 #vars .k { user-select: none; cursor: pointer; color: var(--color-f);  }
 #vars td { padding-right: 1em; }
 
@@ -86,14 +86,15 @@ cursor.mod { color: #f00; }
 	position: fixed; bottom: 3px; right: 1em; margin:0; font-size: 11px; line-height: 1.4;
 	text-align: right; white-space: pre-line; color: var(--color-off); user-select: none;
 }
+#help span { display: block; margin: 1.5ex 0; }
 #help k { display: inline-block; min-width: 1.5em; text-align: center; }
 #help a { color: var(--color-off); text-decoration: none;}
 #help d { color: var(--color-x); }
 #help r { color: var(--color-w); }
 #help c { color: var(--color-f); }
 #help e { color: var(--color-e); }
-#digits { display: none; font-size: 180%; }
-#digits e { padding: 3px 8px; }
+#help #digits { display: none; font-size: 180%; }
+#help #digits e { padding: 3px 8px; }
 @media screen and (max-width: 640px) {
 	#digits { display: block; }
 	#help { font-size: 9px; }
