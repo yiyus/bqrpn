@@ -24,7 +24,7 @@ Sizes = ['1.5em', '2em', '2.5em', '1em']; fs[''] = 0; fs['cmds'] = 3;
 
 // stack
 function ss() { return stk.length; } // stack size
-function sets(n) { return (sel = Math.min(ss(), n)); }
+function sets(n) { return (sel = Math.sign(n) * Math.min(ss(), Math.abs(n))); }
 function st(i = 1) { return i > stk.length ? Val : stk[stk.length-i].type } // stack (element) type
 function input(c) { if (md1) return; cur += c; setres(); sel = 1 + (ss() > 0); }
 function push(t, v) {
@@ -39,20 +39,23 @@ function reset() { clear(); setres(); B.clear(); vres = []; rstk = []; md1 = "";
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
-function selection() { if (md1 == "○") return; setres(); if (cur != "") pushc(); sel = (sel == 1 ? sets(2) : sel - 1); }
+function selection(k = 1) { setres(); if (cur != "") pushc(); sets(sel == 2 * k ? k : 2 * k); }
 function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type] < 0 ? e.value : B.get(e.value)); }
 function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
-function expression(f, x = null, w = null) { return (w == null ? f : exp(w) + f) + val(x); }
 function evaluate(imm, f, x = null, w = null) {
-	xp = expression(f, x, w); if (imm) { push(Val, fmt(B.bqn(xp))); return; }
+	xp = (w == null ? f : exp(w) + f) + val(x); if (imm) { push(Val, fmt(B.bqn(xp))); return; }
 	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
 	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
 }
 function monadic(f, imm = false) { if (pushc() < 1) return; evaluate(imm, f, pop()); }
 function dyadic(f, s, imm = false) { if (pushc() < 2) return; if (s) swap(); w = pop(); evaluate(imm, f, pop(), w); }
-function ambval(m, d = null, s = false, imm = false) { if (sel == 2 && d) dyadic(d, s, imm); else if (sel >= 1) monadic(m, imm); }
+function ambval(m, d = null, s = false, imm = false) {
+	if (sel == 2 && d) dyadic(d, s, imm); else if (sel >= 1) monadic(m, imm);
+	else if (sel == -1 && d) monadic(d + '˜', imm);
+	else if (sel == -2) { swap(); monadic(m, imm); swap(); monadic(m, imm); }
+}
 function ambimm(m, d = null, s = false) { ps = sel; ambval(m, d, s, true); sets(ps); }
 function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] == md1[0] ? "" : m); }
 
@@ -146,7 +149,7 @@ function key(k, s = false) {
 		case "Z": store('z'); break;
 		// interface
 		case "?": help(); break;
-		case " ": if (s) immediate(); else selection(); break;
+		case " ": if (s) selection(-1); else selection(); break;
 		case "ArrowUp": prevres(); break;
 		case "ArrowDown": nextres(); break;
 		case "Tab": if (s) over(); else swap(); break;
@@ -192,7 +195,8 @@ function update() {
 		tr.appendChild(html("td", "k", k)).onclick = () => { fetch(k); update(); }; Vars.appendChild(tr);
 	}
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
-	for (const e of stk) { element(n > sel ? U : (n == 1 && sel == 2) ? W : X, val(e)); n--; }
+	s = Math.sign(sel); a = Math.abs(sel);
+	for (const e of stk) { element(n > a ? U : (n == 1 && (sel == 2 || sel == -1)) ? W : X, val(e)); n--; }
 	if (cur != "") element(sel > 1 ? W : X, cur); cursor(cur != "" ? Val : st()); setres(res, sel);
 	window.scrollTo(0, document.body.scrollHeight);
 }
