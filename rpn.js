@@ -55,7 +55,7 @@ function ambval(m, d = null, s = false, imm = false) {
 	else if (sel == -2) { swap(); monadic(m, imm); swap(); monadic(m, imm); }
 }
 function ambimm(m, d = null, s = false) { ps = sel; ambval(m, d, s, true); sets(ps); }
-function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] == md1[0] ? "" : m); }
+function mod(m = "") { if (pushc() < 1 && m != "→") return; md1 = (!m || m[0] == md1[0] ? "" : m); }
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
@@ -112,9 +112,9 @@ function fetch(k) { pushc(); if (k in vres) push(Val, k); }
 function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
 function key(k, s = false) {
 	back = back && k == "Backspace";
-	if (md1 == "a←" || md1 == "a") {
+	if (md1 == "←" || md1 == "→") {
 		if (k >= 'A' && k <= 'Z') k = k.toLowerCase();
-		if (k >= 'a' && k <= 'z') { if (md1 == "a←") store(k); else fetch(k); }
+		if (k >= 'a' && k <= 'z') { if (md1 == "←") store(k); else fetch(k); }
 		md1 = "";
 	}
 	else if (md1 && (k == 'Enter' || k == 'Escape')) md1 = "";
@@ -159,8 +159,8 @@ function key(k, s = false) {
 		case "S": ambval('⍌', '⍌'); break;
 		case "T": ambval('⍂', '⍂'); break;
 		// variables
-		case "a": if (Object.keys(vres).length) mod('a'); break;
-		case "A": mod('a←'); break;
+		case "a": if (Object.keys(vres).length) mod('→'); break;
+		case "A": mod('←'); break;
 		case "x": fetch('x'); break;
 		case "X": store('x'); break;
 		case "y": fetch('y'); break;
