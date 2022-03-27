@@ -61,16 +61,20 @@ function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] ==
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
 function result(x, f = "", w = null) {
+	let eq = (x, w) => ((w && x.type == w.type && x.value == w.value) || (x == null && w == x));
+	rx = (isres(x.type) ? rstk[x.type] : {r: -1, x: x, f: "", w: null});
 	if (w != null) { // over and forks
-		rx = (isres(x.type) ? rstk[x.type] : {r: -1, x: x, f: "", w: null});
 		rw = (isres(w.type) ? rstk[w.type] : {r: -1, x: w, f: "", w: null});
-		if (rx.w == null && rw.w == null && rx.f && rx.f == rw.f) { f += '○' + rx.f; w = rw.x; x = rx.x; }
-		let eq = (x, w) => (w && x.type == w.type && x.value == w.value);
+		if (rx.w == null && rw.w == null && rx.f && rx.f == rw.f) {
+			f += '○' + (rx.f.length > 1 ? '(' + rx.f + ')' : rx.f); w = rw.x; x = rx.x;
+		}
+		if (eq(x, w)) { f += '˜'; w = null;}
 		if (eq(rx.x, rw.w) && eq(rx.w, rw.x)) { rw.f += '˜'; rw.x = rx.x; rw.w = rx.w; }
 		if (eq(rx.x, rw.x) && eq(rx.w, rw.w)) {
 			f = '(' + rw.f + f + (rx.f[0] == '(' ? rx.f.slice(1) : rx.f + ')'); x = rx.x; w = rx.w;
 		}
 	}
+	else if (rx.f) { f += rx.f; x = rx.x; }
 	r = (f ? B.run(expression(x, f, w)) : -1); rstk.push({r: r, x: x, f: f, w: w});
 	tr = document.createElement("tr"); tr.appendChild(html("td", "", f ? B.get(r) : x));
 	if (f) {
