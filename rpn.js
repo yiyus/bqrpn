@@ -51,7 +51,7 @@ function monadic(f, imm = false) { if (pushc() < 1) return; func(imm, f, stk.pop
 function dyadic(f, s, imm = false) { if (pushc() < 2) return; if (s) swap(); w = stk.pop(); func(imm, f, stk.pop(), w); }
 function ambval(m, d = null, s = false, imm = false) {
 	if (sel == 2 && d) dyadic(d, s, imm); else if (sel >= 1) monadic(m, imm);
-	else if (sel == -1 && d) monadic(d + '˜', imm);
+	else if (sel == -1 && (d || imm)) monadic(imm ? m : d + '˜', imm);
 	else if (sel == -2) { swap(); monadic(m, imm); swap(); monadic(m, imm); }
 }
 function ambimm(m, d = null, s = false) { ps = sel; ambval(m, d, s, true); sets(ps); }
