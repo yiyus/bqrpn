@@ -18,7 +18,7 @@ const Err = document.getElementById('err');
 // globals: stack, results stack, font sizes
 let stk = [], rstk = [], fs = {};
 // state: current, selection, result, modifier, vars, backspace
-let cur = "", sel = 0, res = -1, md1 = "", vres = [], back = false;
+let cur = "", sel = 0, res = -1, md1 = "", vres = {}, back = false;
 // fontsizes
 Sizes = ['1.5em', '2em', '2.5em', '1em']; fs[''] = 0; fs['cmds'] = 3;
 
@@ -31,11 +31,11 @@ function push(t, v) {
 	if (typeof(v) == "string" && v[v.length-1] == '.') v += '0'; stk.push({type: t, value: v}); sets(2);
 }
 function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
-function pop() { return stk.pop(); }
+function pop() { v = stk.pop(); sets(2); return v; }
 function dup() { if (pushc() < 1) return; stk.push(stk[ss()-1]); }
-function drop() { if (pushc() > 0) { t = st(); pop(); setres(isres(t) ? t : -1); }; sets(sel); }
-function clear() { stk = []; cur = ""; setres(-1); sel = 0; }
-function reset() { clear(); setres(); B.clear(); vres = []; rstk = []; md1 = ""; Results.innerHTML = ""; Stack.innerHTML = ""; Err.innerHTML = ""; }
+function drop() { if (pushc() > 0) { t = st(); stk.pop(); setres(isres(t) ? t : -1); }; sets(sel); }
+function clear() { stk = []; cur = ""; setres(); sel = 0; }
+function reset() { clear(); setres(); B.clear(); vres = {}; rstk = []; md1 = ""; Results.innerHTML = ""; Stack.innerHTML = ""; Err.innerHTML = ""; }
 function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
@@ -44,13 +44,12 @@ function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type] < 
 function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
-function evaluate(imm, f, x = null, w = null) {
-	xp = (w == null ? f : exp(w) + f) + val(x); if (imm) { push(Val, fmt(B.bqn(xp))); return; }
-	if (isres(x.type) && w && x.type == w.type) { push(pushr(r = B.run(xp), f + '˜' + rval(x)), r); return; }
-	push(pushr(r = B.run(xp), (w == null ? f : rexp(w) + f) + rval(x)), r);
+function expression(x, f, w = null) { return (w == null ? f : exp(w) + f) + val(x); }
+function func(imm, f, x, w = null) {
+	if (imm) push(Val, fmt(B.bqn(expression(x, f, w)))); else push(r = result(x, f, w), rstk[r]);
 }
-function monadic(f, imm = false) { if (pushc() < 1) return; evaluate(imm, f, pop()); }
-function dyadic(f, s, imm = false) { if (pushc() < 2) return; if (s) swap(); w = pop(); evaluate(imm, f, pop(), w); }
+function monadic(f, imm = false) { if (pushc() < 1) return; func(imm, f, stk.pop()); }
+function dyadic(f, s, imm = false) { if (pushc() < 2) return; if (s) swap(); w = stk.pop(); func(imm, f, stk.pop(), w); }
 function ambval(m, d = null, s = false, imm = false) {
 	if (sel == 2 && d) dyadic(d, s, imm); else if (sel >= 1) monadic(m, imm);
 	else if (sel == -1 && d) monadic(d + '˜', imm);
@@ -61,9 +60,14 @@ function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] ==
 
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
-function pushr(r, x = "") {
-	rstk.push(x ? r : -1); tr = document.createElement("tr"); tr.appendChild(html("td", "", x ? B.get(r) : r));
-	if (x) { tr.appendChild(html("td", "eq", "=")); tr.appendChild(html("td", Exp.description, x)); }
+function result(x, f = "", w = null) {
+	if (f) r = B.run(expression(x, f, w));
+	rstk.push(f ? r : -1); tr = document.createElement("tr"); tr.appendChild(html("td", "", f ? B.get(r) : x));
+	if (f) {
+		tr.appendChild(html("td", "eq", "=")); td = document.createElement("td");
+		if (w) td.appendChild(html("span", W.description, rexp(w))); td.appendChild(html("span", Y.description, f));
+		td.appendChild(html("span", X.description, rval(x))); tr.appendChild(td);
+	}
 	Results.appendChild(tr); History.title = `history (${Results.childElementCount})`; return rs() - 1;
 }
 function getr(i) { return Results.childNodes.item(i); }
@@ -80,13 +84,13 @@ function nextres() { pushc(); if(res < 0) res = -1; if (++res >= rs()) res = -1;
 function rpush(r = null) {
 	if(r === null) r = res; if (r >= 0) push(r, (br = rstk[r]) >= 0 ? br : getr(r).firstChild.textContent);
 }
-function rval(e) { return isres(e.type) ? getr(e.type).childNodes[2].textContent : val(e); }
-Exps = ['π', '∞'];
-function rexp(e) { return (e.type == Val || Exps.includes(e.value) ? val(e) : `(${rval(e)})`) }
+function rtxt(i) { it = getr(i); return it.childNodes[it.childElementCount > 2 ? 2 : 0].innerText; }
+function rval(e) { return isres(e.type) ? rtxt(e.type) : val(e); }
+function rexp(e) { return (e.type == Val || e.value.length == 1 ? val(e) : `(${rval(e)})`) }
 
 // variables
 function store(k) { if (!pushc()) return; monadic(k + '←'); pop(); vres[k] = rs() - 1; }
-function fetch(k) { if (!k in vres) return; rpush(vres[k]); }
+function fetch(k) { pushc(); if (k in vres) push(Exp, k); }
 
 // input
 function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
@@ -163,11 +167,11 @@ function key(k, s = false) {
 			if (cur != "") { pushc(); break; }
 			if (res >= 0) { rpush(); setres(); break; }
 			if (isres(st())) { drop(); break; }
-			if (ss() > 0) pushr(val(pop())); setres(); break;
+			if (ss() > 0) result(val(pop())); setres(); break;
 		case "Backspace":
 			if (!s) {
 				if (cur != "") { cur = cur.slice(0, cur.length - 1); sets(sel); break; }
-				if (ss() && st() == Val) { input(val(pop())); break; }
+				if (ss() && st() == Val) { input(val(stk.pop())); break; }
 				if (ss() && !back) { back = true; setres(); break; }
 			}
 			back = false; drop(); break;
@@ -190,8 +194,9 @@ function update() {
 	Banner.style.visibility = (ss() || rs() || cur || md1 ? "hidden" : "visible");
 	Stack.innerHTML = Err.textContent = Vars.textContent = ''; n = ss();
 	for (const k in vres) {
-		(td = document.createElement("td")).textContent = getr(vres[k]).firstChild.textContent;
-		(tr = document.createElement("tr")).appendChild(td);
+		(a = document.createElement("a")).href = `javascript:setres(${vres[k]});`;
+		a.textContent = getr(vres[k]).firstChild.textContent;
+		(td = document.createElement("td")).appendChild(a); (tr = document.createElement("tr")).appendChild(td);
 		tr.appendChild(html("td", "k", k)).onclick = () => { fetch(k); update(); }; Vars.appendChild(tr);
 	}
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
