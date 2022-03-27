@@ -40,13 +40,13 @@ function id(x) { return x; }
 function swap() { if ((n = pushc()) < 2) return; stk[n-1] = id(stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function over() { if ((n = pushc()) < 3) return; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function selection(k = 1) { setres(); if (cur != "") pushc(); sets(sel == 2 * k ? k : 2 * k); }
-function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type] < 0 ? e.value : B.get(e.value)); }
+function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type].f ? B.get(e.value) : e.value); }
 function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
 function expression(x, f, w = null) { return (w == null ? f : exp(w) + f) + val(x); }
 function func(imm, f, x, w = null) {
-	if (imm) push(Val, fmt(B.bqn(expression(x, f, w)))); else push(r = result(x, f, w), rstk[r]);
+	if (imm) push(Val, fmt(B.bqn(expression(x, f, w)))); else push(r = result(x, f, w), rstk[r].r);
 }
 function monadic(f, imm = false) { if (pushc() < 1) return; func(imm, f, stk.pop()); }
 function dyadic(f, s, imm = false) { if (pushc() < 2) return; if (s) swap(); w = stk.pop(); func(imm, f, stk.pop(), w); }
@@ -61,8 +61,18 @@ function mod(m = "") { if (pushc() < 1 && m != "a") return; md1 = (!m || m[0] ==
 // results (ro stack)
 function rs() { return Results.childElementCount; } // results size
 function result(x, f = "", w = null) {
-	if (f) r = B.run(expression(x, f, w));
-	rstk.push(f ? r : -1); tr = document.createElement("tr"); tr.appendChild(html("td", "", f ? B.get(r) : x));
+	if (w != null) { // over and forks
+		rx = (isres(x.type) ? rstk[x.type] : {r: -1, x: x, f: "", w: null});
+		rw = (isres(w.type) ? rstk[w.type] : {r: -1, x: w, f: "", w: null});
+		if (rx.w == null && rw.w == null && rx.f && rx.f == rw.f) { f += '○' + rx.f; w = rw.x; x = rx.x; }
+		let eq = (x, w) => (w && x.type == w.type && x.value == w.value);
+		if (eq(rx.x, rw.w) && eq(rx.w, rw.x)) { rw.f += '˜'; rw.x = rx.x; rw.w = rx.w; }
+		if (eq(rx.x, rw.x) && eq(rx.w, rw.w)) {
+			f = '(' + rw.f + f + (rx.f[0] == '(' ? rx.f.slice(1) : rx.f + ')'); x = rx.x; w = rx.w;
+		}
+	}
+	r = (f ? B.run(expression(x, f, w)) : -1); rstk.push({r: r, x: x, f: f, w: w});
+	tr = document.createElement("tr"); tr.appendChild(html("td", "", f ? B.get(r) : x));
 	if (f) {
 		tr.appendChild(html("td", "eq", "=")); td = document.createElement("td");
 		if (w) td.appendChild(html("span", W.description, rexp(w))); td.appendChild(html("span", Y.description, f));
@@ -82,7 +92,7 @@ function isres(t) { return typeof(t) == "number"; }
 function prevres() { pushc(); if(res < 0) res = rs(); if (res < 0) res = rs(); setres(res - 1); }
 function nextres() { pushc(); if(res < 0) res = -1; if (++res >= rs()) res = -1; setres(res); }
 function rpush(r = null) {
-	if(r === null) r = res; if (r >= 0) push(r, (br = rstk[r]) >= 0 ? br : getr(r).firstChild.textContent);
+	if(r === null) r = res; if (r >= 0) push(r, (br = rstk[r].r) >= 0 ? br : getr(r).firstChild.textContent);
 }
 function rtxt(i) { it = getr(i); return it.childNodes[it.childElementCount > 2 ? 2 : 0].innerText; }
 function rval(e) { return isres(e.type) ? rtxt(e.type) : val(e); }
