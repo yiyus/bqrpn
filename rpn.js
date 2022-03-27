@@ -71,7 +71,8 @@ function result(x, f = "", w = null) {
 		if (eq(x, w)) { f += '˜'; w = null;}
 		if (eq(rx.x, rw.w) && eq(rx.w, rw.x)) { if (!"+×⌊⌈=≠".includes(rw.f)) rw.f += '˜'; rw.x = rx.x; rw.w = rx.w; }
 		if (eq(rx.x, rw.x) && eq(rx.w, rw.w)) {
-			f = '(' + rw.f + f + (rx.f[0] == '(' ? rx.f.slice(1) : rx.f + ')'); x = rx.x; w = rx.w;
+			f = '(' + (rw.f[0] == '(' && rw.f[rw.f.length-1] == ')' ? rw.f.slice(1, rw.f.length - 1) : rw.f) + f; 
+			f += (rx.f[0] == '(' ? rx.f.slice(1) : rx.f + ')'); x = rx.x; w = rx.w;
 		}
 	}
 	else if (rx.f) { f += rx.f; x = rx.x; }
