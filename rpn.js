@@ -75,7 +75,7 @@ function result(x, f = "", w = null) {
 			f += (rx.f[0] == '(' ? rx.f.slice(1) : rx.f + ')'); x = rx.x; w = rx.w;
 		}
 	}
-	else if (rx.f) { f += rx.f; x = rx.x; }
+	else if (rx.f && !rx.w) { f += rx.f; x = rx.x; }
 	r = (f ? B.run(expression(x, f, w)) : -1); rstk.push({r: r, x: x, f: f, w: w});
 	tr = document.createElement("tr"); tr.appendChild(html("td", "", f ? B.get(r) : val(x)));
 	if (f) {
@@ -126,8 +126,8 @@ function key(k, s = false) {
 		case ".": if (cur.includes(".")) pushc(); input(cur == "" ? '0.' : '.'); break;
 		case "(": input(cur == "" ? '0.0' : '00'); break;
 		case ")": input(cur == "" ? '0.00' : '000'); break;
-		case 'f': push(Exp, '∞'); break;
-		case 'p': push(Exp, 'π'); break;
+		case 'f': pushc(); push(Val, '∞'); break;
+		case 'p': pushc(); push(Val, 'π'); break;
 		// immediate
 		case "_": ambimm('-', 0); break;
 		case 'E': ambimm('10^', '×10^', true); break;
