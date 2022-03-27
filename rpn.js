@@ -2,7 +2,7 @@
 // © JGL (yy). 2022
 
 // types
-const Val = Symbol("val"), Res = Symbol("res"), Fun = Symbol("fun"), Exp = Symbol("exp");
+const Val = Symbol("val"), Res = Symbol("res"), Fun = Symbol("fun");
 // args
 const X = Symbol("x"), W = Symbol("w"), Y = Symbol("y"); U = Symbol("unsel");
 // doc elements
@@ -41,10 +41,9 @@ function swap() { if ((n = pushc()) < 2) return; res = -1; stk[n-1] = id(stk[n-2
 function over() { if ((n = pushc()) < 3) return; res = -1; stk[n-1] = id(stk[n-3], stk[n-3] = stk[n-2], stk[n-2] = stk[n-1]); setres(); }
 function selection(k = 1) { if (cur != "") pushc(); res = -1; sets(sel == 2 * k ? k : 2 * k); setres(); }
 function val(e) { return (typeof(e.type) != "number" ? e.value : rstk[e.type].f ? B.get(e.value) : e.value); }
-function exp(e) { return (e.type == Exp ? `(${e.value})` : val(e)); }
 
 // functions
-function expression(x, f, w = null) { return (w == null ? f : exp(w) + f) + val(x); }
+function expression(x, f, w = null) { return (w == null ? f : val(w) + f) + val(x); }
 function func(imm, f, x, w = null) {
 	if (imm) push(Val, fmt(B.bqn(expression(x, f, w)))); else push(r = result(x, f, w), rstk[r].r); res = -1; setres();
 }
@@ -107,7 +106,7 @@ function rexp(e) { return (e.type == Val || e.value.length == 1 ? val(e) : `(${r
 
 // variables
 function store(k) { if (!pushc()) return; monadic(k + '←'); pop(); vres[k] = rs() - 1; }
-function fetch(k) { pushc(); if (k in vres) push(Exp, k); }
+function fetch(k) { pushc(); if (k in vres) push(Val, k); }
 
 // input
 function keydown(e) { if (e.ctrlKey || e.altKey || e.metaKey) return; e.preventDefault(); key(e.key, e.shiftKey); }
