@@ -90,7 +90,7 @@ cursor.mod { color: #f00; }
 	text-align: right; white-space: pre-line; color: var(--color-off); user-select: none;
 }
 #help span { display: block; margin: 1.5ex 0; }
-#help k { display: inline-block; min-width: 1.5em; text-align: center; }
+#help k { display: inline-block; min-width: 1.5em; text-align: center; cursor: pointer; }
 #help a { color: var(--color-off); text-decoration: none;}
 #help d { color: var(--color-x); }
 #help r { color: var(--color-w); }
