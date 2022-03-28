@@ -44,7 +44,7 @@ a { font-family: 'BQN386'; text-decoration: none; color: var(--color-off); }
 
 div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }
-p { margin: 0; padding: 0.25ex 0 0.25ex 1em; max-width: 100%; }
+div > p { margin: 0; padding: 0.25ex 0 0.25ex 1em; max-width: 100%; }
 p:empty { display: none; }
 pre, code { font-family: 'BQN386'; }
 code { color: #c00; }

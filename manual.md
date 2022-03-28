@@ -73,7 +73,7 @@ Different monadic application:
 
 New or different symbols:
 
-- The caret symbol `^` is used for square / pow. It is equivalent to exp dyadically, but it is a reverse function so it will swap its arguments
+- The caret symbol `^` is used for square / pow. It is equivalent to `⋆` (exp / pow) dyadically, but it is a reverse function so it will swap its arguments
 - The APL symbol for log, `⍟`, is used for log
 - The percent symbol `%` divides by 100 monadically and calculates percentages dyadically (eg: `p25%` is the 25% of pi)
 - The new symbols `⍓⍄⍁` are used for the trigonometric functions sin, cos and tan, respectively, and `⍌⍃⍂` for their inverses. Dyadically, they multiply by the corresponding quantity (eg: `10 p⍄` is 10 multiplied by the cosine of pi, or -10)
@@ -88,9 +88,9 @@ In general, when a function is applied, the result and the expression to obtain 
 
 Pressing the up and down arrows will move over the results in the history. When a result is selected, the x and w values of the corresponding expression are temporarily pushed on the stack (or only x if it is a monadic function). If these values are not manipulated or used in an operation, they will disappear if escape is pressed, when the selected result changes, or if enter is pressed. In this last case, the result will be pushed instead. eg: `2s3+↑*↑↑↓r`
 
-When the selected values on the stack correspond to results on the history, the results on the table are underlined with blue or purple color for target and argument values respectively. Moreover, if a result is dropped from the stack, the corresponding result on the history is selected (at this point, the values used to calculate that result will be pushed, they can be dropped pressing backspace, or the previous value can be recovered pressing enter). eg: `1s2+Bb↑rbbb`
+When the selected values on the stack correspond to results in the history, the results in the table are underlined with blue or purple color for target and argument values respectively. Moreover, if a result is dropped from the stack, the corresponding result in the history will be selected (at this point, the values used to calculate that result will be pushed, they can be used or dropped pressing backspace, or the previous value can be recovered pressing enter). eg: `1s2+Bb↑rbbb`
 
-### Immediate
+### Immediate functions
 
 Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of `E`). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s). eg: `6.626s34_E`
 
