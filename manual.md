@@ -1,16 +1,16 @@
 # [`bqrpn`](https://yiyus.info/bqrpn/) user manual
 
-`bqrpn` is an RPN input method to do atirhmetic operations using the [BQN](https://mlochbaum.github.io/BQN/) programming language: a calculator.
+[`bqrpn`](https://yiyus.info/bqrpn/) is an RPN input method to do atirhmetic operations using the [BQN](https://mlochbaum.github.io/BQN/) programming language: a calculator.
 
 > ##### Disclaimer
 >
-> This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a `bqrpn` session (with a reset between them) could be an easy way to get started. The examples (shown in `red`) must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by `sbtr`, respectively, and `SBTR` are the same keys with shift pressed. The up and down arrows are represented by `↑↓`.
+> This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a [`bqrpn`](https://yiyus.info/bqrpn/) session (with a reset between them) could be an easy way to get started. The examples (shown in `red`) must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by `sbtr`, respectively, and `SBTR` are the same keys with shift pressed. The up and down arrows are represented by `↑↓`.
 ><br><br>
 >PREVIOUS KNOWLEDGE OF [BQN](https://mlochbaum.github.io/BQN/) IS ASSUMED.
 
 ## Reset
 
-Press shift and escape (or just reload). When there is nothing on the stack or previous results, the `bqrpn` banner is displayed.
+Press shift and escape (or just reload). When there is nothing on the stack or previous results, the [`bqrpn`](https://yiyus.info/bqrpn/) banner is displayed.
 
 ## Introducing values
 
@@ -80,7 +80,7 @@ New or different symbols:
 
 There are no specific symbols for boolean operations. Min (`⌊`) and max (`⌈`) are used for AND and OR, respectively, while `=` is used for NOT and `≠` for XOR.
 
-Notice also that there is no explicit way to form expressions with adverbs or function trains. However, `bqrpn` will try to form them implicitly. eg: `1-2-+` is an over and `1s2+1s2*/` is a fork.
+Notice also that there is no explicit way to form expressions with adverbs or function trains. However, [`bqrpn`](https://yiyus.info/bqrpn/) will try to form them implicitly. eg: `1-2-+` is an over and `1s2+1s2*/` is a fork.
 
 ### History
 
@@ -96,7 +96,7 @@ Immediate functions, displayed in the help pannel in red, are executed immediate
 
 ## Variables
 
-Values can be stored in variables with the assign operation, in key `A`. After pressing it, the cursor will indicate that `bqrpn` is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin `a` followed by the variable name. eg: `5Avav__` (notice that, since variables are displayed by default by its name, the immediate function `_` is applied twice to get the actual value).
+Values can be stored in variables with the assign operation, in key `A`. After pressing it, the cursor will indicate that [`bqrpn`](https://yiyus.info/bqrpn/) is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin `a` followed by the variable name. eg: `5Avav__` (notice that, since variables are displayed by default by its name, the immediate function `_` is applied twice to get the actual value).
 
 Alternatively to using `A` and `a`, the keys `XYZ` and `xyz` can be used to store and fetch (respectively) from the varaibles named x, y and z. eg: `1s2s3XYZxyz++`
 
@@ -104,8 +104,8 @@ Alternatively to using `A` and `a`, the keys `XYZ` and `xyz` can be used to stor
 
 At the top right corner there are switches for light / dark mode, to display or hide the history, and to display or hide the help pannel.
 
-The magnifier at the top right changes the font size used by `bqrpn`, while the one at the bottom right changes the font size used in the help pannel.
+The magnifier at the top right changes the font size used by [`bqrpn`](https://yiyus.info/bqrpn/), while the one at the bottom right changes the font size used in the help pannel.
 
 ## More information
 
-The public repository of `bqrpn` is located at [github](https://github.com/yiyus/bqrpn/). Further information about BQN can be found at the [official website](https://mlochbaum.github.io/BQN/).
+The public repository of [`bqrpn`](https://yiyus.info/bqrpn/) is located at [github](https://github.com/yiyus/bqrpn/). Further information about BQN can be found at the [official website](https://mlochbaum.github.io/BQN/).

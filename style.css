@@ -118,3 +118,6 @@ body.other c, body.other d, body.other r, body.other e {
 	}
 }
 
+#manual { padding: 5%; max-width: 40em; margin: auto; font-family: serif; font-size: medium; }
+#manual a { color: var(--color-e); }
+@media (prefers-color-scheme: dark) { #manual code { color: var(--color-f); } }
