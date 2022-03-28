@@ -29,15 +29,15 @@ body.other tr { border-bottom-color: var(--color-l); }
 #all { visibility: hidden; background-color: inherit; }
 #all.on { visibility: visible; }
 
-a { text-decoration: none; color: var(--color-off); }
+a { font-family: 'BQN386'; text-decoration: none; color: var(--color-off); }
 
 .topbar {
 	position: fixed; top:0;  width: 100%; color: var(--color-off);
 	margin: 0 0 1ex 0; padding: 3px; background-color: #ccc;
-	font-family: "Octicons"; font-size: 16px; text-align: right;
+	font-size: 16px; text-align: right;
 }
 .topbar span { padding: 0; }
-.topbar a {	padding: 0 1em 1ex 0; }
+.topbar a {	font-family: "Octicons"; padding: 0 1em 1ex 0; }
 .topbar a:hover, .topbar a:active { color: var(--color-on); }
 .topbar a .toggle, .topbar a:hover .toggle, .topbar a:active .toggle { color: var(--color-on); }
 .topbar a .toggle.none, .topbar a:hover .toggle.none, .topbar a:active .toggle.none { color: var(--color-off); }
@@ -46,7 +46,8 @@ div { margin: 0; padding: 0; }
 span { margin: 0; padding: 0 0 0 1em; }
 p { margin: 0; padding: 0.25ex 0 0.25ex 1em; max-width: 100%; }
 p:empty { display: none; }
-pre { font-family: 'BQN386'; }
+pre, code { font-family: 'BQN386'; }
+code { color: #c00; }
 
 table { border-collapse: collapse; margin-top: 1.25em; }
 body tr { min-width: 10em; border-bottom: solid 3px var(--color-d); }
