@@ -123,6 +123,3 @@ body.other c, body.other d, body.other r, body.other e {
 @media (prefers-color-scheme: dark) {
 	#manual code, #manual a { color: var(--color-f); }
 }
-
-#showframe { position: fixed; top:1em; left: 0.5ex; font-size: x-large; text-decoration: none; cursor: pointer; letter-spacing:4px; }
-#bqrpnframe { display: none; position: fixed; width: 40em; height: 85%; left: 0; border: solid 3px #ccc; }
