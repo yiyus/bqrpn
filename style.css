@@ -63,7 +63,7 @@ td.eq { color: #888; }
 #vars td { padding-right: 1em; }
 
 #stack { padding-left: 0; }
-#stack.none { margin-top: 2em; }
+#stack.none { margin-top: 1.25em; }
 #stack span { display: inline-block; }
 #stack span.unsel { color: var(--color-off); }
 #stack span.x     { color: var(--color-x); }
