@@ -129,6 +129,7 @@ function key(k, s = false) {
 		case 'p': pushc(); push(Val, 'π'); break;
 		// immediate
 		case "_": ambimm('-', 0); break;
+		case "#": ambimm('$', 0); break;
 		case 'E': ambimm('10^', '×10^', true); break;
 		case 'D': ambimm('(π÷180)×', 0); break;
 		case 'R': ambimm('(180÷π)×', 0); break;
