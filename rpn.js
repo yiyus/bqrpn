@@ -187,6 +187,7 @@ function key(k, s = false) {
 		case "Backspace":
 			if (!s) {
 				if (cur != "") { cur = cur.slice(0, cur.length - 1); sets(sel); break; }
+				if (res > -1) { setres(); break; }
 				if (ss() && st() == Val) { input(val(stk.pop())); break; }
 				if (ss() && !back) { back = true; setres(); break; }
 			}
