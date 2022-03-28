@@ -29,7 +29,7 @@
 		<h3>Copy and delete elements</h3>
 		<p>Press shift and enter to duplicate ("dup") the top of the stack value. Press shift and backspace to delete ("drop") it. Pressing escape will drop all elements on the stack. eg: <code>1s2s3RBB</code></p>
 		<h3>Reorder elements</h3>
-		<p>Tab will swap the two elements at the top of the stack. Shift and tab will perform an "over" operation: the third element of the stack will be moved at the top, so the previous top values will occupy positions 2 and 3. eg: <code>1s2s3TTT</code></p>
+		<p>Tab will swap the two elements at the top of the stack. Shift and tab will perform an "over" operation: the third element of the stack will be moved at the top, so the previous top values will occupy positions 2 and 3. eg: <code>1s2tt3TTT</code></p>
 		<h2>Operations</h2>
 		<p>In an operation, a function is applied to the current selection either monadically or diadically.</p>
 		<h3>Selection</h3>
@@ -73,10 +73,10 @@
 		<p>In general, when a function is applied, the result and the expression to obtain it are added to the history (shown above the stack unless deactivated pressing the button at the top right corner).</p>
 		<p>Pressing the up and down arrows will move over the results in the history. When a result is selected, the x and w values of the corresponding expression are temporarily pushed on the stack (or only x if it is a monadic function). If these values are not manipulated or used in an operation, they will disappear if escape is pressed, when the selected result changes, or if enter is pressed. In this last case, the result will be pushed instead. eg: <code>5+↑↑↓-↑r/3+↑*↑/</code></p>
 		<h3>Immediate</h3>
-		<p>Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of <code>E</code>). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s).</p>
+		<p>Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of <code>E</code>). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s). eg: <code>6.626s34_E</code></p>
 		<h2>Variables</h2>
-		<p>Values can be stored in variables with the assign operation, in key <code>A</code>. After pressing it, the cursor will indicate that <code>bqrpn</code> is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin <code>a</code> followed by the variable name.</p>
-		<p>Alternatively to using <code>A</code> and <code>a</code>, the keys <code>XYZ</code> and <code>xyz</code> can be used to store and fetch (respectively) from the varaibles named x, y and z. </p>
+		<p>Values can be stored in variables with the assign operation, in key <code>A</code>. After pressing it, the cursor will indicate that <code>bqrpn</code> is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin <code>a</code> followed by the variable name. eg: <code>5Avav__</code> (notice that, since variables are displayed by default by its name, the immediate function `_` is applied twice to get the actual value).</p>
+		<p>Alternatively to using <code>A</code> and <code>a</code>, the keys <code>XYZ</code> and <code>xyz</code> can be used to store and fetch (respectively) from the varaibles named x, y and z. eg: <code>1s2s3XYZxyz++</code></p>
 		<h2>Visualization options</h2>
 		<p>At the top right corner there are switches for light / dark mode, to display or hide the history, and to display or hide the help pannel.</p>
 		<p>The magnifier at the top right changes the font size used by <code>bqrpn</code>, while the one at the bottom right changes the font size used in the help pannel.</p>

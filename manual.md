@@ -38,7 +38,7 @@ Press shift and enter to duplicate ("dup") the top of the stack value. Press shi
 
 ### Reorder elements
 
-Tab will swap the two elements at the top of the stack. Shift and tab will perform an "over" operation: the third element of the stack will be moved at the top, so the previous top values will occupy positions 2 and 3. eg: `1s2s3TTT`
+Tab will swap the two elements at the top of the stack. Shift and tab will perform an "over" operation: the third element of the stack will be moved at the top, so the previous top values will occupy positions 2 and 3. eg: `1s2tt3TTT`
 
 ## Operations
 
@@ -90,13 +90,13 @@ Pressing the up and down arrows will move over the results in the history. When 
 
 ### Immediate
 
-Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of `E`). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s).
+Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of `E`). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s). eg: `6.626s34_E`
 
 ## Variables
 
-Values can be stored in variables with the assign operation, in key `A`. After pressing it, the cursor will indicate that `bqrpn` is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin `a` followed by the variable name.
+Values can be stored in variables with the assign operation, in key `A`. After pressing it, the cursor will indicate that `bqrpn` is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin `a` followed by the variable name. eg: `5Avav__` (notice that, since variables are displayed by default by its name, the immediate function `_` is applied twice to get the actual value).
 
-Alternatively to using `A` and `a`, the keys `XYZ` and `xyz` can be used to store and fetch (respectively) from the varaibles named x, y and z. 
+Alternatively to using `A` and `a`, the keys `XYZ` and `xyz` can be used to store and fetch (respectively) from the varaibles named x, y and z. eg: `1s2s3XYZxyz++`
 
 ## Visualization options
 
