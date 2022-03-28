@@ -82,6 +82,7 @@ New or different symbols:
 - The caret symbol `^` is used for square / pow. It is equivalent to `⋆` (exp / pow) dyadically, but it is a reverse function so it will swap its arguments
 - The APL symbol for log, `⍟`, is used for log
 - The percent symbol `%` divides by 100 monadically and calculates percentages dyadically (eg: `p25%` is the 25% of pi)
+- The symbol `$` rounds to (maximum) two decimal numbers or performs rounded comparison dyadically (eg: `1.195$1.201$` is 1)
 - The new symbols `⍓⍄⍁` are used for the trigonometric functions sin, cos and tan, respectively, and `⍌⍃⍂` for their inverses. Dyadically, they multiply by the corresponding quantity (eg: `10pc` is 10 multiplied by the cosine of π, or -10)
 
 There are no specific symbols for boolean operations. Min (`⌊`) and max (`⌈`) are used for AND and OR, respectively, while `=` is used for NOT and `≠` for XOR.
