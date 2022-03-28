@@ -210,9 +210,7 @@ function update() {
 	Banner.style.visibility = (ss() || rs() || cur || md1 ? "hidden" : "visible");
 	Stack.innerHTML = Err.textContent = Vars.textContent = ''; n = ss();
 	for (const k in vres) {
-		(a = document.createElement("a")).href = `javascript:setres(${vres[k]});`;
-		a.textContent = getr(vres[k]).firstChild.textContent;
-		(td = document.createElement("td")).appendChild(a); (tr = document.createElement("tr")).appendChild(td);
+		(tr = document.createElement("tr")).appendChild(html("td", "", getr(vres[k]).firstChild.textContent));
 		tr.appendChild(html("td", "k", k)).onclick = () => { fetch(k); update(); }; Vars.appendChild(tr);
 	}
 	if (cur != "" && n++ == 0) { element(X, cur); cursor(Val); return; }
