@@ -143,7 +143,7 @@ function key(k, s = false) {
 		case "r": ambval('√', '√'); break;
 		case "e": ambval('⋆', '⋆'); break;
 		case "l": ambval('⍟', '⍟'); break;
-		case "|": ambval('|', '|', true); break;
+		case "|": ambval('|', '|'); break;
 		case "m": ambval('⌊', '⌊'); break;
 		case "M": ambval('⌈', '⌈'); break;
 		case "<": ambval('<', '<'); break;
