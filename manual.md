@@ -99,7 +99,9 @@ When the selected values on the stack correspond to results in the history, the 
 
 ### Immediate functions
 
-Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of `E`). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s). eg: `6.626s34_E`
+Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of `E`). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s).
+
+The available immediate are `_` to negate, `#` to round to two decimal places, `E` for scientific notation, `D` and `R` for **d**egrees to radians and **r**adians to degrees, respectively, and `P` to multiply by π.  eg: `6.626s34_E#`
 
 ## Variables
 
