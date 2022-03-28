@@ -84,9 +84,9 @@ Notice also that there is no explicit way to form expressions with adverbs or fu
 
 ### History
 
-In general, when a function is applied, the result and the expression to obtain it are added to the history (shown above the stack unless deactivated pressing the button at the top right corner).
+In general, when a function is applied, the result and the expression to obtain it are added to the history (shown above the stack unless deactivated pressing the button at the top right corner). Values can also be stored in the history, just pressing enter when they are on top of the stack.
 
-Pressing the up and down arrows will move over the results in the history. When a result is selected, the x and w values of the corresponding expression are temporarily pushed on the stack (or only x if it is a monadic function). If these values are not manipulated or used in an operation, they will disappear if escape is pressed, when the selected result changes, or if enter is pressed. In this last case, the result will be pushed instead. eg: `2s3+↑*↑↑↓r`
+Pressing the up and down arrows will move over the results in the history. When a result is selected, the cursor will be displayed in blue, and the x and w values of the corresponding expression will be temporarily pushed on the stack (or only x if it is a monadic function). If these values are not manipulated or used in an operation, they will disappear if escape is pressed, when the selected result changes, or if enter is pressed. In this last case, the result will be pushed instead. eg: `2s3+↑*↑↑↓r`
 
 When the selected values on the stack correspond to results in the history, the results in the table are underlined with blue or purple color for target and argument values respectively. Moreover, if a result is dropped from the stack, the corresponding result in the history will be selected (at this point, the values used to calculate that result will be pushed, they can be used or dropped pressing backspace, or the previous value can be recovered pressing enter). eg: `1s2+Bb↑rbbb`
 
