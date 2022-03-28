@@ -47,7 +47,6 @@ span { margin: 0; padding: 0 0 0 1em; }
 div > p { margin: 0; padding: 0.25ex 0 0.25ex 1em; max-width: 100%; }
 p:empty { display: none; }
 pre, code { font-family: 'BQN386'; }
-code { color: #c00; }
 
 table { border-collapse: collapse; margin-top: 1.25em; }
 body tr { min-width: 10em; border-bottom: solid 3px var(--color-d); }
@@ -119,5 +118,11 @@ body.other c, body.other d, body.other r, body.other e {
 }
 
 #manual { padding: 5%; max-width: 40em; margin: auto; font-family: serif; font-size: medium; }
-#manual a { color: var(--color-e); }
-@media (prefers-color-scheme: dark) { #manual code { color: var(--color-f); } }
+#manual code, #manual a { color: #c00; }
+#manual a { text-decoration: underline #777 dotted; }
+@media (prefers-color-scheme: dark) {
+	#manual code, #manual a { color: var(--color-f); }
+}
+
+#showframe { position: fixed; top:1em; left: 0.5ex; font-size: x-large; text-decoration: none; cursor: pointer; letter-spacing:4px; }
+#bqrpnframe { display: none; position: fixed; width: 40em; height: 85%; left: 0; border: solid 3px #ccc; }

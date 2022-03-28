@@ -8,19 +8,23 @@
         <title>bqrpn user manual</title>
     </head>
     <body id="manual">
-		<h1><a href="https://yiyus.info/bqrpn/"><code>bqrpn</code></a> user manual</h1>
-		<p><code>bqrpn</code> is an RPN input method to do atirhmetic operations using the <a href="https://mlochbaum.github.io/BQN/">BQN</a> programming language: a calculator.</p>
+		<div id="showframe" title="show/hide bqrpn window" onclick="javascript:
+			(f=document.getElementById('bqrpnframe')).style.display = (f.style.display == 'block' ? 'none' : 'block');
+		"><cursor class="val tight">█</cursor><cursor class="exp tight">█</cursor><cursor class="res tight">█</cursor><cursor class="xxx tight">█</cursor><cursor class="fun tight">█</cursor></div>
+		<iframe id="bqrpnframe" src="index.html?hz=4"></iframe>
+		<h1><code>bqrpn</code> user manual</h1>
+		<p><a href="https://yiyus.info/bqrpn/">bqrpn</a> is an RPN input method to do atirhmetic operations using the <a href="https://mlochbaum.github.io/BQN/">BQN</a> programming language: a calculator.</p>
 		<blockquote>
 		<h5>Disclaimer</h5>
-		<p>This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a <code>bqrpn</code> session (with a reset between them) could be an easy way to get started. The examples (shown in <code>red</code>) must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by <code>sbtr</code>, respectively, and <code>SBTR</code> are the same keys with shift pressed. The up and down arrows are represented by <code>↑↓</code>. <br><br> PREVIOUS KNOWLEDGE OF <a href="https://mlochbaum.github.io/BQN/">BQN</a> IS ASSUMED.</p>
+		<p>This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a <a href="https://yiyus.info/bqrpn/">bqrpn</a> session (with a reset between them) could be an easy way to get started. The examples must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by <code>sbtr</code>, respectively, and <code>SBTR</code> are the same keys with shift pressed. The up and down arrows are represented by <code>↑↓</code>. Clicking the color cursors at the top left will show a small bqrpn window where the examples (or anything else) can be run. <br><br> PREVIOUS KNOWLEDGE OF <a href="https://mlochbaum.github.io/BQN/">BQN</a> IS ASSUMED.</p>
 		</blockquote>
 		<h2>Reset</h2>
-		<p>Press shift and escape (or just reload). When there is nothing on the stack or previous results, the <code>bqrpn</code> banner is displayed.</p>
+		<p>Press shift and escape (or just reload). When there is nothing on the stack or previous results, the <a href="https://yiyus.info/bqrpn/">bqrpn</a> banner is displayed.</p>
 		<h2>Introducing values</h2>
 		<h3>Digits</h3>
-		<p>Use digits 0-9 to enter numbers. eg: <code>10s20s30</code></p>
+		<p>Use digits 0-9 to enter numbers. eg: <code>10s20s30</code>. When a value is being edited, the cursor changes to grey color.</p>
 		<h3>Dot</h3>
-		<p>The dot is used for decimal numbers. When there is no number being edited or a dot is already present in the value being edited, a new number is started with <code>0.</code>. eg: <code>2.3.5</code></p>
+		<p>The dot is used for decimal numbers. When there is no number being edited (the cursor is not grey) or a dot is already present in the value being edited, a new number is started with <code>0.</code>. eg: <code>2.3.5</code></p>
 		<h3>Zeros</h3>
 		<p>Opening and closing parens can be used to input two or three zeros, respectively. A preceding <code>0.</code> is added if no number is being entered. eg: <code>1(2)3.1(1s(1s)2</code></p>
 		<h3>Pi and infinity</h3>
@@ -68,7 +72,7 @@
 		</li>
 		</ul>
 		<p>There are no specific symbols for boolean operations. Min (<code>⌊</code>) and max (<code>⌈</code>) are used for AND and OR, respectively, while <code>=</code> is used for NOT and <code>≠</code> for XOR.</p>
-		<p>Notice also that there is no explicit way to form expressions with adverbs or function trains. However, <code>bqrpn</code> will try to form them implicitly. eg: <code>1-2-+</code> is an over and <code>1s2+1s2*/</code> is a fork.</p>
+		<p>Notice also that there is no explicit way to form expressions with adverbs or function trains. However, <a href="https://yiyus.info/bqrpn/">bqrpn</a> will try to form them implicitly. eg: <code>1-2-+</code> is an over and <code>1s2+1s2*/</code> is a fork.</p>
 		<h3>History</h3>
 		<p>In general, when a function is applied, the result and the expression to obtain it are added to the history (shown above the stack unless deactivated pressing the button at the top right corner).</p>
 		<p>Pressing the up and down arrows will move over the results in the history. When a result is selected, the x and w values of the corresponding expression are temporarily pushed on the stack (or only x if it is a monadic function). If these values are not manipulated or used in an operation, they will disappear if escape is pressed, when the selected result changes, or if enter is pressed. In this last case, the result will be pushed instead. eg: <code>2s3+↑*↑↑↓r</code></p>
@@ -76,12 +80,12 @@
 		<h3>Immediate functions</h3>
 		<p>Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of <code>E</code>). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s). eg: <code>6.626s34_E</code></p>
 		<h2>Variables</h2>
-		<p>Values can be stored in variables with the assign operation, in key <code>A</code>. After pressing it, the cursor will indicate that <code>bqrpn</code> is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin <code>a</code> followed by the variable name. eg: <code>5Avav__</code> (notice that, since variables are displayed by default by its name, the immediate function <code>_</code> is applied twice to get the actual value).</p>
+		<p>Values can be stored in variables with the assign operation, in key <code>A</code>. After pressing it, the cursor will indicate that <a href="https://yiyus.info/bqrpn/">bqrpn</a> is waiting for a name for the variable, which is given just pressing any key (the assign operation can be cancelled pressing any key which is not a letter). After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressin <code>a</code> followed by the variable name. eg: <code>5Avav__</code> (notice that, since variables are displayed by default by its name, the immediate function <code>_</code> is applied twice to get the actual value).</p>
 		<p>Alternatively to using <code>A</code> and <code>a</code>, the keys <code>XYZ</code> and <code>xyz</code> can be used to store and fetch (respectively) from the varaibles named x, y and z. eg: <code>1s2s3XYZxyz++</code></p>
 		<h2>Visualization options</h2>
 		<p>At the top right corner there are switches for light / dark mode, to display or hide the history, and to display or hide the help pannel.</p>
-		<p>The magnifier at the top right changes the font size used by <code>bqrpn</code>, while the one at the bottom right changes the font size used in the help pannel.</p>
+		<p>The magnifier at the top right changes the font size used by <a href="https://yiyus.info/bqrpn/">bqrpn</a>, while the one at the bottom right changes the font size used in the help pannel.</p>
 		<h2>More information</h2>
-		<p>The public repository of <code>bqrpn</code> is located at <a href="https://github.com/yiyus/bqrpn/">github</a>. Further information about BQN can be found at the <a href="https://mlochbaum.github.io/BQN/">official website</a>.</p>
+		<p>The public repository of <a href="https://yiyus.info/bqrpn/">bqrpn</a> is located at <a href="https://github.com/yiyus/bqrpn/">github</a>. Further information about BQN can be found at the <a href="https://mlochbaum.github.io/BQN/">official website</a>.</p>
 	</body>
 </html>
