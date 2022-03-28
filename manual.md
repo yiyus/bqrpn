@@ -4,7 +4,7 @@
 
 > ##### Disclaimer
 >
-> This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a [bqrpn](https://yiyus.info/bqrpn/) session (with a reset between them) could be an easy way to get started. The examples must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by `sbtr`, respectively, and `SBTR` are the same keys with shift pressed. The up and down arrows are represented by `↑↓`. Clicking the color cursors at the top left will show a small bqrpn window where the examples (or anything else) can be run.
+> This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a [bqrpn](https://yiyus.info/bqrpn/) session (with a reset between them) could be an easy way to get started. The examples must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by `sbtr`, respectively, and `SBTR` are the same keys with shift pressed. The up and down arrows are represented by `↑↓`.
 ><br><br>
 >PREVIOUS KNOWLEDGE OF [BQN](https://mlochbaum.github.io/BQN/) IS ASSUMED.
 
