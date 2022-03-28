@@ -48,17 +48,19 @@ In an operation, a function is applied to the current selection either monadical
 
 The current selection is indicated by colors. Target values are indicated in blue and argument values in purple. Functions are applied dyadically if and only if there is an argument, else they are applied monadically. One or two values can be selected. The possible selections are:
 
-    sel   stack  target argument result
-      1   x      x      ·        Fx
-      2   x w    x      w        wFx
-     -2   x w    x w    ·        Fx Fw
-     -1   x      x      x        xFx
+<code><table id="stack" style="text-align: right; font-family: 'BQN386'; color: black;">
+	<tr><td>Stack</td><td>Result</td></tr>
+	<tr><td><span class="x">x</span></td><td>Fx</td></tr>
+	<tr><td><span class="x">x</span> <span class="w">w</span></td><td>wFx</td></tr>
+	<tr><td><span class="w">x</span></td><td>xFx</td></tr>
+	<tr><td><span class="x">x</span> <span class="x">w</span></td><td>Fx Fw</td></tr>
+</table></code>
 
-Pressing space will switch the selection between 2 and 1 (or set it to 1 if there is only one element on the stack). Pressing shift and space will switch between -2 and -1 (or set it to -1 with only one element).
+Pressing space will switch the selection between <span class="x">x</span> <span class="w">w</span> and <span class="x">x</span> (or set it to <span class="x">x</span> if there is only one element on the stack). Pressing shift and space will switch between <span class="x">x</span> <span class="x">w</span> and <span class="w">x</span> (or set it to <span class="w">x</span> with only one element).
 
 ### Functions
 
-Most functions are shown in the help pannel in blue. They are applied on the (blue) target or targets with the given (purple) argument. eg: `3s2+5*`. When no argument is given (the selection is 1 or -2), the function is applied monadically. eg: `2-5s/S/`. As a special case, when there is no target but there is an argument, the function is applied using the argument value as target too. eg: `3S*`
+Most functions are shown in the help pannel in blue. When the selection is <span class="x">x</span> <span class="w">w</span>, these functions are applied on the (blue) target with the given (purple) argument. eg: `3s2+5*`. When no argument is given (the selection is <span class="x">x</span> or <span class="x">x</span> <span class="x">w</span>), the function is applied monadically. eg: `2-5s/S/`. As a special case, when there is no target but there is an argument (the selection is <span class="w">x</span>), the function is applied using the argument value as target too. eg: `3S*`
 
 Some functions swap the target and argument before being applied (i.e. the target is purple and the argument is blue). They are indicated in the help pannel in purple color. eg: `3s2-5/`
 

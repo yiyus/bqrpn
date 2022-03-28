@@ -55,7 +55,7 @@ td > span { padding: 0; color: var(--color-e); }
 td.x { text-decoration: underline; text-decoration-color: var(--color-x); text-decoration-thickness: 2px; }
 td.w { text-decoration: underline; text-decoration-color: var(--color-w); text-decoration-thickness: 2px; }
 tr.res td { background-color: #667; color: white; }
-td.exp { width: 100%; color: var(--color-e); }
+td.exp { width: 100%; }
 td.eq { color: #888; }
 
 #vars { background-color: inherit; position: fixed; top: 2.5em; right: 0; margin: 0; font-size: small; }
@@ -65,9 +65,9 @@ td.eq { color: #888; }
 #stack { padding-left: 0; }
 #stack.none { margin-top: 1.25em; }
 #stack span { display: inline-block; }
-#stack span.unsel { color: var(--color-off); }
-#stack span.x     { color: var(--color-x); }
-#stack span.w     { color: var(--color-w); }
+span.unsel { color: var(--color-off); }
+span.x     { color: var(--color-x); }
+span.w     { color: var(--color-w); }
 
 cursor { padding: 0 0 0 1em; user-select: none; }
 cursor.tight { padding-left: 0; }
@@ -120,6 +120,7 @@ body.other c, body.other d, body.other r, body.other e {
 #manual { padding: 5%; max-width: 40em; margin: auto; font-family: serif; font-size: medium; }
 #manual code, #manual a { color: #c00; }
 #manual a { text-decoration: underline #777 dotted; }
+#manual span { padding: 0; font-family: 'BQN386'; }
 @media (prefers-color-scheme: dark) {
 	#manual code, #manual a { color: var(--color-f); }
 }
