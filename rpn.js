@@ -28,6 +28,7 @@ function sets(n) { sel = Math.sign(n) * Math.min(ss(), Math.abs(n)); }
 function st(i = 1) { return i > stk.length ? Val : stk[stk.length-i].type } // stack (element) type
 function input(c) { if (md1) return; cur += c; setres(); sel = 1 + (ss() > 0); }
 function push(t, v) {
+	if (isres(t) && getr(r).firstChild.textContent == "NaN") return;
 	if (typeof(v) == "string" && v[v.length-1] == '.') v += '0'; stk.push({type: t, value: v}); sets(2);
 }
 function pushc() { if (cur != "") push(Val, cur); cur = ""; return ss(); }
