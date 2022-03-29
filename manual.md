@@ -52,13 +52,13 @@ In an operation, a function is applied to the current selection either monadical
 
 The current selection is indicated by colors. Target values are indicated in blue and argument values in purple. Functions are applied dyadically if and only if there is an argument, else they are applied monadically. One or two values can be selected. The possible selections are:
 
-<code><table id="stack" style="text-align: right; font-family: 'BQN386'; color: black;">
+<table>
 	<tr><td>Stack</td><td>Result</td></tr>
 	<tr><td><span class="x">x</span></td><td>Fx</td></tr>
 	<tr><td><span class="x">x</span> <span class="w">w</span></td><td>wFx</td></tr>
 	<tr><td><span class="w">x</span></td><td>xFx</td></tr>
 	<tr><td><span class="x">x</span> <span class="x">w</span></td><td>Fx Fw</td></tr>
-</table></code>
+</table>
 
 Pressing space will switch the selection between <span class="x">x</span> <span class="w">w</span> and <span class="x">x</span> (or set it to <span class="x">x</span> if there is only one element on the stack). Pressing shift and space will switch between <span class="x">x</span> <span class="x">w</span> and <span class="w">x</span> (or set it to <span class="w">x</span> with only one element).
 

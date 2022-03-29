@@ -117,7 +117,9 @@ body.other c, body.other d, body.other r, body.other e {
 	}
 }
 
-#manual { padding: 5%; max-width: 40em; margin: auto; font-family: serif; font-size: medium; }
+#manual { padding: 5em 5%; max-width: 40em; margin: auto; font-family: serif; font-size: medium; }
+#manual table { font-family: 'BQN386'; text-align: right; }
+#manual table td + td { text-align: left; }
 #manual code, #manual a { color: #c00; }
 #manual a { text-decoration: underline #777 dotted; }
 #manual span { padding: 0; font-family: 'BQN386'; }

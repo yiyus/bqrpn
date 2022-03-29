@@ -10,7 +10,7 @@
 <body id="manual">
 <div style="position: absolute; top:1em; left: 0.5ex; font-size: xx-large; letter-spacing:0.5ex;">
 <cursor class="val tight">█</cursor><cursor class="exp tight">█</cursor><cursor class="res tight">█</cursor><cursor class="xxx tight">█</cursor><cursor class="fun tight">█</cursor></div>
-<!-- md2html.awk manual.md | awk '!a||NR!=FNR;/awk/{a++}NR==FNR&&a==2{p=p$0"\n"}END{print(p);}' manual.html - -->
+<!-- md2html.awk manual.md | awk '!a||NR!=FNR;/awk/{a++}NR==FNR&&a==2{p=p$0"\n"}END{printf(p);}' manual.html - -->
 <h1><code>bqrpn</code> user manual</h1>
 <p><a href="https://yiyus.info/bqrpn/">bqrpn</a> is an RPN input method to do atirhmetic operations using the <a href="https://mlochbaum.github.io/BQN/">BQN</a> programming language: a calculator.</p>
 <blockquote>
@@ -39,7 +39,13 @@
 <p>In an operation, a function is applied to the current selection either monadically or diadically. The values that constitute the selection are popped from the stack, then the obtained result (or results) are pushed.</p>
 <h3>Selection</h3>
 <p>The current selection is indicated by colors. Target values are indicated in blue and argument values in purple. Functions are applied dyadically if and only if there is an argument, else they are applied monadically. One or two values can be selected. The possible selections are:</p>
-<p><code><table id="stack" style="text-align: right; font-family: 'BQN386'; color: black;"> 	<tr><td>Stack</td><td>Result</td></tr> 	<tr><td><span class="x">x</span></td><td>Fx</td></tr> 	<tr><td><span class="x">x</span> <span class="w">w</span></td><td>wFx</td></tr> 	<tr><td><span class="w">x</span></td><td>xFx</td></tr> 	<tr><td><span class="x">x</span> <span class="x">w</span></td><td>Fx Fw</td></tr> </table></code></p>
+<table>
+	<tr><td>Stack</td><td>Result</td></tr>
+	<tr><td><span class="x">x</span></td><td>Fx</td></tr>
+	<tr><td><span class="x">x</span> <span class="w">w</span></td><td>wFx</td></tr>
+	<tr><td><span class="w">x</span></td><td>xFx</td></tr>
+	<tr><td><span class="x">x</span> <span class="x">w</span></td><td>Fx Fw</td></tr>
+</table>
 <p>Pressing space will switch the selection between <span class="x">x</span> <span class="w">w</span> and <span class="x">x</span> (or set it to <span class="x">x</span> if there is only one element on the stack). Pressing shift and space will switch between <span class="x">x</span> <span class="x">w</span> and <span class="w">x</span> (or set it to <span class="w">x</span> with only one element).</p>
 <h3>Functions</h3>
 <p>Most functions are shown in the help pannel in blue. When the selection is <span class="x">x</span> <span class="w">w</span>, these functions are applied on the (blue) target with the given (purple) argument. eg: <code>3s2+5*</code>. When no argument is given (the selection is <span class="x">x</span> or <span class="x">x</span> <span class="x">w</span>), the function is applied monadically. eg: <code>2-5s/S/</code>. As a special case, when there is no target but there is an argument (the selection is <span class="w">x</span>), the function is applied using the argument value as target too. eg: <code>3S*</code></p>
@@ -89,5 +95,3 @@ The new symbols <code>⍓⍄⍁</code> are used for the trigonometric functions 
 <!-- end-of-awk -->
 </body>
 </html>
-
-
