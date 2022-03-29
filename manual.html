@@ -1,88 +1,93 @@
 <!DOCTYPE html>
 <html>
-    <head>
-		<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
-		<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-		<link rel="icon" type="image/x-icon" href="favicon.ico">
-		<link rel="stylesheet" href="style.css">
-        <title>bqrpn user manual</title>
-    </head>
-    <body id="manual">
-		<div style="position: absolute; top:1em; left: 0.5ex; font-size: xx-large; letter-spacing:0.5ex;">
-		<cursor class="val tight">█</cursor><cursor class="exp tight">█</cursor><cursor class="res tight">█</cursor><cursor class="xxx tight">█</cursor><cursor class="fun tight">█</cursor></div>
-		<h1><code>bqrpn</code> user manual</h1>
-		<p><a href="https://yiyus.info/bqrpn/">bqrpn</a> is an RPN input method to do atirhmetic operations using the <a href="https://mlochbaum.github.io/BQN/">BQN</a> programming language: a calculator.</p>
-		<blockquote>
-		<h5>Disclaimer</h5>
-		<p>This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a <a href="https://yiyus.info/bqrpn/">bqrpn</a> session (with a reset between them) could be an easy way to get started. The examples must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by <code>sbtr</code>, respectively, and <code>SBTR</code> are the same keys with shift pressed. The up and down arrows are represented by <code>↑↓</code>. <br><br> PREVIOUS KNOWLEDGE OF <a href="https://mlochbaum.github.io/BQN/">BQN</a> IS ASSUMED.</p>
-		</blockquote>
-		<h2>Reset</h2>
-		<p>Press shift and escape, or just reload. The <a href="https://yiyus.info/bqrpn/">bqrpn</a> banner is displayed when there is nothing on the stack or previous results.</p>
-		<h2>Introducing values</h2>
-		<p><a href="https://yiyus.info/bqrpn/">bqrpn</a> only works with numeric values.</p>
-		<h3>Digits</h3>
-		<p>Use digits 0-9 to enter numbers. eg: <code>10s20s30</code>.</p>
-		<h3>Dot</h3>
-		<p>The dot is used for decimal numbers. When there is no number being edited or a dot is already present in the value being edited, a new number is started with <code>0.</code>, and a final <code>0</code> is added is needed. eg: <code>192.168.1.*</code></p>
-		<h3>Zeros</h3>
-		<p>Opening and closing parens can be used to input two or three zeros, respectively. A preceding <code>0.</code> is added if no number is being entered. eg: <code>1(2)3.1(1s(1s)2</code></p>
-		<h3>Pi and infinity</h3>
-		<p>The special values π and ∞ are introduced with the keys <code>p</code> (for <strong>p</strong>i) and <code>f</code> (for in<strong>f</strong>inity). eg: <code>pf</code></p>
-		<h2>Stack manipulation</h2>
-		<p>The values entered by the user are pushed on a <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">stack</a>.</p>
-		<h3>Copy and delete elements</h3>
-		<p>Press shift and enter to duplicate ("dup") the top of the stack value. Press shift and backspace to delete ("drop") it. Pressing escape will drop all elements on the stack. eg: <code>1s2s3RBB</code></p>
-		<h3>Reorder elements</h3>
-		<p>Tab will swap the two elements at the top of the stack. Shift and tab will perform an "over" operation: the third element of the stack will be moved at the top, so the previous top values will occupy positions 2 and 3. eg: <code>1s2tt3TTT</code></p>
-		<h2>Operations</h2>
-		<p>In an operation, a function is applied to the current selection either monadically or diadically. The values that constitute the selection are popped from the stack, then the obtained result (or results) are pushed.</p>
-		<h3>Selection</h3>
-		<p>The current selection is indicated by colors. Target values are indicated in blue and argument values in purple. Functions are applied dyadically if and only if there is an argument, else they are applied monadically. One or two values can be selected. The possible selections are:</p>
-		<p><code><table id="stack" style="text-align: right; font-family: 'BQN386'; color: black;"> 	<tr><td>Stack</td><td>Result</td></tr> 	<tr><td><span class="x">x</span></td><td>Fx</td></tr> 	<tr><td><span class="x">x</span> <span class="w">w</span></td><td>wFx</td></tr> 	<tr><td><span class="w">x</span></td><td>xFx</td></tr> 	<tr><td><span class="x">x</span> <span class="x">w</span></td><td>Fx Fw</td></tr> </table></code></p>
-		<p>Pressing space will switch the selection between <span class="x">x</span> <span class="w">w</span> and <span class="x">x</span> (or set it to <span class="x">x</span> if there is only one element on the stack). Pressing shift and space will switch between <span class="x">x</span> <span class="x">w</span> and <span class="w">x</span> (or set it to <span class="w">x</span> with only one element).</p>
-		<h3>Functions</h3>
-		<p>Most functions are shown in the help pannel in blue. When the selection is <span class="x">x</span> <span class="w">w</span>, these functions are applied on the (blue) target with the given (purple) argument. eg: <code>3s2+5*</code>. When no argument is given (the selection is <span class="x">x</span> or <span class="x">x</span> <span class="x">w</span>), the function is applied monadically. eg: <code>2-5s/S/</code>. As a special case, when there is no target but there is an argument (the selection is <span class="w">x</span>), the function is applied using the argument value as target too. eg: <code>3S*</code></p>
-		<p>Some functions swap the target and argument before being applied (i.e. the target is purple and the argument is blue). They are indicated in the help pannel in purple color. eg: <code>3s2-5/</code></p>
-		<h4>Non-standard BQN functions</h4>
-		<p>Most functions will do the same as in BQN. Exceptions are listed below.</p>
-		<p>Different monadic application:</p>
-		<ul>
-		<li>
-		Monadic <code>+</code> is increment
-		</li><li>
-		Comparison functions (<code>&lt;>=≤≥≠</code>) perform a comparison with zero when used monadically (<code>>x</code> is <code>x>0</code>, for example).
-		</li>
-		</ul>
-		<p>New or different symbols:</p>
-		<ul>
-		<li>
-		The caret symbol <code>^</code> is used for square / pow. It is equivalent to <code>⋆</code> (exp / pow) dyadically, but it is a reverse function so it will swap its arguments
-		</li><li>
-		The APL symbol for log, <code>⍟</code>, is used for log
-		</li><li>
-		The percent symbol <code>%</code> divides by 100 monadically and calculates percentages dyadically (eg: <code>p25%</code> is the 25% of pi)
-		</li><li>
-		The symbol <code>$</code> rounds to (maximum) two decimal numbers or performs rounded comparison dyadically (eg: <code>1.195$1.201$</code> is 1)
-		</li><li>
-		The new symbols <code>⍓⍄⍁</code> are used for the trigonometric functions sin, cos and tan, respectively, and <code>⍌⍃⍂</code> for their inverses. Dyadically, they multiply by the corresponding quantity (eg: <code>10pc</code> is 10 multiplied by the cosine of π, or -10)
-		</li>
-		</ul>
-		<p>There are no specific symbols for boolean operations. Min (<code>⌊</code>) and max (<code>⌈</code>) are used for AND and OR, respectively, while <code>=</code> is used for NOT and <code>≠</code> for XOR.</p>
-		<p>Notice also that there is no explicit way to form expressions with adverbs or function trains. However, <a href="https://yiyus.info/bqrpn/">bqrpn</a> will try to form them implicitly. eg: <code>1s2S-+</code> is an over and <code>1s2+1s2*/</code> is a fork.</p>
-		<h3>History</h3>
-		<p>In general, when a function is applied, the result and the expression to obtain it are added to the history (shown above the stack unless deactivated pressing the button at the top right corner). Values can also be stored in the history, just pressing enter when they are on top of the stack.</p>
-		<p>Pressing the up and down arrows will move over the results in the history. When a result is selected, the x and w values of the corresponding expression will be temporarily pushed on the stack (or only x if it is a monadic function). If these values are not manipulated or used in an operation, they will disappear if escape is pressed, when the selected result changes, or if enter is pressed. In this last case, the result will be pushed instead. eg: <code>2s3+↑*↑↑↓r</code></p>
-		<p>When the selected values on the stack correspond to results in the history, the results in the table are underlined with blue or purple color for target and argument values respectively. Moreover, if a result is dropped from the stack, the corresponding result in the history will be selected (at this point, the values used to calculate that result will be pushed, they can be used or dropped pressing backspace, or the previous value can be recovered pressing enter). eg: <code>1s2+Bb↑rbbb</code></p>
-		<h3>Immediate functions</h3>
-		<p>Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of <code>E</code>). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s).</p>
-		<p>The available immediate are <code>_</code> to negate, <code>#</code> to round to two decimal places, <code>E</code> for scientific notation, <code>D</code> and <code>R</code> for <strong>d</strong>egrees to radians and <strong>r</strong>adians to degrees, respectively, and <code>P</code> to multiply by π.  eg: <code>6.626s34_E#</code></p>
-		<h2>Variables</h2>
-		<p>Values can be stored in variables with the assign operation, in key <code>A</code>. After pressing it, the cursor will indicate that <a href="https://yiyus.info/bqrpn/">bqrpn</a> is waiting for a (single letter) name for the variable, which is given just pressing any key. The assign operation can be cancelled pressing any key which is not a letter. After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressing <code>a</code> followed by the variable name. eg: <code>5Avav__</code> (notice that, since variables are displayed by default by their name, the immediate negation function <code>_</code> is applied twice to get the actual value).</p>
-		<p>Alternatively to using <code>A</code> and <code>a</code>, the keys <code>XYZ</code> and <code>xyz</code> can be used to store and fetch (respectively) from the variables named x, y and z. eg: <code>1s2s3XYZxyz++</code></p>
-		<h2>Visualization options</h2>
-		<p>At the top right corner there are switches for light and dark mode, to display or hide the history, and to display or hide the help pannel.</p>
-		<p>The magnifier at the top right changes the font size used by <a href="https://yiyus.info/bqrpn/">bqrpn</a>, while the one at the bottom right changes the font size used in the help pannel.</p>
-		<h2>More information</h2>
-		<p>The public repository of <a href="https://yiyus.info/bqrpn/">bqrpn</a> is located at <a href="https://github.com/yiyus/bqrpn/">github</a>. Further information about BQN can be found at the <a href="https://mlochbaum.github.io/BQN/">official website</a>.</p>
-	</body>
+<head>
+	<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="style.css">
+	<title>bqrpn user manual</title>
+</head>
+<body id="manual">
+<div style="position: absolute; top:1em; left: 0.5ex; font-size: xx-large; letter-spacing:0.5ex;">
+<cursor class="val tight">█</cursor><cursor class="exp tight">█</cursor><cursor class="res tight">█</cursor><cursor class="xxx tight">█</cursor><cursor class="fun tight">█</cursor></div>
+<!-- md2html.awk manual.md | awk '!a||NR!=FNR;/awk/{a++}NR==FNR&&a==2{p=p$0"\n"}END{print(p);}' manual.html - -->
+<h1><code>bqrpn</code> user manual</h1>
+<p><a href="https://yiyus.info/bqrpn/">bqrpn</a> is an RPN input method to do atirhmetic operations using the <a href="https://mlochbaum.github.io/BQN/">BQN</a> programming language: a calculator.</p>
+<blockquote>
+<h5>Disclaimer</h5>
+<p>This is a manual, not a tutorial. Nevertheless, reading it from top to bottom and typing all the examples in a <a href="https://yiyus.info/bqrpn/">bqrpn</a> session (with a reset between them) could be an easy way to get started. The examples must be typed verbatim, key by key. Space, backspace, tab, and return are indicated by <code>sbtr</code>, respectively, and <code>SBTR</code> are the same keys with shift pressed. The up and down arrows are represented by <code>↑↓</code>. <br><br> PREVIOUS KNOWLEDGE OF <a href="https://mlochbaum.github.io/BQN/">BQN</a> IS ASSUMED.</p>
+</blockquote>
+<h2>Reset</h2>
+<p>Press shift and escape, or just reload. The <a href="https://yiyus.info/bqrpn/">bqrpn</a> banner is displayed when there is nothing on the stack or previous results.</p>
+<h2>Introducing values</h2>
+<p><a href="https://yiyus.info/bqrpn/">bqrpn</a> only works with numeric values.</p>
+<h3>Digits</h3>
+<p>Use digits 0-9 to enter numbers. eg: <code>10s20s30</code>.</p>
+<h3>Dot</h3>
+<p>The dot is used for decimal numbers. When there is no number being edited or a dot is already present in the value being edited, a new number is started with <code>0.</code>, and a final <code>0</code> is added is needed. eg: <code>192.168.1.*</code></p>
+<h3>Zeros</h3>
+<p>Opening and closing parens can be used to input two or three zeros, respectively. A preceding <code>0.</code> is added if no number is being entered. eg: <code>1(2)3.1(1s(1s)2</code></p>
+<h3>Pi and infinity</h3>
+<p>The special values π and ∞ are introduced with the keys <code>p</code> (for <strong>p</strong>i) and <code>f</code> (for in<strong>f</strong>inity). eg: <code>pf</code></p>
+<h2>Stack manipulation</h2>
+<p>The values entered by the user are pushed on a <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">stack</a>.</p>
+<h3>Copy and delete elements</h3>
+<p>Press shift and enter to duplicate ("dup") the top of the stack value. Press shift and backspace to delete ("drop") it. Pressing escape will drop all elements on the stack. eg: <code>1s2s3RBB</code></p>
+<h3>Reorder elements</h3>
+<p>Tab will swap the two elements at the top of the stack. Shift and tab will perform an "over" operation: the third element of the stack will be moved at the top, so the previous top values will occupy positions 2 and 3. eg: <code>1s2tt3TTT</code></p>
+<h2>Operations</h2>
+<p>In an operation, a function is applied to the current selection either monadically or diadically. The values that constitute the selection are popped from the stack, then the obtained result (or results) are pushed.</p>
+<h3>Selection</h3>
+<p>The current selection is indicated by colors. Target values are indicated in blue and argument values in purple. Functions are applied dyadically if and only if there is an argument, else they are applied monadically. One or two values can be selected. The possible selections are:</p>
+<p><code><table id="stack" style="text-align: right; font-family: 'BQN386'; color: black;"> 	<tr><td>Stack</td><td>Result</td></tr> 	<tr><td><span class="x">x</span></td><td>Fx</td></tr> 	<tr><td><span class="x">x</span> <span class="w">w</span></td><td>wFx</td></tr> 	<tr><td><span class="w">x</span></td><td>xFx</td></tr> 	<tr><td><span class="x">x</span> <span class="x">w</span></td><td>Fx Fw</td></tr> </table></code></p>
+<p>Pressing space will switch the selection between <span class="x">x</span> <span class="w">w</span> and <span class="x">x</span> (or set it to <span class="x">x</span> if there is only one element on the stack). Pressing shift and space will switch between <span class="x">x</span> <span class="x">w</span> and <span class="w">x</span> (or set it to <span class="w">x</span> with only one element).</p>
+<h3>Functions</h3>
+<p>Most functions are shown in the help pannel in blue. When the selection is <span class="x">x</span> <span class="w">w</span>, these functions are applied on the (blue) target with the given (purple) argument. eg: <code>3s2+5*</code>. When no argument is given (the selection is <span class="x">x</span> or <span class="x">x</span> <span class="x">w</span>), the function is applied monadically. eg: <code>2-5s/S/</code>. As a special case, when there is no target but there is an argument (the selection is <span class="w">x</span>), the function is applied using the argument value as target too. eg: <code>3S*</code></p>
+<p>Some functions swap the target and argument before being applied (i.e. the target is purple and the argument is blue). They are indicated in the help pannel in purple color. eg: <code>3s2-5/</code></p>
+<h4>Non-standard BQN functions</h4>
+<p>Most functions will do the same as in BQN. Exceptions are listed below.</p>
+<p>Different monadic application:</p>
+<ul>
+<li>
+Monadic <code>+</code> is increment
+</li><li>
+Comparison functions (<code>&lt;>=≤≥≠</code>) perform a comparison with zero when used monadically (<code>>x</code> is <code>x>0</code>, for example).
+</li>
+</ul>
+<p>New or different symbols:</p>
+<ul>
+<li>
+The caret symbol <code>^</code> is used for square / pow. It is equivalent to <code>⋆</code> (exp / pow) dyadically, but it is a reverse function so it will swap its arguments
+</li><li>
+The APL symbol for log, <code>⍟</code>, is used for log
+</li><li>
+The percent symbol <code>%</code> divides by 100 monadically and calculates percentages dyadically (eg: <code>p25%</code> is the 25% of pi)
+</li><li>
+The symbol <code>$</code> rounds to (maximum) two decimal numbers or performs rounded comparison dyadically (eg: <code>1.195$1.201$</code> is 1)
+</li><li>
+The new symbols <code>⍓⍄⍁</code> are used for the trigonometric functions sin, cos and tan, respectively, and <code>⍌⍃⍂</code> for their inverses. Dyadically, they multiply by the corresponding quantity (eg: <code>10pc</code> is 10 multiplied by the cosine of π, or -10)
+</li>
+</ul>
+<p>There are no specific symbols for boolean operations. Min (<code>⌊</code>) and max (<code>⌈</code>) are used for AND and OR, respectively, while <code>=</code> is used for NOT and <code>≠</code> for XOR.</p>
+<p>Notice also that there is no explicit way to form expressions with adverbs or function trains. However, <a href="https://yiyus.info/bqrpn/">bqrpn</a> will try to form them implicitly. eg: <code>1s2S-+</code> is an over and <code>1s2+1s2*/</code> is a fork.</p>
+<h3>History</h3>
+<p>In general, when a function is applied, the result and the expression to obtain it are added to the history (shown above the stack unless deactivated pressing the button at the top right corner). Values can also be stored in the history, just pressing enter when they are on top of the stack.</p>
+<p>Pressing the up and down arrows will move over the results in the history. When a result is selected, the x and w values of the corresponding expression will be temporarily pushed on the stack (or only x if it is a monadic function). If these values are not manipulated or used in an operation, they will disappear if escape is pressed, when the selected result changes, or if enter is pressed. In this last case, the result will be pushed instead. eg: <code>2s3+↑*↑↑↓r</code></p>
+<p>When the selected values on the stack correspond to results in the history, the results in the table are underlined with blue or purple color for target and argument values respectively. Moreover, if a result is dropped from the stack, the corresponding result in the history will be selected (at this point, the values used to calculate that result will be pushed, they can be used or dropped pressing backspace, or the previous value can be recovered pressing enter). eg: <code>1s2+Bb↑rbbb</code></p>
+<h3>Immediate functions</h3>
+<p>Immediate functions, displayed in the help pannel in red, are executed immediately, without storing a result in the result table, generating a new value as if it had been inputed by the user. Most immediate functions are monadic (all of them with the exception of <code>E</code>). These functions will be performed on the argument value (purple) if there is one, else on the (blue) target(s).</p>
+<p>The available immediate are <code>_</code> to negate, <code>#</code> to round to two decimal places, <code>E</code> for scientific notation, <code>D</code> and <code>R</code> for <strong>d</strong>egrees to radians and <strong>r</strong>adians to degrees, respectively, and <code>P</code> to multiply by π.  eg: <code>6.626s34_E#</code></p>
+<h2>Variables</h2>
+<p>Values can be stored in variables with the assign operation, in key <code>A</code>. After pressing it, the cursor will indicate that <a href="https://yiyus.info/bqrpn/">bqrpn</a> is waiting for a (single letter) name for the variable, which is given just pressing any key. The assign operation can be cancelled pressing any key which is not a letter. After storing a value in a variable, it can be pushed on the stack either clicking on the variable name, or pressing <code>a</code> followed by the variable name. eg: <code>5Avav__</code> (notice that, since variables are displayed by default by their name, the immediate negation function <code>_</code> is applied twice to get the actual value).</p>
+<p>Alternatively to using <code>A</code> and <code>a</code>, the keys <code>XYZ</code> and <code>xyz</code> can be used to store and fetch (respectively) from the variables named x, y and z. eg: <code>1s2s3XYZxyz++</code></p>
+<h2>Visualization options</h2>
+<p>At the top right corner there are switches for light and dark mode, to display or hide the history, and to display or hide the help pannel.</p>
+<p>The magnifier at the top right changes the font size used by <a href="https://yiyus.info/bqrpn/">bqrpn</a>, while the one at the bottom right changes the font size used in the help pannel.</p>
+<h2>More information</h2>
+<p>The public repository of <a href="https://yiyus.info/bqrpn/">bqrpn</a> is located at <a href="https://github.com/yiyus/bqrpn/">github</a>. Further information about BQN can be found at the <a href="https://mlochbaum.github.io/BQN/">official website</a>.</p>
+
+<!-- end-of-awk -->
+</body>
 </html>
+
+
