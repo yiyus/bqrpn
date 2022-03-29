@@ -104,9 +104,9 @@ cursor.mod { color: #f00; }
 	#help { font-size: 9px; }
 }
 c, d, r, e {
-	border-radius: 4px; border: dotted 1px; display: inline-block; opacity: 80%;
+	border-radius: .4ex; border: dotted 1px; display: inline-block; opacity: 80%;
 	background-color: var(--key-bg-l); box-shadow: 1px 2px var(--color-off); 
-	margin: 2px; padding: 2px 5px 3px 5px; letter-spacing: .05em; line-height: .75em; white-space: nowrap;
+	margin: .2ex; padding: .2ex .5ex .3ex .5ex; letter-spacing: .05em; line-height: .75em; white-space: nowrap;
 }
 body.other c, body.other d, body.other r, body.other e {
 	background-color: var(--key-bg-d); box-shadow: -1px -2px var(--color-off);
